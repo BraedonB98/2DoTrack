@@ -17,22 +17,20 @@ User{}
         -Email,text, or both reminder? (put highest priority tasks at the top of the list)
         -ToDo Reminder?
         -Finance OverView?
-    -To Do Lists[]
-        -ToDoItem ID
+    -To Do Catagories[]
+        -To Do List{} //single catagory object
+            -Name
+            -ToDoItems[]
+                -ToDoItem (Mongoose Oject)
     -Recurring Expenses[] //will update every set amount of time
         -...Finance Item{}
             -Reaccuring time frame
     -Finance Accounts[]  //Business, Personal,ext
         -Balance
         -Finance Catagory[] //create new or use existing
-            -Finance Items{}
-                -Name
-                -Profit or Deficit amount //Deficit is negative Profit is positive 
-                -Date
-                -Notes
-                ---Color
-                ---Location
--To Do Items{}
+            -FinanceItem(Mongoose Object)
+            
+To Do Item{}
     -Task
     -ID (Auto from Mongoose)
     -Due?(if so)
@@ -41,7 +39,17 @@ User{}
     -Priority(1-Low, 2-LowMid, 3-Mid, 4-MidHigh, 5 High)
     -Location
     -Notes
-    ---Users Involved
+    -Users[]
+
+Finance Item{}
+    -Name
+    -ID(Auto from Mongoose)
+    -Profit or Deficit amount //Deficit is negative Profit is positive 
+    -Date
+    -Notes
+    ---Color
+    ---Location
+    -Users[]
 
 ------------------------------ REST API Commands --------------------------------------
 
@@ -66,5 +74,25 @@ User{}
 -PATCH/API/:UID/Info/Preferences -Change Preferences 
     -(Auth, Preference{})
     -Updates User Preferences if User is logged in
+
+-POST/API/:UID/Catagories -New Catagory 
+    -(Auth, Todo Catagory Name)
+    -Creates new empty array with Name in USER->TO DO Catagories -> Name[]
+
+-PATCH/API/:UID/Catagories -Rename Catagory
+    -(Auth, Previous Catagory Name, New Catagory Name)
+    -Finds Previous CatagoryName in  USER->TO DO Catagories -> Name[], If its there then it will duplicate the found array to a new array with a new Name
+
+-DELETE/API/:UID/Catagories -Delete Catagory
+    -(Auth, Catagory)
+    -Deletes Catagory and all TODO Items in catagory 
+
+-GET/API/:UID/Catagories -Get Catagorys
+    -(Auth)
+    -returns all catagories user has
+
+-GET/API/:UID/Catagories/:Catagory
+    -(Auth)
+    -returns specific catagory requested
 
 
