@@ -75,15 +75,15 @@ Finance Item{}
     -(Auth, Preference{})
     -Updates User Preferences if User is logged in
 
--POST/API/:UID/Catagories -New Catagory 
-    -(Auth, Todo Catagory Name)
+-POST/API/:UID/Catagories -New TODOLIST 
+    -(Auth, Todo TODOLIST Name)
     -Creates new empty array with Name in USER->TO DO Catagories -> Name[]
 
--PATCH/API/:UID/Catagories -Rename Catagory
-    -(Auth, Previous Catagory Name, New Catagory Name)
-    -Finds Previous CatagoryName in  USER->TO DO Catagories -> Name[], If its there then it will duplicate the found array to a new array with a new Name
+-PATCH/API/:UID/Catagories -Rename TODOLIST
+    -(Auth, Previous TODOLIST Name, New TODOLIST Name)
+    -Finds Previous TODOLISTName in  USER->TO DO Catagories -> Name[], If its there then it will duplicate the found array to a new array with a new Name
 
--DELETE/API/:UID/Catagories -Delete Catagory
+-DELETE/API/:UID/Catagories -Delete TODOLIST
     -(Auth, Catagory)
     -Deletes Catagory and all TODO Items in catagory 
 
@@ -91,8 +91,10 @@ Finance Item{}
     -(Auth)
     -returns all catagories user has
 
--GET/API/:UID/Catagories/:Catagory
+-GET/API/:UID/Catagories/:Catagory -Get TODO LIST
     -(Auth)
-    -returns specific catagory requested
+    -returns specific TODO LIST requested
+
+-
 
 
