@@ -5,6 +5,7 @@ import MainHeader from "./MainHeader";
 import NavLinks from './NavLinks';
 import SideDrawer from "./SideDrawer";
 import Backdrop from '../UIElements/Backdrop';
+import MainLogo from "../../../design/MainLogo";
 import "./MainNavigation.css";
 
 
@@ -35,7 +36,7 @@ const MainNavigation = props => {
             <span />
         </button>
         <h1 className="main-navigation__title">
-            <Link to = "/"><img className = "main-navigation__logo-image" src="./MDLOGO.png" alt ="Monument Dental"/></Link>
+            <Link to = "/"> <MainLogo styling = "main-navigation__logo-image"/></Link>
         </h1>
         <nav className="main-navigation__header-nav">
             <NavLinks/>
