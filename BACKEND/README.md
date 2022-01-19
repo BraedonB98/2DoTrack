@@ -55,6 +55,14 @@ Finance Item{}
     -Users[]
 
 ------------------------------ REST API Commands --------------------------------------
+-GET/API/UID/Name/:Name
+    -Returns UID based on name 
+
+-GET/API/UID/Email/:Email
+    -Returns UID based on email
+
+-GET/API/UID/PhoneNumber/:PhoneNumber
+    -Returns UID based on PhoneNumber
 
 -POST/API/CreateUser -Create User
     -(Name, Email, PhoneNumber, Password)//will assign preferences and Photo default, Todo lists,Recurring Expenses, and Finance Accounts Empty
