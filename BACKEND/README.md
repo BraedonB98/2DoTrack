@@ -12,7 +12,8 @@ User
     -Preferences
         -Wake Up time
         -Email,text, or both reminder? (put highest priority tasks at the top of the list)
-    -Finance Catagory's
+        -ToDo Reminder?
+        -Finance OverView?
     -To Do Lists[]
         -To Do Items[]
             -Task
@@ -23,8 +24,16 @@ User
             -Location
             -Notes
             ---Users Involved
+    -Recurring Expenses[] //will update every set amount of time
+        -...Finance Item
+            -Reaccuring time frame
     -Finance Accounts[]  //Business, Personal,ext
-        -Finance Items
-            -Name
-            -Catagory //create new or use exsisting
-
+        -Balance
+        -Finance Catagory[] //create new or use existing
+            -Finance Items
+                -Name
+                -Profit or Deficit amount //Deficit is negative Profit is positive 
+                -Date
+                -Notes
+                ---Color
+                ---Location
