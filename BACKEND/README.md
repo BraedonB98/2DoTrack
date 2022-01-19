@@ -22,6 +22,7 @@ User{}
             -Name
             -ToDoItems[]
                 -ToDoItem (Mongoose Oject)
+    ---PendingSharedTasks[] //tasks shared by another user but not accepted by this user
     -Recurring Expenses[] //will update every set amount of time
         -...Finance Item{}
             -Reaccuring time frame
@@ -33,13 +34,15 @@ User{}
 To Do Item{}
     -Task
     -ID (Auto from Mongoose)
-    -Due?(if so)
+    -Complete(Not Started, Started, Finished)
+    -ToDoLists //which todo list is it stored in, If is shared with other users this will be filled in upon return 
+    -Due(if so){}
         -Date
         -Time
     -Priority(1-Low, 2-LowMid, 3-Mid, 4-MidHigh, 5 High)
     -Location
     -Notes
-    -Users[]
+    -Users[] 
 
 Finance Item{}
     -Name
@@ -75,26 +78,63 @@ Finance Item{}
     -(Auth, Preference{})
     -Updates User Preferences if User is logged in
 
--POST/API/:UID/Catagories -New TODOLIST 
+-POST/API/:UID/TODOLIST -New TODOLIST 
     -(Auth, Todo TODOLIST Name)
     -Creates new empty array with Name in USER->TO DO Catagories -> Name[]
 
--PATCH/API/:UID/Catagories -Rename TODOLIST
-    -(Auth, Previous TODOLIST Name, New TODOLIST Name)
-    -Finds Previous TODOLISTName in  USER->TO DO Catagories -> Name[], If its there then it will duplicate the found array to a new array with a new Name
+-PATCH/API/:UID/TODOLISTS/:TODOLIST -Rename TODOLIST
+    -(Auth,New TODOLIST Name)
+    -Finds Previous TODOLIST -> Name , If its there then it will duplicate the found array to a new array with a new Name else return error
 
--DELETE/API/:UID/Catagories -Delete TODOLIST
-    -(Auth, Catagory)
-    -Deletes Catagory and all TODO Items in catagory 
+-DELETE/API/:UID/TODOLISTS/:TODOLIST -Delete TODOLIST
+    -(Auth)
+    -Deletes TODOLIST and all TODO Items in catagory 
 
 -GET/API/:UID/Catagories -Get Catagorys
     -(Auth)
     -returns all catagories user has
 
--GET/API/:UID/Catagories/:Catagory -Get TODO LIST
+-GET/API/:UID/TODOLISTS/:TODOLIST -Get TODO LIST
     -(Auth)
     -returns specific TODO LIST requested
 
--
+-GET/API/:UID/:TODOLIST/:TDIID -Get TODO ITEM //TDI == TO DO ITEM
+    -(Auth)
+    -Searches through todo List in user if there returns todoitem else error
+
+-POST/API/:UID/:TODOLIST/
+    -(Auth, TODOITEM)
+    - if todo list is there, add new TODO Item to the selected todo list, else throw error
+
+-PATCH/API/:UID/:TODOLIST/:TDID/ -Change Task info
+    -(Auth, task, due, priority, location, notes)
+    - if todo item is there, ...TDID +  amend new info
+    
+-DELETE/API/:UID/:TODOLIST/:TDID/ - Delete Task
+    -(Auth)
+    - if todo item is there, Delete it
+
+-PATCH/API/:UID/:TODOLIST/:TDID/Move -Move Task
+    -(Auth, newTaskList)
+    - if todo item is there, copy Task to new Task list, Remove it from old task list
+
+---PATCH/API/:UID/:TODOLIST/:TDID/Share - Share Task with other user
+    -(Auth, UsersAdded)
+    -Adds task to UsersAdded PendingSharedTasks[] array until they accept
+
+---GET/API/:UID/PendingSharedTasks/
+    -(Auth)
+    -returns all pending tasks for user shared from other user
+
+---PATCH/API/:UID/AcceptTask/
+    -(Auth, TaskAcceptedID , TODOLIST)//TODOLIST is the list the user wants to add it to
+    -Moves task from PendingSharedTasks[] to TODOLIST, removes it from PendingSharedTasks[]
+
+
+
+
+
+
+
 
 
