@@ -1,7 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
 
 :root{
-  --colorBackground: brown;
+  --colorPrimary: #316B83; 
+  --colorPrimaryVariant: #316B83; 
+  --colorSecondary: #6D8299; /* Cards Buttons */
+  --colorSecondaryVariant: #8CA1A5; /* Nav Bar */
+  --colorBackground: #D5BFBF; /*Page Background*/
+  --colorSurface: #D5BFBF;
+  --colorError: red;
+  --colorOnPrimary: black;
+  --colorOnSecondary: black;
+  --colorOnPrimaryVariant: black;
+  --colorOnSecondaryVariant: black;
+  --colorOnBackground: black;
+  --colorOnSurface: black;
+  --colorOnError: black;
 }
 
 * {
@@ -14,7 +27,7 @@ html {
 
 body {
   margin: 0;
-  background: #4d4d4d;
+  background: var(--colorBackground);
 }
 
 .slide-in-left-enter {

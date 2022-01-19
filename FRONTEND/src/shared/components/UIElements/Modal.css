@@ -4,7 +4,8 @@
     top: 22vh;
     left: 10%;
     width: 80%;
-    background: white;
+    color: var(--colorOnSecondary);
+    background: var(--colorSecondary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     border-radius: 8px;
   }
@@ -12,8 +13,8 @@
   .modal__header {
     width: 100%;
     padding: 1rem 0.5rem;
-    background: #2a006e;
-    color: white;
+    background: var(--colorSecondaryVariant);
+    color: var(--colorOnSecondaryVariant);
   }
   
   .modal__header h2 {
