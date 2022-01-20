@@ -32,7 +32,7 @@
   
   .nav-links button {
     cursor: pointer;
-    border: 1px solid var(--colorSecondaryVariant);
+    border: 1px solid var(--colorOnSecondaryVariant);
     color: var(--colorOnSecondaryVariant);
     background: transparent;
     padding: 0.5rem;
@@ -65,7 +65,7 @@
   
     .nav-links button {
       border:none;
-      color: var(--colorSecondaryVariant);
+      color: var(--colorOnSecondaryVariant);
       background: transparent;
     }
     

@@ -1,14 +1,25 @@
-import React,{useContext}from "react";
+import React,{ useContext}from "react";
+import {NavLink} from 'react-router-dom';
+
+import Button from "../../shared/components/FormElements/Button";
+
 import { AuthContext } from "../../shared/context/auth-context";
 
 const AuthPage = props => {
     const auth = useContext(AuthContext);
-    auth.login(true);
+    
+    const login = () => {
+        auth.login(true);
+        auth.userId("Braedon");
+    }
+    
 
 return(
-<h1>
-    authpage
-</h1>)
-}
+    <div> 
+        <h1>authpage</h1>
+        <NavLink to ="/" exact><Button onClick = {login}>login</Button></NavLink>
+        
+    </div>
+)}
 
 export default AuthPage;
