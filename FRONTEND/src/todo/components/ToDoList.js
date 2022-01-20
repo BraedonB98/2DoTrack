@@ -1,11 +1,15 @@
 import React from "react";
 
+//-----------------------Components--------------------------
 import Card from '../../shared/components/UIElements/Card';
 import ToDoItem from "./ToDoItem";
 import Button from "../../shared/components/FormElements/Button"
 
+//---------------------CSS----------------------------------
+import "./ToDoList.css"
 
-const DUMMYITEMS = [{id: "task1", 
+
+let DUMMYITEMS = [{id: "task1", 
     task: "Create the dummy items",
     complete: "Pending",
     due: null,
@@ -20,11 +24,22 @@ const DUMMYITEMS = [{id: "task1",
     UID: "Braedon",
     address: "2468 S. Marion St Denver CO",
     coordinates: {},
-    notes : "This is going to be a big project probably should use a dummy place to test"}]
+    notes : "More dummy places to test seems smart"},
+    {id: "task3", 
+    task: "Create a Third",
+    complete: "Started",
+    due: null,
+    UID: "Braedon",
+    address: "2468 S. Marion St Denver CO",
+    coordinates: {},
+    notes : "More dummy places to test seems smart"}];
+
 
 const ToDoList = props=> {
     //props.items=DUMMYITEMS;
+    //DUMMYITEMS = [];
     if(DUMMYITEMS.length === 0){
+        console.log("fail here")
         return (
         <div className="todo-list center">
             <Card>

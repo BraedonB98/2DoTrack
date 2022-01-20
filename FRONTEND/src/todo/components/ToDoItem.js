@@ -1,5 +1,5 @@
 import React,{ useState, useContext}from "react";
-
+import {AiOutlineCheck,AiOutlineFieldTime,AiOutlineUnorderedList} from "react-icons/ai"
 //-----------------------Components--------------------------
 import Button from "../../shared/components/FormElements/Button";
 import Card from '../../shared/components/UIElements/Card'
@@ -14,9 +14,13 @@ import { AuthContext } from "../../shared/context/auth-context";
 //----------------------Hooks---------------------------------
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
+//---------------------CSS-----------------------------------
+import "./ToDoItem.css"
+
 const ToDoItem = props => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const auth = useContext(AuthContext);
+    const [expand, setExpand] = useState(false);
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const openMapHandler = () => {
@@ -40,6 +44,13 @@ const ToDoItem = props => {
        // console.log("You just got deleted!!!! BOOM");
         //setShowConfirmModal(false)
     };
+    const closeExpand=()=>{
+            setExpand(false);
+    }
+    const openExpand=()=>{
+        console.log("expanding this")
+        setExpand(true);
+    }
 
 return(
     <React.Fragment>
@@ -67,21 +78,23 @@ return(
                         <Button danger onClick={confirmDeleteHandler}>DELETE</Button>
                     </React.Fragment>
                 } >
-                    <p>Are you sure you want to delete this place?</p>
+                    <p>Are you sure you want to delete this Task?</p>
             </Modal>
         <li className="todo-item ">
-        <Card className="todo-item__content">
+        <Card className="todo-item__content" onClick = {openExpand}>
         {isLoading && <LoadingSpinner asOverlay />}
-        <div className="todo-item__info">
-            <h2>{props.title}</h2>
-            <p>{props.notes}</p>
+        <div onClick = {closeExpand}  className="todo-item__info">
+            {props.complete === "Complete" && <AiOutlineCheck/>}
+            {props.complete === "Started" && <AiOutlineFieldTime/>}
+            {props.complete === "Pending" && <AiOutlineUnorderedList/>}
+            <h2>{props.task}</h2>
         </div>
-        <div className="todo-item__actions">
-            <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
+        {expand && (<div className="todo-item__expand">
+            <p>{props.notes}</p>
+            <Button onClick={openMapHandler}>VIEW ON MAP</Button>
             {auth.isLoggedIn && (<Button to={`/places/${props.id}`}>EDIT</Button>)}
             {auth.isLoggedIn && (<Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>)}
-            
-        </div>
+            </div>)}
         </Card>
     </li>
     </React.Fragment> 
