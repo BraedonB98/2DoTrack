@@ -6,3 +6,5 @@ List Of know issues
         -need to fix default routing to page not found page 
     -PageNotFound.js
         -currently go back to our homepage is a hard link to local host 3000
+    -DropDownNavLink.js
+        -change UID for name on nave bar to user name once setup

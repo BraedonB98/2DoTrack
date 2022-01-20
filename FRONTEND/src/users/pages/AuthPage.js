@@ -9,8 +9,7 @@ const AuthPage = props => {
     const auth = useContext(AuthContext);
     
     const login = () => {
-        auth.login(true);
-        auth.userId("Braedon");
+        auth.login("Braedon");
     }
     
 
