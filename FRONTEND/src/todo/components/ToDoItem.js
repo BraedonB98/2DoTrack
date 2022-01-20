@@ -53,6 +53,12 @@ const ToDoItem = props => {
             setExpand(true);
         }
     }
+    const startTask = () => {
+
+    }
+    const finishTask = () => {
+
+    }
 
 return(
     <React.Fragment>
@@ -93,9 +99,12 @@ return(
         </div>
         {expand && (<div className="todo-item__expand">
             <p>{props.notes}</p>
+            {props.complete ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
+            {props.complete ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
+
             <Button onClick={openMapHandler}>VIEW ON MAP</Button>
-            {auth.isLoggedIn && (<Button to={`/places/${props.id}`}>EDIT</Button>)}
-            {auth.isLoggedIn && (<Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>)}
+            <Button to={`/places/${props.id}`}>EDIT</Button>
+            <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>
             </div>)}
         </Card>
     </li>

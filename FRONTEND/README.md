@@ -8,3 +8,5 @@ List Of know issues
         -currently go back to our homepage is a hard link to local host 3000
     -DropDownNavLink.js
         -change UID for name on nave bar to user name once setup
+    -todoitem.js
+        -need to wire up start task and finish task functions
