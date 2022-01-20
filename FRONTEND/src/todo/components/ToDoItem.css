@@ -1,22 +1,25 @@
 .todo-item__content {
     padding: 0;
+    
     margin :1%;
   }
-.todo-item__content hover{
+.todo-item__header:hover{
     cursor: pointer;
   }
 
-.todo-item__info {
+.todo-item__header {
     padding: 1%;
-    display:inline;
+    display:block;
+
+    
     
   }
-  .todo-item__info p {
+  .todo-item__header p {
     margin: 0;
     padding: 1%;
     
   }
-  .todo-item__info h2 {
+  .todo-item__header h2 {
     margin: 0;
     padding: 1%;
     display:inline;
@@ -30,7 +33,8 @@
   }
 
   .todo-item__expand {
-    padding: 1rem;
+    padding: 0rem;
+    padding-bottom: 2%;
     text-align: center;
     border-top: 1px solid var(--colorSecondaryVariant);
   }

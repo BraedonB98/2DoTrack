@@ -44,12 +44,14 @@ const ToDoItem = props => {
        // console.log("You just got deleted!!!! BOOM");
         //setShowConfirmModal(false)
     };
-    const closeExpand=()=>{
+    const toggleExpand=()=>{
+        if(expand)
+        {
             setExpand(false);
-    }
-    const openExpand=()=>{
-        console.log("expanding this")
-        setExpand(true);
+        }
+        else{
+            setExpand(true);
+        }
     }
 
 return(
@@ -81,9 +83,9 @@ return(
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
         <li className="todo-item ">
-        <Card className="todo-item__content" onClick = {openExpand}>
+        <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
-        <div onClick = {closeExpand}  className="todo-item__info">
+        <div onClick = {toggleExpand}  className="todo-item__header">
             {props.complete === "Complete" && <AiOutlineCheck/>}
             {props.complete === "Started" && <AiOutlineFieldTime/>}
             {props.complete === "Pending" && <AiOutlineUnorderedList/>}
