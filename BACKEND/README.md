@@ -18,8 +18,8 @@ User{}
         -notificationType ---Email,text, or both reminder? (put highest priority tasks at the top of the list)
         -notificationToDo-----ToDo Reminder?
         -notificatioFinance ------Finance OverView?
-    -To Do Catagories[]
-        -To Do List{} //single catagory object
+    -To Do Categories[]
+        -To Do Category{} //single category object
             -Name
             -ToDoItems[]
                 -ToDoItem (Mongoose Oject)
