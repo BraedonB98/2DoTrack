@@ -104,19 +104,26 @@ const photoUpload = async(req,res,next)=>{
     if(!user){
         return(next(new HttpError('Place not in database', 404)));
     }
+    
 
-    //if user is using default image
-    if(user.imageUrl === "../uploads/images/2DoFinanceLogo.png"){ 
-        user.imageUrl = req.file.path;
-    }
-    //Delete custom image uploads
-    else{
-        fs.unlink(user.imageUrl, err => {
+    //save user with new image URL
+    try{
+         //if user is using default image
+        if(user.imageUrl === "../uploads/images/2DoFinanceLogo.png"){ 
+            user.imageUrl = req.file.path;
+        }
+        //Delete custom image uploads
+        else{
+            fs.unlink(user.imageUrl, err => {
             console.log(err);
         })
         user.imageUrl = req.file.path;
     }
-
+        await user.save();
+    }
+    catch(error){
+        return(next(new HttpError('Could not update photo in database', 500)));
+    }
 
 
     res.json({user: user.toObject({getters:true})});
