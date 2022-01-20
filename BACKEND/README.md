@@ -14,10 +14,10 @@ User{}
     -Phone Number
     -Password
     -Preferences{}
-        -Wake Up time
-        -Email,text, or both reminder? (put highest priority tasks at the top of the list)
-        -ToDo Reminder?
-        -Finance OverView?
+        -notificationTime
+        -notificationType ---Email,text, or both reminder? (put highest priority tasks at the top of the list)
+        -notificationToDo-----ToDo Reminder?
+        -notificatioFinance ------Finance OverView?
     -To Do Catagories[]
         -To Do List{} //single catagory object
             -Name
@@ -29,13 +29,13 @@ User{}
             -Reaccuring time frame
     -Finance Accounts[]  //Business, Personal,ext
         -Balance
-        -Finance Catagory[] //create new or use existing
+        -Finance Catagory[] //create new or use existing (food, movies,ext)
             -FinanceItem(Mongoose Object)
             
 To Do Item{}
     -Task
     -ID (Auto from Mongoose)
-    -Complete(Not Started, Started, Complete)
+    -Complete(Pending, Started, Complete)
     //-ToDoLists //which todo list is it stored in, If is shared with other users this will be filled in upon return 
     -Due(if so){}
         -Date
