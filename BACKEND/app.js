@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const fs = require('fs');
+const path = require('path') //required for express static path for file accessing
 //------------------Models---------------------------
 const HttpError = require('./models/http-error');
 
@@ -23,6 +24,8 @@ const userRoutes = require('./routes/user-routes');
 //-----------------MiddleWare--------------------
 app.use(bodyParser.json());
 
+app.use('/uploads/images', express.static(path.join('uploads','images')));
+
 app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin','*');//Access-control-Allow-Origin required to let browser use api, the the * can be replaced by urls (for the browser) that are allowed to use it
     res.setHeader('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -43,6 +46,20 @@ app.use((req,res,next)=>{
     return(next(error));
 });
 
+
+//------------------ImageHandling-----------------
+app.use((error, req,res,next)=> {
+    if(req.file){
+        fs.unlink(req.file.path , (err) => {
+            console.log(err);
+        } )
+    }
+    if(res.headerSent){
+        return next(error);
+    }
+    res.status(error.code || 500);
+    res.json({message: error.message || 'An unknown error(imageHandling) occurred!'});
+});
 //------------------Mongo------------------------
 mongoose
 .connect(mongoUrl)

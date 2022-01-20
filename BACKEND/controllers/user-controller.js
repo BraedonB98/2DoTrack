@@ -5,6 +5,9 @@ const {validationResult} = require('express-validator');
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
 
+//-------------------Helper Functions-----------------
+
+
 //-----------------------Controllers------------------
 const createUser = async (req,res,next)=>{
     //Checking valid inputs
@@ -79,8 +82,33 @@ const login = async (req,res,next)=>{
     res.json({message: 'Logged in!' , user: existingUser.toObject({getters:true})})
 }
 
-const photoUpload = (req,res,next)=>{
-    res.status(201).json({user:"test"})
+const photoUpload = async(req,res,next)=>{
+    //getting params from url
+    const uid = req.params.uid;
+    
+    //checking for errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
+    } 
+    
+    //getting user from DB
+    let user;
+    try{
+        user = await User.findById(uid);
+    }
+    catch(error){
+        return(next(new HttpError('Could not find place in database', 500)));
+    };
+    if(!user){
+        return(next(new HttpError('Place not in database', 404)));
+    }
+    user.imageUrl =
+
+
+
+    res.json({user: user.toObject({getters:true})});
 }
 const getPreferences = (req,res,next)=>{
     res.json({user:"test"});
