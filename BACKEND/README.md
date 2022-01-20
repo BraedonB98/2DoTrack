@@ -8,6 +8,7 @@ BackEnd planning
 User{}
     -Name
     -ID(Auto from Mongoose)
+    -Subscription{}
     -Photo
     -Email
     -Phone Number
@@ -34,12 +35,13 @@ User{}
 To Do Item{}
     -Task
     -ID (Auto from Mongoose)
-    -Complete(Not Started, Started, Finished)
-    -ToDoLists //which todo list is it stored in, If is shared with other users this will be filled in upon return 
+    -Complete(Not Started, Started, Complete)
+    //-ToDoLists //which todo list is it stored in, If is shared with other users this will be filled in upon return 
     -Due(if so){}
         -Date
         -Time
     -Priority(1-Low, 2-LowMid, 3-Mid, 4-MidHigh, 5 High)
+    -Address
     -Location
     -Notes
     -Users[] 
