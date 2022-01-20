@@ -1,12 +1,13 @@
-import React,{ useContext}from "react";
+import React from "react";
 
 
 import ToDoList from "../components/ToDoList";
 //----------------------Context--------------------------------
-import { AuthContext } from "../../shared/context/auth-context";
+
+
 
 const ToDoPage = () => {
-    const auth = useContext(AuthContext);
+    
 
 return(
     <div> 

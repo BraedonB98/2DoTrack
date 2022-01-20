@@ -1,4 +1,4 @@
-import React,{ useState, useContext}from "react";
+import React,{ useState}from "react";
 import {AiOutlineCheck,AiOutlineFieldTime,AiOutlineUnorderedList} from "react-icons/ai"
 //-----------------------Components--------------------------
 import Button from "../../shared/components/FormElements/Button";
@@ -9,7 +9,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import Map from '../../shared/components/UIElements/Map';
 
 //----------------------Context--------------------------------
-import { AuthContext } from "../../shared/context/auth-context";
+
 
 //----------------------Hooks---------------------------------
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -19,7 +19,6 @@ import "./ToDoItem.css"
 
 const ToDoItem = props => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
-    const auth = useContext(AuthContext);
     const [expand, setExpand] = useState(false);
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
