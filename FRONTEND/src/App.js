@@ -5,12 +5,16 @@ import { BrowserRouter as Router, Route , Routes, Navigate} from 'react-router-d
 import PageNotFound from './landing/pages/PageNotFound';
 import HomePage from './landing/pages/HomePage';
 import AuthPage from './users/pages/AuthPage';
+import DashBoard from './users/pages/DashBoard'
+import ToDoPage from './todo/pages/ToDoPage';
+import FinancePage from './finance/pages/FinancePage';
 
 //-----------------------Components--------------------------
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 
 //----------------------Context--------------------------------
 import { AuthContext } from './shared/context/auth-context';
+
 
 const App = () => {
   const [isLoggedIn,setIsLoggedIn]=useState(false)
@@ -31,7 +35,9 @@ const App = () => {
   if (isLoggedIn){
     routes = ( //if user logged in
     <Routes>
-      <Route path="/" exact element={<HomePage/>} />
+      <Route path="/" exact element={<DashBoard/>} />
+      <Route path="/todo" exact element={<ToDoPage/>} />
+      <Route path="/finance" exact element={<FinancePage/>} />
       <Route path="/pagenotfound"  element = {<PageNotFound/>}/> {/* Need to make this the default if path is not found, looked at navigate but havnt been able to figure out*/}
     </Routes>
     );

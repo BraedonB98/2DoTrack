@@ -5,7 +5,7 @@ import Button from "../../shared/components/FormElements/Button";
 
 import { AuthContext } from "../../shared/context/auth-context";
 
-const AuthPage = props => {
+const AuthPage = () => {
     const auth = useContext(AuthContext);
     
     const login = () => {
