@@ -104,7 +104,18 @@ const photoUpload = async(req,res,next)=>{
     if(!user){
         return(next(new HttpError('Place not in database', 404)));
     }
-    user.imageUrl =
+
+    //if user is using default image
+    if(user.imageUrl === "../uploads/images/2DoFinanceLogo.png"){ 
+        user.imageUrl = req.file.path;
+    }
+    //Delete custom image uploads
+    else{
+        fs.unlink(user.imageUrl, err => {
+            console.log(err);
+        })
+        user.imageUrl = req.file.path;
+    }
 
 
 
