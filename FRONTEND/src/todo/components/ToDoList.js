@@ -11,7 +11,7 @@ import "./ToDoList.css"
 
 let DUMMYITEMS = [{id: "task1", 
     task: "Create the dummy items",
-    complete: "Pending",
+    status: "Pending",
     due: null,
     UID: "Braedon",
     address: "2468 S. Marion St Denver CO",
@@ -19,7 +19,7 @@ let DUMMYITEMS = [{id: "task1",
     notes : "This is going to be a big project probably should use a dummy place to test"},
     {id: "task2", 
     task: "Create another",
-    complete: "Complete",
+    status: "Complete",
     due: null,
     UID: "Braedon",
     address: "2468 S. Marion St Denver CO",
@@ -27,7 +27,7 @@ let DUMMYITEMS = [{id: "task1",
     notes : "More dummy places to test seems smart"},
     {id: "task3", 
     task: "Create a Third",
-    complete: "Started",
+    status: "Started",
     due: null,
     UID: "Braedon",
     address: "2468 S. Marion St Denver CO",
@@ -55,7 +55,7 @@ const ToDoList = props=> {
          <ToDoItem 
             id={todo.id} 
             task={todo.task} 
-            complete={todo.complete} 
+            status={todo.status} 
             due ={todo.due}
             UID={todo.UID}
             address = {todo.address}

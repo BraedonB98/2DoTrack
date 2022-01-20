@@ -91,15 +91,15 @@ return(
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
         <div onClick = {toggleExpand}  className="todo-item__header">
-            {props.complete === "Complete" && <AiOutlineCheck/>}
-            {props.complete === "Started" && <AiOutlineFieldTime/>}
-            {props.complete === "Pending" && <AiOutlineUnorderedList/>}
+            {props.status === "Complete" && <AiOutlineCheck/>}
+            {props.status === "Started" && <AiOutlineFieldTime/>}
+            {props.status === "Pending" && <AiOutlineUnorderedList/>}
             <h2>{props.task}</h2>
         </div>
         {expand && (<div className="todo-item__expand">
             <p>{props.notes}</p>
-            {props.complete ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
-            {props.complete ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
+            {props.status ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
+            {props.status ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
 
             <Button onClick={openMapHandler}>VIEW ON MAP</Button>
             <Button to={`/places/${props.id}`}>EDIT</Button>

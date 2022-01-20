@@ -28,7 +28,7 @@ const userSchema = new Schema({
         account:{type:String,required:true},
         balance:{type:Number,required:true},
         financeCategories:[{
-            category:{type:String},
+            category:{type:String,required:true},
             transactionList:[{type:mongoose.Types.ObjectId,required:true, ref: 'Transaction'}]
         }]
     }],

@@ -9,7 +9,7 @@ const HttpError = require('./models/http-error');
 const APIKEYS = require('./apikeys');
 
 //------------------DataBase----------------------
-const mongoUrl = `mongodb+srv://BraedonB98:${APIKEYS.MONGO}@plutus.nmh1i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+const mongoUrl = `mongodb+srv://BraedonB98:${APIKEYS.MONGO}@plutus.nmh1i.mongodb.net/2DoFinance?retryWrites=true&w=majority`
 
 //-------------------Instantiation---------------
 const app = express();
