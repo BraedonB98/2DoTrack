@@ -22,7 +22,8 @@ const userSchema = new Schema({
             name:{type:String,require:true},
             toDoList:[{type:mongoose.Types.ObjectId,required:true, ref: 'ToDoItem'}]
         }],
-    pendingSharedTasks:[{type:mongoose.Types.ObjectId,required:true, ref: 'ToDoItem'}], //could just make this a catagory but easier to be able to clear occasionally this way
+    recurringTasks:[{type:mongoose.Types.ObjectId,required:true, ref: 'ToDoItem'}], //may have some issue making shared enter recurring folder
+    pendingSharedTasks:[{type:mongoose.Types.ObjectId,required:true, ref: 'ToDoItem'}], //could just make this a category but easier to be able to clear occasionally this way
     financeAccounts:[{
         account:{type:String,required:true},
         balance:{type:Number,required:true},
