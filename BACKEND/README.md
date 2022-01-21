@@ -161,3 +161,10 @@ todo-controller.js -> rename Category, It will also need to search through recur
 todo-controllers.js -> deleteItem, make sure to go through users list and delete it from task list of all users(both pending or accepted) Also make sure user is the creator. If just a user just remove it from array so they no longer use it.
 
 Todo-routes.js ->still need to add validation to all functions
+User-routes.js ->still need to add validation to all functions
+UID-routes.js ->still need to add validation to all functions
+Finance-routes.js ->still need to add validation to all functions
+
+Need to add a delete user function
+
+user-controllers -> create user, need to fix check for previous user since existing user is over written with User.findOne{{phonenumber:phonenumber}} (around line 27 rn)

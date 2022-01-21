@@ -2,7 +2,6 @@
 const APIKEYS = require('../apikeys');
 
 //--------------------imports-------------------------
-const {validationResult} = require('express-validator');
 const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
@@ -10,27 +9,57 @@ sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
 
+//----------------------HelperFunction------------------
+const getUserById = async(uid) =>{
+    let user
+    try{
+        user = await User.findById(uid);
+    }
+    catch(error){
+        return({error:error,errorMessage:'Could not find user in database',errorCode:500})
+    };
+    if(!user){
+        return({error:error,errorMessage:'User not in database',errorCode:404})
+    }
+    return(user);
+}
+
+const getUserByProp = async(prop,value) =>{
+    let user
+    try{
+        user = await User.findOne({[prop]:value});//dynamic property
+    }
+    catch(error){
+        return({error:{message:`Accessing database failed`, code:500}})
+    };
+    if(!user){
+        return({error:{message:`Could not locate ${prop} in database`, code:404}})
+    }
+    return(user);
+}
+
+
+
+
 //-----------------------Controllers------------------
 const createUser = async (req,res,next)=>{
-    //Checking valid inputs
-    const errors = validationResult(req);
-    if(!errors.isEmpty())
-    {
-        return(next(new HttpError('Invalid Inputs Passed found by expressValidator Please try again', 422)))
-    }
     const{name, email,phoneNumber, password }= req.body;
 
     //Checking if user already has account
     let existingUser; 
     try{
        existingUser = await User.findOne({email:email});
-       existingUser = await User.findOne({phoneNumber:phoneNumber});
+       if(!existingUser){
+            existingUser = await User.findOne({phoneNumber:phoneNumber});
+       }
+       
     }
     catch(error){
         return(next(new HttpError('Sign up failed, Could not access database', 500)));
     };
+    
     if(existingUser){
-        return(next(new HttpError('Could not create user, email already in use'),422));
+        return(next(new HttpError('Could not create user, credentials already in use'),422));
     }
 
     //Creating new user
@@ -47,7 +76,7 @@ const createUser = async (req,res,next)=>{
             notificationToDo:false,
             notificationFinance:false,
         },
-        toDoCatagories:[],
+        toDoCategories:[],
         recurringTasks:[],
         financeAccounts:[],
         recurringExpenses:[]
@@ -114,23 +143,10 @@ const photoUpload = async(req,res,next)=>{
     //getting params from url
     const uid = req.params.uid;
     
-    //checking for errors
-    const errors = validationResult(req);
-    if(!errors.isEmpty())
-    {
-        return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
-    } 
-    
     //getting user from DB
-    let user;
-    try{
-        user = await User.findById(uid);
-    }
-    catch(error){
-        return(next(new HttpError('Could not find place in database', 500)));
-    };
-    if(!user){
-        return(next(new HttpError('User not in database', 404)));
+    let user = await getUserById(uid);
+    if(!!user.error){
+        return(next(new HttpError(user.errorMessage, user.errorCode)));
     }
     
 
@@ -159,54 +175,30 @@ const photoUpload = async(req,res,next)=>{
 const getPreferences = async (req,res,next)=>{
     //getting params from url
     const uid = req.params.uid;
-    //checking for errors
-    const errors = validationResult(req);
-    if(!errors.isEmpty())
-    {
-        return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
-    } 
-        
+    
     //getting user from DB
-    let user;
-    try{
-        user = await User.findById(uid);
-    }
-    catch(error){
-        return(next(new HttpError('Could not find user in database', 500)));
-    };
-    if(!user){
-        return(next(new HttpError('User not in database', 404)));
-    }
+    let user = await getUserById(uid);
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+ 
+
     res.status(200).json({preferences: user.preferences.toObject({getters:true})});
 }
 const updatePreferences = async (req,res,next)=>{
         //getting params from url
         const uid = req.params.uid;
         const {preferences}= req.body;
-        //checking for errors
-        const errors = validationResult(req);
-        if(!errors.isEmpty())
-        {
-            return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
-        } 
-            
+
         //getting user from DB
-        let user;
-        try{
-            user = await User.findById(uid);
-        }
-        catch(error){
-            return(next(new HttpError('Could not find user in database', 500)));
-        };
-        if(!user){
-            return(next(new HttpError('User not in database', 404)));
-        }
+        let user = await getUserById(uid);
+        if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+
         user.preferences= preferences;
+        console.log(user);
         try{
-            
             await user.save();
         }
         catch(error){
+            console.log(error);
             return(next(new HttpError('Could not update user in database', 500)));
         }
             

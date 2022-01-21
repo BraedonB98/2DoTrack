@@ -2,7 +2,6 @@
 const APIKEYS = require('../apikeys');
 
 //--------------------imports-------------------------
-const {validationResult} = require('express-validator');
 const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
@@ -11,47 +10,62 @@ const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
 const ToDoItem = require('../models/toDoItem-model');
 
+
 //-----------------------Controllers------------------
-const createItem = async(req,res,next)=>{
+const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 
-const editItem = (req,res,next)=>{
+const editItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 
-const deleteItem = (req,res,next)=>{
+const deleteItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const getItem = (req,res,next)=>{
+const getItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 
 }
-const moveItem = (req,res,next)=>{
+const moveItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const shareItem = (req,res,next)=>{
+const shareItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const acceptPendingSharedItem = (req,res,next)=>{
+const acceptPendingSharedItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const getPendingSharedItems = (req,res,next)=>{
+const getPendingSharedItems = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const transferCreator = (req,res,next)=>{
+const transferCreator = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const createCategory = (req,res,next)=>{
+const createCategory = async(req,res,next)=>{
+    const{uid, name, icon}= req.body;
+
+    //Find User
+    let user = await getUser(uid,next); 
+    
+    const category = {
+        name,
+        icon,
+        toDoList:[]
+    }
+    user.toDoCategories.push(category);
+
+
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const renameCategory = (req,res,next)=>{
+
+const renameCategory = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const deleteCategory = (req,res,next)=>{    
+const deleteCategory = async(req,res,next)=>{    
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const getCategory = (req,res,next)=>{
+const getCategory = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 
