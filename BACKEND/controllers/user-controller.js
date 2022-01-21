@@ -102,7 +102,7 @@ const photoUpload = async(req,res,next)=>{
         return(next(new HttpError('Could not find place in database', 500)));
     };
     if(!user){
-        return(next(new HttpError('Place not in database', 404)));
+        return(next(new HttpError('User not in database', 404)));
     }
     
 
@@ -126,13 +126,65 @@ const photoUpload = async(req,res,next)=>{
     }
 
 
-    res.json({user: user.toObject({getters:true})});
+    res.json({user: user.imageUrl.toObject({getters:true})});
 }
-const getPreferences = (req,res,next)=>{
-    res.json({user:"test"});
+const getPreferences = async (req,res,next)=>{
+    //getting params from url
+    const uid = req.params.uid;
+    //checking for errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
+    } 
+        
+    //getting user from DB
+    let user;
+    try{
+        user = await User.findById(uid);
+    }
+    catch(error){
+        return(next(new HttpError('Could not find user in database', 500)));
+    };
+    if(!user){
+        return(next(new HttpError('User not in database', 404)));
+    }
+    res.status(200).json({preferences: user.preferences.toObject({getters:true})});
 }
-const updatePreferences = (req,res,next)=>{
-    res.status(201).json({user:"test"})
+const updatePreferences = async (req,res,next)=>{
+        //getting params from url
+        const uid = req.params.uid;
+        const {preferences}= req.body;
+        //checking for errors
+        const errors = validationResult(req);
+        if(!errors.isEmpty())
+        {
+            return(next(new HttpError('Invalid Inputs Passed Please try again', 422)))
+        } 
+            
+        //getting user from DB
+        let user;
+        try{
+            user = await User.findById(uid);
+        }
+        catch(error){
+            return(next(new HttpError('Could not find user in database', 500)));
+        };
+        if(!user){
+            return(next(new HttpError('User not in database', 404)));
+        }
+        user.preferences= preferences;
+        try{
+            
+            await user.save();
+        }
+        catch(error){
+            return(next(new HttpError('Could not update user in database', 500)));
+        }
+            
+    
+            
+        res.status(200).json({preferences: user.preferences.toObject({getters:true})});
 }
 
 //---------------------Exports--------------------------
