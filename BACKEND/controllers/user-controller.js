@@ -40,7 +40,6 @@ const getUserByProp = async(prop,value) =>{
 
 
 
-
 //-----------------------Controllers------------------
 const createUser = async (req,res,next)=>{
     const{name, email,phoneNumber, password }= req.body;
@@ -187,7 +186,6 @@ const updatePreferences = async (req,res,next)=>{
         if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
 
         user.preferences= preferences;
-        console.log(user);
         try{
             await user.save();
         }
@@ -207,3 +205,5 @@ exports.login = login;
 exports.photoUpload = photoUpload;
 exports.getPreferences = getPreferences;
 exports.updatePreferences = updatePreferences;
+exports.getUserById = getUserById;
+exports.getUserByProp = getUserByProp;

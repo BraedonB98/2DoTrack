@@ -166,5 +166,3 @@ UID-routes.js ->still need to add validation to all functions
 Finance-routes.js ->still need to add validation to all functions
 
 Need to add a delete user function
-
-user-controllers -> create user, need to fix check for previous user since existing user is over written with User.findOne{{phonenumber:phonenumber}} (around line 27 rn)

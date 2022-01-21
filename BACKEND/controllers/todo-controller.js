@@ -5,6 +5,11 @@ const APIKEYS = require('../apikeys');
 const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
+
+//------------------Modules--------------------------
+const userController = require('../controllers/user-controller');
+const getUserById = userController.getUserById;
+const getUserByProps = userController.getUserByProps;
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
@@ -46,7 +51,13 @@ const createCategory = async(req,res,next)=>{
     const{uid, name, icon}= req.body;
 
     //Find User
-    let user = await getUser(uid,next); 
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+  
+    if (user.toDoCategories.filter(category => category.name === name).length!==0)
+    {
+        return(next(new HttpError("Category name already exists", 422)))
+    }
     
     const category = {
         name,
@@ -55,12 +66,44 @@ const createCategory = async(req,res,next)=>{
     }
     user.toDoCategories.push(category);
 
+    try{
+        await user.save();
+    }
+    catch(error){
+        console.log(error);
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+        
 
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
 }
 
 const renameCategory = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const{uid, name , newName}= req.body;
+
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+   
+    if (user.toDoCategories.filter(category => category.name === name).length!==0)
+    {
+        user.toDoCategories.find(category => category.name === name).name = newName;
+    }
+    else{
+        return(next(new HttpError("Category not found in database", 404)))
+    }
+    
+
+    try{
+        await user.save();
+    }
+    catch(error){
+        console.log(error);
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+        
+
+    res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
 }
 const deleteCategory = async(req,res,next)=>{    
     res.status(201).json({message:"test"}.toObject({getters:true}))
