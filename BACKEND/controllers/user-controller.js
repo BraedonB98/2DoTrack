@@ -121,19 +121,15 @@ const login = async (req,res,next)=>{
     //Locating User
     let existingUser;
     if(!phoneNumber){
-        try{
-            existingUser = await User.findOne({email:email});
-        }
-        catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}
+        existingUser=await getUserByProp ('email',email);
+        if(!!existingUser.error){return(next(new HttpError(existingUser.error.message, existingUser.error.code)))}
     }
     if(!email){
-        try{
-            existingUser = await User.findOne({phoneNumber:phoneNumber})
-        }
-         catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}    
+        existingUser=await getUserByProp ('phoneNumber',phoneNumber);
+        if(!!existingUser.error){return(next(new HttpError(existingUser.error.message, existingUser.error.code)))}
     }   
     //Checking Passwords
-    if(!existingUser || existingUser.password !== password){
+    if( existingUser.password !== password){
         return(next(new HttpError('Login Failed,invalid credentials', 401)));
     }
     res.json({message: 'Logged in!' , user: existingUser.toObject({getters:true})})
@@ -145,9 +141,7 @@ const photoUpload = async(req,res,next)=>{
     
     //getting user from DB
     let user = await getUserById(uid);
-    if(!!user.error){
-        return(next(new HttpError(user.errorMessage, user.errorCode)));
-    }
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
     
 
     //save user with new image URL
@@ -190,7 +184,7 @@ const updatePreferences = async (req,res,next)=>{
 
         //getting user from DB
         let user = await getUserById(uid);
-        if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+        if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
 
         user.preferences= preferences;
         console.log(user);
