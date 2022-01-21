@@ -153,3 +153,11 @@ in app.js/ && user files -> still need to handle validation of users
 in uid-controller.js->getbyName will need to get all users with same name and show part of personal info to let user decide which one they are looking for.
 
 need to add user->getcatagory
+
+todo-controller.js -> delete Category, It will also need to search through recurring category and delete any with that category. 
+
+todo-controller.js -> rename Category, It will also need to search through recurring category and rename any with that category and rename those in renamed category
+
+todo-controllers.js -> deleteItem, make sure to go through users list and delete it from task list of all users(both pending or accepted) Also make sure user is the creator. If just a user just remove it from array so they no longer use it.
+
+Todo-routes.js ->still need to add validation to all functions
