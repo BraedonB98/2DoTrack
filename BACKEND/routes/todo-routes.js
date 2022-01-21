@@ -44,12 +44,14 @@ router.patch('/renamecategory',
     [],
     toDoController.renameCategory)
 
-router.delete('/deletecategory',
+router.get('/category/:uid/:cid',//category name
+    toDoController.getCategory)
+
+router.delete('/category',
     [],
     toDoController.deleteCategory)
 
-router.get('/getcategory/:CID',//categoryID
-    toDoController.getItem)
+
 
 
 

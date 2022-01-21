@@ -109,7 +109,17 @@ const deleteCategory = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const getCategory = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const {cid,uid} = req.params;
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    console.log(user.toDoCategories.filter(category => category.name === cid))
+    let category = user.toDoCategories.filter(category => category.name === cid)
+    if (category.length===0)
+    {
+        return(next(new HttpError("Category Cant Be Located", 422)))
+    }
+    res.status(200).json({category: category})
 }
 
 

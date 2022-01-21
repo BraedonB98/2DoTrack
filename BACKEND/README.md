@@ -166,3 +166,5 @@ UID-routes.js ->still need to add validation to all functions
 Finance-routes.js ->still need to add validation to all functions
 
 Need to add a delete user function
+
+Figure out why todo categories have their own object Id when they arnt a mongoose object
