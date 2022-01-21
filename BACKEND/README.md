@@ -149,3 +149,5 @@ Finance Item{}
 in user-controller->imageUpload, if image fails to unlink, add it to a log file to be able to delete later
 
 in app.js/ && user files -> still need to handle validation of users
+
+in uid-controller.js->getbyName will need to get all users with same name and show part of personal info to let user decide which one they are looking for.

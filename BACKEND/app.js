@@ -6,7 +6,7 @@ const path = require('path') //required for express static path for file accessi
 //------------------Models---------------------------
 const HttpError = require('./models/http-error');
 
-//-------------------API-----------------------------
+//-------------------APIAuth-----------------------------
 const APIKEYS = require('./apikeys');
 
 //------------------DataBase----------------------
@@ -18,7 +18,7 @@ const app = express();
 //-------------------Routes-----------------------
 //const financeRoutes = require('./routes/finance-routes');
 //const todoRoutes = require('./routes/todo-routes');
-//const uidRoutes = require('./routes/uid-routes');
+const uidRoutes = require('./routes/uid-routes');
 const userRoutes = require('./routes/user-routes');
 
 //-----------------MiddleWare--------------------
@@ -34,7 +34,7 @@ app.use((req,res,next) => {
 });
 
 //-----------------Known Routes--------------------------
-//app.use('/api/uid',uidRoutes); // /api/UID...
+app.use('/api/uid',uidRoutes); // /api/UID...
 app.use('/api/user',userRoutes); // /api/user...
 //app.use('/api/todo',todoRoutes); // /api/todo...
 //app.use('/api/finance',financeRoutes); // /api/finance...
@@ -60,6 +60,7 @@ app.use((error, req,res,next)=> {
     res.status(error.code || 500);
     res.json({message: error.message || 'An unknown error(imageHandling) occurred!'});
 });
+
 //------------------Mongo------------------------
 mongoose
 .connect(mongoUrl)
