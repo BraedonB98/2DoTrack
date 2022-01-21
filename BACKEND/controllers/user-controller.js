@@ -4,7 +4,8 @@ const APIKEYS = require('../apikeys');
 //--------------------imports-------------------------
 const {validationResult} = require('express-validator');
 const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
-
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
@@ -61,6 +62,7 @@ const createUser = async (req,res,next)=>{
     catch(error){
         return(next(new HttpError('Creating user failed',500)));
     };
+    //SMS Notification with Twilio
     client.messages
         .create({
             body: `Welcome ${createdUser.name} to 2DoFinance! We are happy to have you!!!`,
@@ -68,6 +70,23 @@ const createUser = async (req,res,next)=>{
             to: `+1${createdUser.phoneNumber}`
         })
         .then(message => console.log(message.sid));
+    
+    //Email Notification with SendGrid(twilio)
+    const msg = {
+        to: createdUser.email,
+        from: APIKEYS.SENDGRIDEMAIL, 
+        subject: 'Welcome to 2DoFinance!!!',
+        text: `message`,
+        html: (`<p>Welcome ${createdUser.name},</p> <p>to 2DoFinance! We are happy to have you!!! </p> <p>If this is a mistake please let us know,</p> <p> your friends at,</p><h2>2DoFinance<h2>`)
+      }
+      sgMail.send(msg)
+        .then(() => {
+            console.log(`Email to ${createdUser.email}`)
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+
 
     res.status(201).json({user:createdUser.toObject({getters:true})})
 }
