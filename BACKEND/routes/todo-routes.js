@@ -2,14 +2,59 @@ const express = require('express');
 const { check } = require('express-validator');
 
 
-const toDoController = require('../controllers/user-controller');
+const toDoController = require('../controllers/todo-controller');
 
 const router = express.Router();
 
 
-//router.post('/createitem',
-    //[check('email').normalizeEmail().isEmail()],
-      //  toDoController.createItem)
+router.post('/createitem',
+    [],
+    toDoController.createItem)
+
+router.patch('/edititem/',
+    [],
+    toDoController.editItem)
+
+router.delete('/deleteitem',
+    [],
+    toDoController.deleteItem)
+
+router.get('/getitem/:TDIID',//To DO Item ID maybe add different ways to get
+    toDoController.getItem)
+
+router.patch('/moveitem',
+    [],
+    toDoController.moveItem)
+
+router.patch('/shareItem',
+    [],
+    toDoController.shareItem)
+
+router.patch('/acceptPendingSharedItem',
+    [],
+    toDoController.acceptPendingSharedItem)
+
+router.get('/getPendingSharedItems',
+    toDoController.getPendingSharedItems)
+
+router.post('/createcategory',
+    [],
+    toDoController.createCategory)
+
+router.patch('/renamecategory',
+    [],
+    toDoController.renameCategory)
+
+router.delete('/deletecategory',
+    [],
+    toDoController.deleteCategory)
+
+router.get('/getcategory/:CID',//categoryID
+    toDoController.getItem)
+
+
+
+
 
 
 

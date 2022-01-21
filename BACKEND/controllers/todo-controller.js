@@ -9,6 +9,7 @@ sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
+const ToDoItem = require('../models/toDoItem-model');
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{
@@ -32,10 +33,13 @@ const moveItem = (req,res,next)=>{
 const shareItem = (req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const acceptPendingSharedItems = (req,res,next)=>{
+const acceptPendingSharedItem = (req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const getPendingSharedItems = (req,res,next)=>{
+    res.status(201).json({message:"test"}.toObject({getters:true}))
+}
+const transferCreator = (req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const createCategory = (req,res,next)=>{
@@ -44,7 +48,7 @@ const createCategory = (req,res,next)=>{
 const renameCategory = (req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const deleteCategory = (req,res,next)=>{    \
+const deleteCategory = (req,res,next)=>{    
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const getCategory = (req,res,next)=>{
@@ -61,8 +65,9 @@ exports.getItem = getItem;
 exports.moveItem = moveItem;
 
 exports.shareItem = shareItem;
-exports.acceptPendingSharedItems = acceptPendingSharedItems;
+exports.acceptPendingSharedItem = acceptPendingSharedItem;
 exports.getPendingSharedItems =getPendingSharedItems;
+exports.transferCreator = transferCreator;
 
 exports.createCategory = createCategory;
 exports.renameCategory = renameCategory;
