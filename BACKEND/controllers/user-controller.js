@@ -10,9 +10,6 @@ sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
 
-//-------------------Helper Functions-----------------
-
-
 //-----------------------Controllers------------------
 const createUser = async (req,res,next)=>{
     //Checking valid inputs
