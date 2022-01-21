@@ -92,15 +92,15 @@ Finance Item{}
     -(Auth, Todo TODOLIST Name)
     -Creates new empty array with Name in USER->TO DO Catagories -> Name[]
 
--PATCH/API/:UID/TODOLISTS/:TODOLIST -Rename TODOLIST
+-PATCH/API/TODOLISTS/:UID/:TODOLIST -Rename TODOLIST
     -(Auth,New TODOLIST Name)
     -Finds Previous TODOLIST -> Name , If its there then it will duplicate the found array to a new array with a new Name else return error
 
--DELETE/API/:UID/TODOLISTS/:TODOLIST -Delete TODOLIST
+-DELETE/API/TODOLISTS/:UID/:TODOLIST -Delete TODOLIST
     -(Auth)
     -Deletes TODOLIST and all TODO Items in catagory 
 
--GET/API/:UID/Catagories -Get Catagorys
+-GET/API/user/:UID/Catagories -Get Catagorys
     -(Auth)
     -returns all catagories user has
 
@@ -151,3 +151,5 @@ in user-controller->imageUpload, if image fails to unlink, add it to a log file 
 in app.js/ && user files -> still need to handle validation of users
 
 in uid-controller.js->getbyName will need to get all users with same name and show part of personal info to let user decide which one they are looking for.
+
+need to add user->getcatagory
