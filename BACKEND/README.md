@@ -148,4 +148,4 @@ Finance Item{}
 -------------------------------------------------------Known Issues---------------------------------------
 in user-controller->imageUpload, if image fails to unlink, add it to a log file to be able to delete later
 
-
+in app.js/ && user files -> still need to handle validation of users

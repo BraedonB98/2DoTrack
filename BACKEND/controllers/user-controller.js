@@ -1,5 +1,9 @@
+//-------------------APIAuth-----------------------------
+const APIKEYS = require('../apikeys');
+
 //--------------------imports-------------------------
 const {validationResult} = require('express-validator');
+const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
 
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
@@ -57,6 +61,14 @@ const createUser = async (req,res,next)=>{
     catch(error){
         return(next(new HttpError('Creating user failed',500)));
     };
+    client.messages
+        .create({
+            body: `Welcome ${createdUser.name} to 2DoFinance! We are happy to have you!!!`,
+            from: APIKEYS.TWILIOPHONENUMBER,
+            to: `+1${createdUser.phoneNumber}`
+        })
+        .then(message => console.log(message.sid));
+
     res.status(201).json({user:createdUser.toObject({getters:true})})
 }
 const login = async (req,res,next)=>{
