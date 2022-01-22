@@ -176,3 +176,6 @@ add change category Icon patch route
 may need to install twilio-cli into project, its installed globally but not for this project
 
 will only work with phone numbers with +1   (USA phone numbers)
+
+----------------------------------------------Dev Info----------------------------------
+you need ngrok to be able to open port to internet for sms functionality
