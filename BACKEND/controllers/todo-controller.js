@@ -2,6 +2,7 @@
 const APIKEYS = require('../apikeys');
 
 //--------------------imports-------------------------
+const mongoose = require('mongoose');
 const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
@@ -18,7 +19,62 @@ const ToDoItem = require('../models/toDoItem-model');
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
+
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    let category = user.toDoCategories.filter(category => category.name === cid)[0]
+    console.log(!category);
+    if (!category)
+    {
+        return(next(new HttpError("Category not found", 422)))
+    }
+    
+    //Create Item
+    const newItem = new ToDoItem({
+        name,
+        recurring,
+        status,
+        due,
+        priority,
+        address,
+        location,
+        notes,
+        creator:uid,
+        users:[uid]
+    });
+
+    
+    //Save user and todo with sessions like in new place
+    try{
+        
+        console.log("starting session")
+        const sess = await mongoose.startSession();
+        sess.startTransaction();//transactions perform multiple action
+        
+        await newItem.save({session:sess})
+        category.toDoList.push(newItem);
+        user.toDoCategories.filter(category => category.name === cid)
+        console.log("Category");
+
+        console.log(category);
+        console.log("user");
+        console.log(user);
+        //user.toDoCategories.filter(category => category.name === cid)[toDoList].push(newItem);
+        await user.save({session:sess});
+        
+        console.log("Commiting");
+        await sess.commitTransaction();//saves transaction if all successful 
+        console.log("Commited");
+    }
+    catch(error){
+        console.log(error)
+        return(next(new HttpError('Could not update user or item in database', 500)));
+    }
+        
+
+    res.status(201).json({category: newItem.toObject({getters:true})})
 }
 
 const editItem = async(req,res,next)=>{
@@ -113,7 +169,6 @@ const getCategory = async(req,res,next)=>{
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
-    console.log(user.toDoCategories.filter(category => category.name === cid))
     let category = user.toDoCategories.filter(category => category.name === cid)
     if (category.length===0)
     {
