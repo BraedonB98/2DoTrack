@@ -16,6 +16,20 @@ const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
 const ToDoItem = require('../models/toDoItem-model');
 
+//-----------------------HelperFunctions-----------------------
+const getItemById = async(TID) =>{
+    let item
+    try{
+        item = await ToDoItem.findById(TID);
+    }
+    catch(error){
+        return({error:error,errorMessage:'Could not access task in database',errorCode:500})
+    };
+    if(!item){
+        return({error:error,errorMessage:'Task not in database',errorCode:404})
+    }
+    return(item);
+}
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
@@ -56,17 +70,12 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
         await newItem.save({session:sess})
         category.toDoList.push(newItem);
         user.toDoCategories.filter(category => category.name === cid)
-        console.log("Category");
 
-        console.log(category);
-        console.log("user");
-        console.log(user);
         //user.toDoCategories.filter(category => category.name === cid)[toDoList].push(newItem);
         await user.save({session:sess});
         
-        console.log("Commiting");
+
         await sess.commitTransaction();//saves transaction if all successful 
-        console.log("Commited");
     }
     catch(error){
         console.log(error)
@@ -74,20 +83,55 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     }
         
 
-    res.status(201).json({category: newItem.toObject({getters:true})})
+    res.status(201).json({task: newItem.toObject({getters:true})})
 }
 
 const editItem = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+            const tid = req.params.TDIID;
+            const {name,status,priority,address,notes}= req.body;
+    
+            let item = await getItemById(tid);
+            if(!!item.error){return(next(new HttpError(item.error.message, item.error.code)))}
+    
+            if(name){item.name = name};
+            if(status){item.status = status};
+            if(status){item.priority = priority};
+            if(status){item.address = address};//update location at the same time
+            if(status){item.notes = notes};
+
+            
+            try{
+                await item.save();
+            }
+            catch(error){
+                console.log(error);
+                return(next(new HttpError('Could not update task in database', 500)));
+            }
+                
+        
+                
+            res.status(200).json({preferences: item.toObject({getters:true})});
 }
 
 const deleteItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
+
 const getItem = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const tid = req.params.TDIID;
+    //getting item from DB
+    let item = await getItemById(tid);
+    if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+ 
+
+    res.status(200).json({task: item.toObject({getters:true})});
 
 }
+
+const getItems= async(req,res,next)=>{
+    res.status(201).json({message:"test"}.toObject({getters:true}))
+}
+
 const moveItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
@@ -183,6 +227,7 @@ exports.createItem = createItem;//yes I realize this could be called task but im
 exports.editItem = editItem;
 exports.deleteItem = deleteItem;
 exports.getItem = getItem;
+exports.getItems = getItems;
 
 exports.moveItem = moveItem;
 

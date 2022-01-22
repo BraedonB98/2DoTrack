@@ -16,7 +16,7 @@ const getUserById = async(uid) =>{
         user = await User.findById(uid);
     }
     catch(error){
-        return({error:error,errorMessage:'Could not find user in database',errorCode:500})
+        return({error:error,errorMessage:'Could not access user in database',errorCode:500})
     };
     if(!user){
         return({error:error,errorMessage:'User not in database',errorCode:404})

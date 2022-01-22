@@ -10,7 +10,7 @@ router.post('/createitem',
     [],
     toDoController.createItem)
 
-router.patch('/edititem/',
+router.patch('/edititem/:TDIID',
     [],
     toDoController.editItem)
 
@@ -20,6 +20,9 @@ router.delete('/deleteitem',
 
 router.get('/getitem/:TDIID',//To DO Item ID maybe add different ways to get
     toDoController.getItem)
+
+router.get('/getitems/:UID',
+    toDoController.getItems)
 
 router.patch('/moveitem',
     [],
