@@ -170,3 +170,9 @@ Need to add a delete user function
 Figure out why todo categories have their own object Id when they arnt a mongoose 
 
 Need to standardize emails and phonenumber inputs so a capitalization and stuff doesnt make it not findable when searching.
+
+add change category Icon patch route    
+
+may need to install twilio-cli into project, its installed globally but not for this project
+
+will only work with phone numbers with +1   (USA phone numbers)

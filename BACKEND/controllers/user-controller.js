@@ -67,7 +67,7 @@ const createUser = async (req,res,next)=>{
         subscription:"noSub",
         imageUrl:"../uploads/images/2DoFinanceLogo.png",
         email,
-        phoneNumber,
+        phoneNumber:('+1'+phoneNumber),
         password,
         preferences:{
             notificationTime:0,
@@ -92,7 +92,7 @@ const createUser = async (req,res,next)=>{
         .create({
             body: `Welcome ${createdUser.name} to 2DoFinance! We are happy to have you!!!`,
             from: APIKEYS.TWILIOPHONENUMBER,
-            to: `+1${createdUser.phoneNumber}`
+            to: `${createdUser.phoneNumber}`
         })
         .then(message => console.log(message.sid));
     

@@ -20,6 +20,7 @@ const app = express();
 const todoRoutes = require('./routes/todo-routes');
 const uidRoutes = require('./routes/uid-routes');
 const userRoutes = require('./routes/user-routes');
+const smsRoutes = require('./routes/sms-routes');
 
 //-----------------MiddleWare--------------------
 app.use(bodyParser.json());
@@ -38,6 +39,10 @@ app.use('/api/uid',uidRoutes); // /api/UID...
 app.use('/api/user',userRoutes); // /api/user...
 app.use('/api/todo',todoRoutes); // /api/todo...
 //app.use('/api/finance',financeRoutes); // /api/finance...
+//allows for a different body parser for sms so you can read messages
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/sms',smsRoutes)
+
 
 
 //-----------------Unknown Route Handling-------------------
