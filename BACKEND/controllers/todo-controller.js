@@ -150,15 +150,36 @@ const getItems= async(req,res,next)=>{ //all items from category
 
 const moveItem = async(req,res,next)=>{ //use map function on categories array, then inside run findOne with Id(or see if it contains it), if not move on
 
-    //const {cid,uid} = req.params;
-    //Find User
+    const{tid, uid, newCid, cid}= req.body;
+    //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
-    let category = user.toDoCategories.filter(category => category.name === cid)[0]
-    if (category.length===0)
+
+    //find item by Users(makes sure the user has category before running through long process of searching every category)
+    //get category
+    let oldCategory
+    if (cid===undefined)
     {
-        return(next(new HttpError("Category Cant Be Located", 422)))
+        //find category from searching
+        
+        oldCategory = user.toDoCategories.filter(category => 
+           category.toDoList.filter(item => 
+                item._id.toString()===tid
+            ).length!==0
+        )
     }
+    else{ //alot more efficient than way above
+        oldCategory = user.toDoCategories.filter(category => category.name === cid)
+    }
+    if (oldCategory.length===0)
+        {return(next(new HttpError("Category Cant Be Located", 422)))};
+    oldCategory = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+    
+
+    
+    //remove from cid
+    //add to cid
+    //save user
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const shareItem = async(req,res,next)=>{
