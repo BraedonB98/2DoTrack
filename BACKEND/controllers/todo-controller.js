@@ -214,8 +214,37 @@ const moveItem = async(req,res,next)=>{
 
     res.status(201).json({category: category.toObject({getters:true})})
 }
-const shareItem = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+const shareItem = async(req,res,next)=>{//max size of user inbox == 20
+    const{tid, uid}= req.body;
+    //get user
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+
+    //check item 
+    let itemExists = await itemInDataBase(tid)
+    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
+    if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
+
+    //get new category
+    category = user.pendingSharedTasks;
+    if (!category){return(next(new HttpError("Category Cant Be Located", 422)))};
+    if(category.length>=20)
+    {
+        return(next(new HttpError("Sorry users inbox is currently full", 552)))
+    }
+    //add to item to new category
+    category.toDoList.push(tid);    
+
+    //save user
+    try{
+        await user.save();
+    }
+    catch(error){
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+
+
+    res.status(201).json({category: category.toObject({getters:true})})
 }
 const acceptPendingSharedItem = async(req,res,next)=>{ 
     const{tid, uid, cid}= req.body;
