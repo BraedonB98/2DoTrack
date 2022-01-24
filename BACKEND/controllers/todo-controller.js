@@ -128,11 +128,37 @@ const getItem = async(req,res,next)=>{
 
 }
 
-const getItems= async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+const getItems= async(req,res,next)=>{ //all items from category
+    const {cid,uid} = req.params;
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    let category = user.toDoCategories.filter(category => category.name === cid)[0]
+    if (category.length===0)
+    {
+        return(next(new HttpError("Category Cant Be Located", 422)))
+    }
+
+    var itemArray = await Promise.all(category.toDoList.map(async(item) => { //waits until all promises finish
+        var newItem = (await getItemById(item._id.toString()));
+        if(!!newItem.error){return(next(new HttpError(newItem.errorMessage, newItem.errorCode)))}
+        console.log(newItem);
+        return(newItem);
+    } ))
+    res.status(200).json({items: itemArray})
 }
 
-const moveItem = async(req,res,next)=>{
+const moveItem = async(req,res,next)=>{ //use map function on categories array, then inside run findOne with Id(or see if it contains it), if not move on
+
+    //const {cid,uid} = req.params;
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    let category = user.toDoCategories.filter(category => category.name === cid)[0]
+    if (category.length===0)
+    {
+        return(next(new HttpError("Category Cant Be Located", 422)))
+    }
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const shareItem = async(req,res,next)=>{
