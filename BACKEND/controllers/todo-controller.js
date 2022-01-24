@@ -13,7 +13,6 @@ const getUserById = userController.getUserById;
 const getUserByProps = userController.getUserByProps;
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
-const User = require('../models/user-model');
 const ToDoItem = require('../models/toDoItem-model');
 
 //-----------------------HelperFunctions-----------------------
@@ -34,7 +33,7 @@ const getItemById = async(TID) =>{
 const itemInDataBase = async(tid) =>{
     let item;
     try{
-        item = await User.exists({ _id: tid })
+        item = await ToDoItem.exists({ _id: tid })
     }
     catch{
         return({error:{message:`Accessing database failed`, code:500}})
@@ -284,7 +283,13 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     res.status(201).json({category: category.toObject({getters:true})})
 }
 const getPendingSharedItems = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const {uid} = req.params;
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    
+    
+    res.status(200).json({items: user.pendingSharedTasks})
 }
 const transferCreator = async(req,res,next)=>{//same as move item except with user not item.
     const{uidOldCreator, uidCreator, tid}= req.body;
