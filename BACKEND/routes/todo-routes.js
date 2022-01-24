@@ -32,6 +32,10 @@ router.patch('/shareItem',
     [],
     toDoController.shareItem)
 
+router.patch('/transferItem',
+    [],
+    toDoController.transferCreator)
+
 router.patch('/acceptPendingSharedItem',
     [],
     toDoController.acceptPendingSharedItem)

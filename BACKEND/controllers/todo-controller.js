@@ -31,6 +31,16 @@ const getItemById = async(TID) =>{
     return(item);
 }
 
+const itemInDataBase = async(tid) =>{
+    let item;
+    try{
+        item = await User.exists({ _id: tid })
+    }
+    catch{
+        return({error:{message:`Accessing database failed`, code:500}})
+    }
+    return(item);
+}
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
     const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
@@ -182,13 +192,8 @@ const moveItem = async(req,res,next)=>{
     oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
     
     //get item 
-    let itemExists ;
-    try{
-        itemExists = await ToDoItem.exists({ _id: tid })
-    }
-    catch{
-        return(next(new HttpError("Could not access task in DataBase", 500)))
-    }
+    let itemExists = await itemInDataBase(tid)
+    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
     if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
     //get new category
@@ -212,8 +217,42 @@ const moveItem = async(req,res,next)=>{
 const shareItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const acceptPendingSharedItem = async(req,res,next)=>{
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+const acceptPendingSharedItem = async(req,res,next)=>{ 
+    const{tid, uid, cid}= req.body;
+    //get user
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+
+    
+    //get category
+    let oldCategory = user.pendingSharedTasks;
+    if (!oldCategory){return(next(new HttpError("Task/Category Cant Be Located", 422)))};
+    
+    //removing item from old category
+    oldCategory = oldCategory.filter(item => item._id.toString()!==tid)
+    
+    //check item 
+    let itemExists = await itemInDataBase(tid)
+    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
+    if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
+
+    //get new category
+    category = user.toDoCategories.filter(category => category.name === cid)[0]
+    if (!category){return(next(new HttpError("Category Cant Be Located", 422)))};
+    
+    //add to item to new category
+    category.toDoList.push(tid);    
+
+    //save user
+    try{
+        await user.save();
+    }
+    catch(error){
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+
+
+    res.status(201).json({category: category.toObject({getters:true})})
 }
 const getPendingSharedItems = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
@@ -221,7 +260,37 @@ const getPendingSharedItems = async(req,res,next)=>{
 const transferCreator = async(req,res,next)=>{//same as move item except with user not item.
     const{uidOldCreator, uidCreator, tid}= req.body;
 
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    //make sure its not the same creator
+    if(uidOldCreator=== uidCreator){ return(next(new HttpError("You are already the owner", 409)))}
+
+    //get task
+    let item = await getItemById(tid);
+    if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+
+    //make sure user owns item
+    if(uidOldCreator!==item.creator._id.toString()){ return(next(new HttpError("Sorry you are not the creator of this task", 409)))}
+
+    //Make sure users exist
+    let creator = await userController.userInDataBase(uidOldCreator)
+    if(!!creator.error){return(next(new HttpError(creator.error.message, creator.error.code)))}
+    if(!creator){return(next(new HttpError("oldCreator not located in db", 404)))}
+
+    creator = await userController.userInDataBase(uidCreator)
+    if(!!creator.error){return(next(new HttpError(creator.error.message, creator.error.code)))}
+    if(!creator){return(next(new HttpError("creator(new) not located in db", 404)))}
+
+    
+    item.creator = uidCreator
+    console.log(item);
+        //save task
+       // try{
+         //   await item.save();
+       // }
+        //catch(error){
+         //   return(next(new HttpError('Could not update user in database', 500)));
+        //}
+
+    res.status(201).json({item:item.toObject({getters:true})})
 }
 const createCategory = async(req,res,next)=>{
     const{uid, name, icon}= req.body;

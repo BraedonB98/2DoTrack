@@ -38,6 +38,17 @@ const getUserByProp = async(prop,value) =>{
     return(user);
 }
 
+const userInDataBase = async(uid) =>{
+    let user;
+    try{
+        user = await User.exists({ _id: uid })
+    }
+    catch(error){
+        console.log(error)
+        return({error:{message:`Accessing database failed`, code:500}})
+    }
+    return(user)
+}
 
 
 //-----------------------Controllers------------------
@@ -207,3 +218,4 @@ exports.getPreferences = getPreferences;
 exports.updatePreferences = updatePreferences;
 exports.getUserById = getUserById;
 exports.getUserByProp = getUserByProp;
+exports.userInDataBase = userInDataBase;
