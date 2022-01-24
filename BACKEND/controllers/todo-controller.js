@@ -113,7 +113,7 @@ const editItem = async(req,res,next)=>{
             res.status(200).json({preferences: item.toObject({getters:true})});
 }
 
-const deleteItem = async(req,res,next)=>{
+const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 
@@ -148,12 +148,17 @@ const getItems= async(req,res,next)=>{ //all items from category
     res.status(200).json({items: itemArray})
 }
 
-const moveItem = async(req,res,next)=>{ //use map function on categories array, then inside run findOne with Id(or see if it contains it), if not move on
+const moveItem = async(req,res,next)=>{ 
 
     const{tid, uid, cid, oldCid}= req.body;
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+
+    //make sure the cid and oldCid are different
+    if(cid === oldCid){
+        return(next(new HttpError("Task is already in that category", 409)))
+    }
 
     //find item by Users(makes sure the user has category before running through long process of searching every category)
     //get category
@@ -171,7 +176,7 @@ const moveItem = async(req,res,next)=>{ //use map function on categories array, 
     else{ //alot more efficient than way above
         oldCategory = user.toDoCategories.filter(category => category.name === oldCid)
     }
-    if (!oldCategory){return(next(new HttpError("Category Cant Be Located", 422)))};
+    if (!oldCategory){return(next(new HttpError("Task/Category Cant Be Located", 422)))};
     
     //removing item from old category
     oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
@@ -213,7 +218,9 @@ const acceptPendingSharedItem = async(req,res,next)=>{
 const getPendingSharedItems = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
-const transferCreator = async(req,res,next)=>{
+const transferCreator = async(req,res,next)=>{//same as move item except with user not item.
+    const{uidOldCreator, uidCreator, tid}= req.body;
+
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const createCategory = async(req,res,next)=>{
