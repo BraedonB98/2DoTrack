@@ -150,7 +150,7 @@ const getItems= async(req,res,next)=>{ //all items from category
 
 const moveItem = async(req,res,next)=>{ //use map function on categories array, then inside run findOne with Id(or see if it contains it), if not move on
 
-    const{tid, uid, newCid, cid}= req.body;
+    const{tid, uid, cid, oldCid}= req.body;
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
@@ -158,7 +158,7 @@ const moveItem = async(req,res,next)=>{ //use map function on categories array, 
     //find item by Users(makes sure the user has category before running through long process of searching every category)
     //get category
     let oldCategory
-    if (cid===undefined)
+    if (oldCid===undefined)
     {
         //find category from searching
         
@@ -166,21 +166,43 @@ const moveItem = async(req,res,next)=>{ //use map function on categories array, 
            category.toDoList.filter(item => 
                 item._id.toString()===tid
             ).length!==0
-        )
+        )[0]
     }
     else{ //alot more efficient than way above
-        oldCategory = user.toDoCategories.filter(category => category.name === cid)
+        oldCategory = user.toDoCategories.filter(category => category.name === oldCid)
     }
-    if (oldCategory.length===0)
-        {return(next(new HttpError("Category Cant Be Located", 422)))};
-    oldCategory = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+    if (!oldCategory){return(next(new HttpError("Category Cant Be Located", 422)))};
     
+    //removing item from old category
+    oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+    
+    //get item 
+    let itemExists ;
+    try{
+        itemExists = await ToDoItem.exists({ _id: tid })
+    }
+    catch{
+        return(next(new HttpError("Could not access task in DataBase", 500)))
+    }
+    if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
+    //get new category
+    category = user.toDoCategories.filter(category => category.name === cid)[0]
+    if (!category){return(next(new HttpError("Category Cant Be Located", 422)))};
     
-    //remove from cid
-    //add to cid
+    //add to item to new category
+    category.toDoList.push(tid);    
+
     //save user
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    try{
+        await user.save();
+    }
+    catch(error){
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+
+
+    res.status(201).json({category: category.toObject({getters:true})})
 }
 const shareItem = async(req,res,next)=>{
     res.status(201).json({message:"test"}.toObject({getters:true}))
