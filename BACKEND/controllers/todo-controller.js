@@ -441,8 +441,34 @@ const renameCategory = async(req,res,next)=>{
     res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
 }
 const deleteCategory = async(req,res,next)=>{ 
+    // const {cid,uid} = req.body;
+    // if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
+    // if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
+    // //Find User
+    // let user = await getUserById(uid); 
+    // if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+    // let category = user.toDoCategories.filter(category => category.name === cid)[0]
+    // if (category.length===0)
+    // {return(next(new HttpError("Category Cant Be Located", 404)))}
+    // console.log(category)
+    // try{
+    //     await category.toDoList.map(async(item) => {
+    //         const itemToRemove={body:{uid:uid,tid:item._id.toString(), oldCid:category.name}}
+    //         console.log(itemToRemove);
+    //         const deletingItem = await deleteItemHelper(itemToRemove);
+    //         if(!!deletingItem.error){return(next(new HttpError(deletingItem.errorMessage, deletingItem.errorCode)))}
+    //     })
+    // }catch(error){
+    //     console.log(error);
+    //     {return(next(new HttpError("Could not delete Items from array", 500)))}
+    // }
 
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    //delete all items in category array
+
+    //remove category from user
+
+    
+    res.status(201).json({message:`deleted ${cid}`})
 }
 const getCategory = async(req,res,next)=>{
     const {cid,uid} = req.params;
