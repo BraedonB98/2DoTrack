@@ -57,6 +57,8 @@ router.get('/category/:uid/:cid',//category name
 router.delete('/category',
     [],
     toDoController.deleteCategory)
+router.get('/categories/:uid/',
+    toDoController.getCategories)
 
 
 

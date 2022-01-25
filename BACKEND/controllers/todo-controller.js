@@ -16,16 +16,16 @@ const HttpError = require('../models/http-error');
 const ToDoItem = require('../models/toDoItem-model');
 
 //-----------------------HelperFunctions-----------------------
-const getItemById = async(TID) =>{
+const getItemById = async(tid) =>{
     let item
     try{
-        item = await ToDoItem.findById(TID);
+        item = await ToDoItem.findById(tid);
     }
     catch(error){
         return({error:error,errorMessage:'Could not access task in database',errorCode:500})
     };
     if(!item){
-        return({error:error,errorMessage:'Task not in database',errorCode:404})
+        return({error:true,errorMessage:'Task not in database',errorCode:404})
     }
     return(item);
 }
@@ -40,15 +40,70 @@ const itemInDataBase = async(tid) =>{
     }
     return(item);
 }
+
+const deleteItemHelper = async (req) => {
+       //getting item
+       const {uid,tid,oldCid}= req.body;
+       let item = await getItemById(tid);
+       if(!!item.error){return({error:item.error, errorMessage:item.errorMessage, errorCode:item.errorCode})}
+       //console.log(item)
+       //getting user
+       let user = await getUserById(uid); 
+       if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
+   
+       let oldCategory
+       if (oldCid===undefined)
+       {
+           //find category from searching
+           
+           oldCategory = user.toDoCategories.filter(category => 
+              category.toDoList.filter(item => 
+                   item._id.toString()===tid
+               ).length!==0
+           )[0]
+       }
+       else{ //alot more efficient than way above
+           oldCategory = user.toDoCategories.filter(category => category.name === oldCid)
+       }
+       if (!oldCategory){ 
+        return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
+       
+       if(item.creator._id.toString() === uid){
+           console.log("removing item for all users")
+           try {
+               const sess = await mongoose.startSession();
+               sess.startTransaction();
+               await item.remove({session: sess});
+               //removing item from old category
+               oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+               await user.save({session: sess});
+               await sess.commitTransaction();
+             } catch (err) {
+                return({error:error, errorMessage:"Something went wrong, could not delete item", errorCode:500})
+             }
+       }
+       else{
+           try {
+               //removing item from old category
+               oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+               await user.save();
+             } catch (err) {
+                return({error:error, errorMessage:"Something went wrong, could not delete item", errorCode:"500"})
+             }
+            }
+        return({error:false})
+}
+
+
+
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
     const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
 
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     let category = user.toDoCategories.filter(category => category.name === cid)[0]
-    console.log(!category);
     if (!category)
     {
         return(next(new HttpError("Category not found", 422)))
@@ -72,7 +127,6 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     //Save user and todo with sessions like in new place
     try{
         
-        console.log("starting session")
         const sess = await mongoose.startSession();
         sess.startTransaction();//transactions perform multiple action
         
@@ -100,7 +154,7 @@ const editItem = async(req,res,next)=>{
             const {name,status,priority,address,notes}= req.body;
     
             let item = await getItemById(tid);
-            if(!!item.error){return(next(new HttpError(item.error.message, item.error.code)))}
+            if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
     
             if(name){item.name = name};
             if(status){item.status = status};
@@ -123,7 +177,9 @@ const editItem = async(req,res,next)=>{
 }
 
 const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
-    res.status(201).json({message:"test"}.toObject({getters:true}))
+    const deletingItem = await deleteItemHelper(req);
+    if(!!deletingItem.error){return(next(new HttpError(deletingItem.errorMessage, deletingItem.errorCode)))}
+    res.status(201).json({message:"deleted"})
 }
 
 const getItem = async(req,res,next)=>{
@@ -141,7 +197,7 @@ const getItems= async(req,res,next)=>{ //all items from category
     const {cid,uid} = req.params;
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     let category = user.toDoCategories.filter(category => category.name === cid)[0]
     if (category.length===0)
     {
@@ -162,7 +218,7 @@ const moveItem = async(req,res,next)=>{
     const{tid, uid, cid, oldCid}= req.body;
     //get user
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
 
     //make sure the cid and oldCid are different
     if(cid === oldCid){
@@ -192,7 +248,7 @@ const moveItem = async(req,res,next)=>{
     
     //get item 
     let itemExists = await itemInDataBase(tid)
-    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
+    if(!!itemExists.error){return(next(new HttpError(itemExists.errorMessage, itemExists.errorCode)))}
     if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
     //get new category
@@ -217,11 +273,11 @@ const shareItem = async(req,res,next)=>{//max size of user inbox == 20
     const{tid, uid}= req.body;
     //get user
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
 
     //check item 
     let itemExists = await itemInDataBase(tid)
-    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
+    if(!!itemExists.error){return(next(new HttpError(itemExists.errorMessage, itemExists.errorCode)))}
     if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
     //get new category
@@ -249,7 +305,7 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     const{tid, uid, cid}= req.body;
     //get user
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
 
     
     //get category
@@ -261,7 +317,7 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     
     //check item 
     let itemExists = await itemInDataBase(tid)
-    if(!!itemExists.error){return(next(new HttpError(itemExists.error.message, itemExists.error.code)))}
+    if(!!itemExists.error){return(next(new HttpError(itemExists.errorMessage, itemExists.errorCode)))}
     if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
     //get new category
@@ -286,7 +342,7 @@ const getPendingSharedItems = async(req,res,next)=>{
     const {uid} = req.params;
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     
     
     res.status(200).json({items: user.pendingSharedTasks})
@@ -306,11 +362,11 @@ const transferCreator = async(req,res,next)=>{//same as move item except with us
 
     //Make sure users exist
     let creator = await userController.userInDataBase(uidOldCreator)
-    if(!!creator.error){return(next(new HttpError(creator.error.message, creator.error.code)))}
+    if(!!creator.error){return(next(new HttpError(creator.errorMessage, creator.errorCode)))}
     if(!creator){return(next(new HttpError("oldCreator not located in db", 404)))}
 
     creator = await userController.userInDataBase(uidCreator)
-    if(!!creator.error){return(next(new HttpError(creator.error.message, creator.error.code)))}
+    if(!!creator.error){return(next(new HttpError(creator.errorMessage, creator.errorCode)))}
     if(!creator){return(next(new HttpError("creator(new) not located in db", 404)))}
 
     
@@ -331,7 +387,7 @@ const createCategory = async(req,res,next)=>{
 
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
   
     if (user.toDoCategories.filter(category => category.name === name).length!==0)
     {
@@ -362,7 +418,7 @@ const renameCategory = async(req,res,next)=>{
 
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
    
     if (user.toDoCategories.filter(category => category.name === name).length!==0)
     {
@@ -384,20 +440,37 @@ const renameCategory = async(req,res,next)=>{
 
     res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
 }
-const deleteCategory = async(req,res,next)=>{    
+const deleteCategory = async(req,res,next)=>{ 
+
     res.status(201).json({message:"test"}.toObject({getters:true}))
 }
 const getCategory = async(req,res,next)=>{
     const {cid,uid} = req.params;
+    if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
+    if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
     //Find User
     let user = await getUserById(uid); 
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     let category = user.toDoCategories.filter(category => category.name === cid)
     if (category.length===0)
     {
-        return(next(new HttpError("Category Cant Be Located", 422)))
+        return(next(new HttpError("Category Cant Be Located", 404)))
     }
     res.status(200).json({category: category})
+}
+
+const getCategories = async (req,res,next)=>{
+    const {uid} = req.params;
+    if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+    let categories = user.toDoCategories
+    if (categories.length===0)
+    {
+        return(next(new HttpError("Category empty", 404)))
+    }
+    res.status(200).json({categories: categories})
 }
 
 
@@ -419,3 +492,4 @@ exports.createCategory = createCategory;
 exports.renameCategory = renameCategory;
 exports.deleteCategory = deleteCategory;
 exports.getCategory = getCategory;
+exports.getCategories = getCategories;

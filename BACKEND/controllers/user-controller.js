@@ -19,7 +19,7 @@ const getUserById = async(uid) =>{
         return({error:error,errorMessage:'Could not access user in database',errorCode:500})
     };
     if(!user){
-        return({error:error,errorMessage:'User not in database',errorCode:404})
+        return({error:true,errorMessage:'User not in database',errorCode:404})
     }
     return(user);
 }
@@ -30,10 +30,10 @@ const getUserByProp = async(prop,value) =>{
         user = await User.findOne({[prop]:value});//dynamic property
     }
     catch(error){
-        return({error:{message:`Accessing database failed`, code:500}})
+        return({error:error,errorMessage:`Accessing database failed`, errorCode:500})
     };
     if(!user){
-        return({error:{message:`Could not locate ${prop} in database`, code:404}})
+        return({error:true,errorMessage:`Could not locate ${prop} in database`, errorCode:404})
     }
     return(user);
 }
@@ -45,7 +45,7 @@ const userInDataBase = async(uid) =>{
     }
     catch(error){
         console.log(error)
-        return({error:{message:`Accessing database failed`, code:500}})
+        return({error:error, errorMessage:`Accessing database failed`, errorCode:500})
     }
     return(user)
 }
@@ -132,11 +132,11 @@ const login = async (req,res,next)=>{
     let existingUser;
     if(!phoneNumber){
         existingUser=await getUserByProp ('email',email);
-        if(!!existingUser.error){return(next(new HttpError(existingUser.error.message, existingUser.error.code)))}
+        if(!!existingUser.error){return(next(new HttpError(existingUser.errorMessage, existingUser.errorCode)))}
     }
     if(!email){
         existingUser=await getUserByProp ('phoneNumber',phoneNumber);
-        if(!!existingUser.error){return(next(new HttpError(existingUser.error.message, existingUser.error.code)))}
+        if(!!existingUser.error){return(next(new HttpError(existingUser.errorMessage, existingUser.errorCode)))}
     }   
     //Checking Passwords
     if( existingUser.password !== password){
@@ -151,7 +151,7 @@ const photoUpload = async(req,res,next)=>{
     
     //getting user from DB
     let user = await getUserById(uid);
-    if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     
 
     //save user with new image URL
@@ -194,7 +194,7 @@ const updatePreferences = async (req,res,next)=>{
 
         //getting user from DB
         let user = await getUserById(uid);
-        if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
+        if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
 
         user.preferences= preferences;
         try{
