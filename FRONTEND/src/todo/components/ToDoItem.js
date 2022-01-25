@@ -29,19 +29,25 @@ const ToDoItem = props => {
         setShowMap(false);
     }
     const showDeleteWarningHandler = () =>{
+        console.log(props.id)
         setShowConfirmModal(true);
     }
     const cancelDeleteHandler = () =>{
         setShowConfirmModal(false);
     }
     const confirmDeleteHandler = async () =>{
-        //try{
-        //    await sendRequest(`http://localhost:5000/api/places/${props.id}`,'DELETE');
-       //     props.onDelete(props.id);
-      // }
-       // catch(error){}
-       // console.log("You just got deleted!!!! BOOM");
-        //setShowConfirmModal(false)
+        
+        try{
+            
+             await sendRequest(`http://localhost:5000/api/todo/deleteitem/`,'DELETE',
+            JSON.stringify({
+              tid : props.id}),
+              {'Content-Type': 'application/json'});
+            props.onDelete(props.id);
+       }
+        catch(error){}
+        console.log("You just got deleted!!!! BOOM");
+        setShowConfirmModal(false)
     };
     const toggleExpand=()=>{
         if(expand)
@@ -94,7 +100,7 @@ return(
             {props.status === "Complete" && <AiOutlineCheck/>}
             {props.status === "Started" && <AiOutlineFieldTime/>}
             {props.status === "Pending" && <AiOutlineUnorderedList/>}
-            <h2>{props.task}</h2>
+            <h2>{props.name}</h2>
         </div>
         {expand && (<div className="todo-item__expand">
             <p>{props.notes}</p>

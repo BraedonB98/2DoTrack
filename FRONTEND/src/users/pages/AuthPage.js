@@ -58,7 +58,7 @@ const AuthPage = () => {
     const authSubmitHandler = async event => {
         event.preventDefault();
 
-        console.log(formState.inputs);
+        
         if(isLogin)
         {
           try{
@@ -70,6 +70,7 @@ const AuthPage = () => {
                 password : formState.inputs.password.value}),
                 {'Content-Type': 'application/json'});
             auth.login(responseData.user.id);
+            
           }
           catch(error){}
         }
@@ -93,9 +94,6 @@ const AuthPage = () => {
           
 
 
-    const login = () => {
-        auth.login("Braedon");
-    }
 return(
     <React.Fragment>
       <ErrorModal error ={error} onClear={clearError}/>

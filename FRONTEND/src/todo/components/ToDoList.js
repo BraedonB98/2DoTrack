@@ -9,36 +9,11 @@ import Button from "../../shared/components/FormElements/Button"
 import "./ToDoList.css"
 
 
-let DUMMYITEMS = [{id: "task1", 
-    task: "Create the dummy items",
-    status: "Pending",
-    due: null,
-    UID: "Braedon",
-    address: "2468 S. Marion St Denver CO",
-    coordinates: {},
-    notes : "This is going to be a big project probably should use a dummy place to test"},
-    {id: "task2", 
-    task: "Create another",
-    status: "Complete",
-    due: null,
-    UID: "Braedon",
-    address: "2468 S. Marion St Denver CO",
-    coordinates: {},
-    notes : "More dummy places to test seems smart"},
-    {id: "task3", 
-    task: "Create a Third",
-    status: "Started",
-    due: null,
-    UID: "Braedon",
-    address: "2468 S. Marion St Denver CO",
-    coordinates: {},
-    notes : "More dummy places to test seems smart"}];
-
 
 const ToDoList = props=> {
     //props.items=DUMMYITEMS;
     //DUMMYITEMS = [];
-    if(DUMMYITEMS.length === 0){
+    if(props.items.length === 0){
         console.log("fail here")
         return (
         <div className="todo-list center">
@@ -51,17 +26,19 @@ const ToDoList = props=> {
 
     return(
         <ul className= "todo-list">
-        {DUMMYITEMS.map( todo =>
+        {props.items.map( todo =>
          <ToDoItem 
-            id={todo.id} 
-            task={todo.task} 
+            id={todo._id} 
+            name={todo.name} 
             status={todo.status} 
+            priority = {todo.priority}
             due ={todo.due}
-            UID={todo.UID}
+            creator={todo.creator}
             address = {todo.address}
             coordinates = {todo.location}
             notes = {todo.notes}
-            onDelete = {todo.onDeletePlace} />)}
+            users = {todo.users}
+            onDelete = {todo.onDeleteTask} />)}
     </ul>
     );
 }

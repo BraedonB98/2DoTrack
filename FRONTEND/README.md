@@ -10,3 +10,5 @@ List Of know issues
         -change UID for name on nave bar to user name once setup
     -todoitem.js
         -need to wire up start task and finish task functions
+    -todopage.js
+        - doesnt filter correct taskDeletedHandler

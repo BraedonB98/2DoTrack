@@ -43,10 +43,11 @@ const itemInDataBase = async(tid) =>{
 
 const deleteItemHelper = async (req) => {
        //getting item
-       const {uid,tid,oldCid}= req.body;
+       const {tid,oldCid}= req.body;
        let item = await getItemById(tid);
        if(!!item.error){return({error:item.error, errorMessage:item.errorMessage, errorCode:item.errorCode})}
        //console.log(item)
+       uid= item.creator
        //getting user
        let user = await getUserById(uid); 
        if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
