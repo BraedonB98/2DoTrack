@@ -11,8 +11,6 @@ import "./CategoriesList.css"
 
 
 const CategoryList = props=> {
-    //props.items=DUMMYITEMS;
-    //DUMMYITEMS = [];
     if(props.categories.length === 0){
         console.log("no props provided in categories ist")
         return (

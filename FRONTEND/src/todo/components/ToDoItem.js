@@ -61,7 +61,7 @@ const ToDoItem = props => {
     const startTask = async() => {
 
         try{
-            console.log(props.id)
+            
             await sendRequest(`http://localhost:5000/api/todo/edititem/${props.id}`,'PATCH',
            JSON.stringify({
              status : "Started"}),

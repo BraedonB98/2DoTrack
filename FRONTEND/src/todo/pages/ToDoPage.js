@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext , useCallback} from "react";
+import React, {useState, useEffect, useContext } from "react";
 
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
@@ -9,6 +9,7 @@ import {AuthContext} from "../../shared/context/auth-context";
 
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";
+
 
 
 
@@ -30,7 +31,7 @@ const ToDoPage = () => {
               }
               catch(err){}
           };
-        fetchCategories();
+        fetchCategories();// eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     useEffect( ()=>{

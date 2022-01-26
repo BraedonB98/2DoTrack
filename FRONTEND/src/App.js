@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { BrowserRouter as Router, Route , Routes, Navigate} from 'react-router-dom'; //also import Navigate for default routing
+import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'; //also import Navigate for default routing
 
 //------------------------Pages-------------------------------
 import PageNotFound from './landing/pages/PageNotFound';
@@ -14,12 +14,15 @@ import MainNavigation from './shared/components/Navigation/MainNavigation';
 
 //----------------------Context--------------------------------
 import { AuthContext } from './shared/context/auth-context';
+import { MobileContext } from './shared/context/mobile-context';
+
 
 
 const App = () => {
   const [isLoggedIn,setIsLoggedIn]=useState(false)
   const[UID,setUID]= useState(false);
-  
+  const[mobileDevice,setMobileDevice] = useState(false);// eslint-disable-line
+  const[OS,setOS] = useState(false);// eslint-disable-line
   const login = useCallback((uid) => {
     console.log("logging in");
     setIsLoggedIn(true);
@@ -30,7 +33,8 @@ const App = () => {
     setIsLoggedIn(false);
     setUID(null);
   },[])
-
+  //setOS("windows");
+  //setMobileDevice(false);
   let routes;
   if (isLoggedIn){
     routes = ( //if user logged in
@@ -51,6 +55,7 @@ const App = () => {
     </Routes>
     );
  }
+ 
   
   return (
     <AuthContext.Provider 
@@ -60,12 +65,18 @@ const App = () => {
       login,
       logout}}
     >
+      <MobileContext.Provider 
+    value = {{
+      mobileDevice,
+      OS}}
+    >
     <Router>
       <MainNavigation/>
       <main id ="content">
         {routes}  
       </main>
     </Router>
+    </MobileContext.Provider>
     </AuthContext.Provider>
   );
 };

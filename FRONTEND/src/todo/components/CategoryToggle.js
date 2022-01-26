@@ -64,7 +64,7 @@ return(
         <Card  onClick = {changeCategoryHandler} className="category-toggle__content">
         {isLoading && <LoadingSpinner asOverlay />}
             <div className="category-toggle__header-div">
-            <h2 className="">{props.name}</h2>
+                <h2>{props.name}</h2>
             </div>
         </Card>
     </article>
