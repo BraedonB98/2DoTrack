@@ -1,30 +1,27 @@
+
+
+
 /*--------------------------Standard styling------------------------------*/
-.category-toggle:hover{
-    cursor: pointer;
-  }
-
-  .category-toggle__header-div{
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-  }
-  
-  .category-toggle__modal-content {
-    padding: 0;
-  }
-  .category-toggle__modal-actions {
-    text-align: right;
-  }
-
+.category-toggle__modal-content {
+  padding: 0;
+}
+.category-toggle__modal-actions {
+  text-align: right;
+}
 .category-toggle {
-    flex-basis:25rem;
-  }
+  display:none;
+  cursor: pointer;
+ }
 /*--------------------------Screen Dependant Styling------------------------------*/
 
 
-@media (min-width: 768px) {
+@media all and (min-width: 1081px) and (-webkit-min-device-pixel-ratio: 0.99) {
     .category-toggle {
-     display:none;
+     display:flex;
+     flex-grow:1;
+     text-align: center;
+    justify-content: center;
+    padding:0;
+    margin:1rem;
     }
 }

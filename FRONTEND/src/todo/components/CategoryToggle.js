@@ -60,14 +60,13 @@ return(
                 } >
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
-        <article className="category-toggle">
-        <Card  onClick = {changeCategoryHandler} className="category-toggle__content">
+        
+        <Card  onClick = {changeCategoryHandler} className="category-toggle">
         {isLoading && <LoadingSpinner asOverlay />}
             <div className="category-toggle__header-div">
                 <h2>{props.name}</h2>
             </div>
         </Card>
-    </article>
     </React.Fragment> 
 )}
 

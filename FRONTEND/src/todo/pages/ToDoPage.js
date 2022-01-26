@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext } from "react";
 
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import SwipeableHook from "../../shared/hooks/gesture-hook"
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -69,12 +70,24 @@ const ToDoPage = () => {
         {setLoadedCategory(newCategory)}
         
     }
-
+    const leftSwipe = () =>{
+        const currentCatIndex = loadedCategories.findIndex(cat => cat.name===loadedCategory.name);
+        if(loadedCategories[currentCatIndex+1]){
+            setLoadedCategory(loadedCategories[currentCatIndex+1])
+        }
+    }
+    const rightSwipe = () =>{
+        const currentCatIndex = loadedCategories.findIndex(cat => cat.name===loadedCategory.name);
+        if(loadedCategories[currentCatIndex-1]){
+            setLoadedCategory(loadedCategories[currentCatIndex-1])
+        }
+    }
 
 
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
+            <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
                 <LoadingSpinner/>    
@@ -86,6 +99,7 @@ return(
                 {(!isLoading && loadedCategory) && <h1>{loadedCategory.name}</h1> }
                 {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
             </div>
+            </SwipeableHook>
         </React.Fragment>
     
 )}
