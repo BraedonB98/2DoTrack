@@ -4,19 +4,19 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import SwipeableHook from "../../shared/hooks/gesture-hook"
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import NewToDoItemModal from "../components/NewToDoItemModal";
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-
+import Button from '../../shared/components/FormElements/Button';
 import {AuthContext} from "../../shared/context/auth-context";
 
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";
 
-
-
-
+import "./styling/ToDoPage.css"
 
 const ToDoPage = () => {
     const{isLoading,error,sendRequest,clearError} = useHttpClient();
+    const [newTask, setNewTask] = useState(true);
     const [loadedTasks, setLoadedTasks] = useState();
     const [loadedCategory, setLoadedCategory] = useState();
     const[loadedCategories,setLoadedCategories]= useState();
@@ -82,11 +82,13 @@ const ToDoPage = () => {
             setLoadedCategory(loadedCategories[currentCatIndex-1])
         }
     }
+    
 
 
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
+            <NewToDoItemModal open={newTask} onClear={()=>{setNewTask(false)}} />
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
@@ -96,7 +98,10 @@ return(
                 {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
             
             <div>
-                {(!isLoading && loadedCategory) && <h1>{loadedCategory.name}</h1> }
+                {(!isLoading && loadedCategory) && 
+                    <h1>{loadedCategory.name}
+                        <Button className = "todo-page__newToDoItemButton" category = {loadedCategory.name} onClick={()=>{setNewTask(true)}}>+</Button>
+                    </h1> }
                 {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
             </div>
             </SwipeableHook>
