@@ -62,9 +62,9 @@ const App = () => {
     >
     <Router>
       <MainNavigation/>
-      <main>
+      <main id ="content">
         {routes}  
-      </main>  
+      </main>
     </Router>
     </AuthContext.Provider>
   );

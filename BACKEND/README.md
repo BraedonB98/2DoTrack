@@ -172,6 +172,9 @@ may need to install twilio-cli into project, its installed globally but not for 
 will only work with phone numbers with +1   (USA phone numbers)
 
 need to finish delete category function
+
+need to add a change category Icon route and function
+
 ----------------------------------------------Dev Info----------------------------------
 you need ngrok to be able to open port to internet for sms functionality
 

@@ -1,6 +1,5 @@
 .todo-item__content {
     padding: 0;
-    
     margin :1%;
   }
 .todo-item__header:hover{
@@ -10,9 +9,6 @@
 .todo-item__header {
     padding: 1%;
     display:block;
-
-    
-    
   }
   .todo-item__header p {
     margin: 0;

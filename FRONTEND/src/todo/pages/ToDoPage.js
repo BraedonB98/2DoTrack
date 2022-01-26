@@ -31,7 +31,7 @@ const ToDoPage = () => {
               catch(err){}
           };
         fetchCategories();
-    },[UID])
+    },[])
 
     useEffect( ()=>{
         const fetchTasks = async ()=>{
@@ -78,10 +78,13 @@ return(
             <div className = "center">
                 <LoadingSpinner/>    
             </div>}
-
-            {!isLoading&& loadedCategories && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
-            {!isLoading&& loadedCategories && <h1>{loadedCategory.name}</h1> }
-            {!isLoading&& loadedTasks && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
+            
+                {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
+            
+            <div>
+                {(!isLoading && loadedCategory) && <h1>{loadedCategory.name}</h1> }
+                {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
+            </div>
         </React.Fragment>
     
 )}

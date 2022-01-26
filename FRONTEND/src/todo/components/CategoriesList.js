@@ -16,7 +16,7 @@ const CategoryList = props=> {
     if(props.categories.length === 0){
         console.log("no props provided in categories ist")
         return (
-        <div className="todo-list center">
+        <div className="categories-list center">
             <Card>
                 <h2>No Categories found, Lets try creating one!</h2>
                 <Button to = "/category/new">Create Category</Button>
@@ -25,7 +25,7 @@ const CategoryList = props=> {
     }
 
     return(
-        <ul className= "category-list">
+        <section className= "categories">
         {props.categories.map( category =>
          <CategoryToggle 
             id={category._id} 
@@ -33,7 +33,7 @@ const CategoryList = props=> {
             icon = {category.icon}
             toDoList = {category.toDoList}
             onChangeCategory = {props.onChangeCategory} />)}
-    </ul>
+        </section>
     );
 }
 export default CategoryList;

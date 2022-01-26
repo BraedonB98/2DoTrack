@@ -17,9 +17,18 @@
   --colorOnError: black;
 }
 
-* {
-  box-sizing: border-box;
+
+
+
+.header {width:10%; }
+
+#content {
+  padding-left:2.5%;
+  width:95%;
 }
+
+
+
 
 html {
   font-family: 'Open Sans', sans-serif;
