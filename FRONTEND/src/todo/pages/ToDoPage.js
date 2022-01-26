@@ -100,7 +100,7 @@ return(
             <div>
                 {(!isLoading && loadedCategory) && 
                     <h1>{loadedCategory.name}
-                        <Button className = "todo-page__newToDoItemButton" category = {loadedCategory.name} onClick={()=>{setNewTask(true)}}>+</Button>
+                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={()=>{setNewTask(true)}}>+</Button>
                     </h1> }
                 {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
             </div>

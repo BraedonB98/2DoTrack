@@ -27,10 +27,6 @@ const NewToDoItemModal = props => {
         value: 'Pending',
         isValid: true
       },
-      priority: {
-        value: null,
-        isValid: false
-      },
       address: {
         value: '',
         isValid: false
@@ -81,10 +77,13 @@ return(<React.Fragment>
       <form className ="place-form" onSubmit = {newToDoSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
         <Input id="name" element="input" type ="text" label="name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid task name." onInput={inputHandler}/>
-        <Input id="priority" element="range" min="0" max ="5" label="priority" validators={[VALIDATOR_REQUIRE()]} errorText = "Set Priority." onInput={inputHandler}/>
+        {/*//!----------- will need to be made into a Input that sets validity */
+        }
+        <Input id="address" element="input" type = "range" min="1" max ="5" label="range" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid address." onInput={inputHandler}/>
+        
         <Input id="address" element="input" label="address" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid address." onInput={inputHandler}/>
         <Input id="notes" element="textarea" label="notes" validators={[VALIDATOR_MINLENGTH(5)]} errorText = "Please enter a valid description (at least 5 characters)." onInput={inputHandler}/>
-        <Button type="submit" disabled={!formState.isValid}> ADD PLACE</Button>
+        <Button type="submit" disabled={!formState.isValid}> Submit </Button>
       </form>
     </Modal>
 </React.Fragment>)
