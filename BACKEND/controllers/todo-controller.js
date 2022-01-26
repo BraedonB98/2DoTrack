@@ -159,9 +159,9 @@ const editItem = async(req,res,next)=>{
     
             if(name){item.name = name};
             if(status){item.status = status};
-            if(status){item.priority = priority};
-            if(status){item.address = address};//update location at the same time
-            if(status){item.notes = notes};
+            if(priority){item.priority = priority};
+            if(address){item.address = address};//update location at the same time
+            if(notes){item.notes = notes};
 
             
             try{
@@ -174,7 +174,7 @@ const editItem = async(req,res,next)=>{
                 
         
                 
-            res.status(200).json({preferences: item.toObject({getters:true})});
+            res.status(200).json({item: item.toObject({getters:true})});
 }
 
 const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
@@ -200,7 +200,7 @@ const getItems= async(req,res,next)=>{ //all items from category
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     let category = user.toDoCategories.filter(category => category.name === cid)[0]
-    if (category.length===0)
+    if (!category)
     {
         return(next(new HttpError("Category Cant Be Located", 422)))
     }
@@ -208,7 +208,6 @@ const getItems= async(req,res,next)=>{ //all items from category
     var itemArray = await Promise.all(category.toDoList.map(async(item) => { //waits until all promises finish
         var newItem = (await getItemById(item._id.toString()));
         if(!!newItem.error){return(next(new HttpError(newItem.errorMessage, newItem.errorCode)))}
-        console.log(newItem);
         return(newItem);
     } ))
     res.status(200).json({items: itemArray})

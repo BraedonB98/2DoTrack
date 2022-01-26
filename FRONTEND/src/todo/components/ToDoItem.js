@@ -29,7 +29,7 @@ const ToDoItem = props => {
         setShowMap(false);
     }
     const showDeleteWarningHandler = () =>{
-        console.log(props.id)
+        //console.log(props.id)
         setShowConfirmModal(true);
     }
     const cancelDeleteHandler = () =>{
@@ -43,7 +43,7 @@ const ToDoItem = props => {
             JSON.stringify({
               tid : props.id}),
               {'Content-Type': 'application/json'});
-            props.onDelete(props.id);
+            props.onDeleteTask(props.id);
        }
         catch(error){}
         console.log("You just got deleted!!!! BOOM");
@@ -58,11 +58,35 @@ const ToDoItem = props => {
             setExpand(true);
         }
     }
-    const startTask = () => {
+    const startTask = async() => {
 
+        try{
+            console.log(props.id)
+            await sendRequest(`http://localhost:5000/api/todo/edititem/${props.id}`,'PATCH',
+           JSON.stringify({
+             status : "Started"}),
+             {'Content-Type': 'application/json'});
+
+             props.onStatusChange(props.id,"Started")
+           
+      }
+       catch(error){
+           console.log("unable to change task status")
+       }
+       
     }
-    const finishTask = () => {
-
+    const finishTask = async() => {
+        try{
+            
+            await sendRequest(`http://localhost:5000/api/todo/edititem/${props.id}`,'PATCH',
+           JSON.stringify({
+             status : "Complete"}),
+             {'Content-Type': 'application/json'});
+            props.onStatusChange(props.id,"Complete")
+      }
+       catch(error){
+           console.log("unable to change task status")
+       }
     }
 
 return(

@@ -14,7 +14,7 @@ const ToDoList = props=> {
     //props.items=DUMMYITEMS;
     //DUMMYITEMS = [];
     if(props.items.length === 0){
-        console.log("fail here")
+        console.log("no items in props todo list")
         return (
         <div className="todo-list center">
             <Card>
@@ -38,7 +38,8 @@ const ToDoList = props=> {
             coordinates = {todo.location}
             notes = {todo.notes}
             users = {todo.users}
-            onDelete = {todo.onDeleteTask} />)}
+            onStatusChange ={props.onStatusChange}
+            onDeleteTask = {props.onDeleteTask} />)}
     </ul>
     );
 }
