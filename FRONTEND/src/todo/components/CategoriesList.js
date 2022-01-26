@@ -6,7 +6,7 @@ import CategoryToggle from "./CategoryToggle";
 import Button from "../../shared/components/FormElements/Button"
 
 //---------------------CSS----------------------------------
-import "./CategoriesList.css"
+import "./styling/CategoriesList.css"
 
 
 

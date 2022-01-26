@@ -15,7 +15,7 @@ import Map from '../../shared/components/UIElements/Map';
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 //---------------------CSS-----------------------------------
-import "./ToDoItem.css"
+import "./styling/ToDoItem.css"
 
 const ToDoItem = props => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();

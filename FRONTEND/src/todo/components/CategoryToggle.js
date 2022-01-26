@@ -15,7 +15,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 //---------------------CSS-----------------------------------
-import "./CategoryToggle.css"
+import "./styling/CategoryToggle.css"
 
 
 const CategoryToggle = props => {
