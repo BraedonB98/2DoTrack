@@ -117,7 +117,7 @@ return(
                 } >
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
-        <li className="todo-item ">
+        <li className="todo-item " key = {props.id} >
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
         <div onClick = {toggleExpand}  className="todo-item__header">

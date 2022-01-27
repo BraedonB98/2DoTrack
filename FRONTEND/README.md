@@ -12,3 +12,7 @@ List Of know issues
         -need to wire up start task and finish task functions
     -todopage.js
         - doesnt filter correct taskDeletedHandler
+    -todoitemmodal
+        -need to make range slider have a default value
+        -still needs styling
+    
