@@ -1,5 +1,5 @@
 import React,{useState, useContext}from "react";
-import {NavLink} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 
 import Card from '../../shared/components/UIElements/Card';
@@ -14,10 +14,12 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const AuthPage = () => {
+    const navigate = useNavigate();
     const auth = useContext(AuthContext);
     const [isLogin, setIsLogin]= useState(true);
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
-  
+    
+    
     const [formState, inputHandler , setFormData] = useForm(
         {
           email: {
@@ -70,7 +72,8 @@ const AuthPage = () => {
                 password : formState.inputs.password.value}),
                 {'Content-Type': 'application/json'});
             auth.login(responseData.user.id);
-            
+            navigate('/');
+
           }
           catch(error){}
         }
@@ -87,9 +90,11 @@ const AuthPage = () => {
                 password : formState.inputs.password.value}),
                 {'Content-Type': 'application/json'});
             auth.login(responseData.user.id);
+            navigate('/')
           }
           catch(error){}
         }
+          
         }
           
 

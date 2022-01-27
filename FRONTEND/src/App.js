@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'; //also import Navigate for default routing
+import { BrowserRouter as Router, Route , Routes, Navigate} from 'react-router-dom'; //also import Navigate for default routing
 
 //------------------------Pages-------------------------------
 import PageNotFound from './landing/pages/PageNotFound';
@@ -24,17 +24,15 @@ const App = () => {
   const[mobileDevice,setMobileDevice] = useState(false);// eslint-disable-line
   const[OS,setOS] = useState(false);// eslint-disable-line
   const login = useCallback((uid) => {
-    console.log("logging in");
+    //console.log("logging in");
     setIsLoggedIn(true);
     setUID(uid);
   },[])
   const logout = useCallback(() => {
-    console.log("logging out");
+    //console.log("logging out");
     setIsLoggedIn(false);
     setUID(null);
   },[])
-  //setOS("windows");
-  //setMobileDevice(false);
   let routes;
   if (isLoggedIn){
     routes = ( //if user logged in
@@ -42,6 +40,7 @@ const App = () => {
       <Route path="/" exact element={<DashBoard/>} />
       <Route path="/todo" exact element={<ToDoPage/>} />
       <Route path="/finance" exact element={<FinancePage/>} />
+      <Route path="/auth" exact element={<AuthPage/>} />
       <Route path="/pagenotfound"  element = {<PageNotFound/>}/> {/* Need to make this the default if path is not found, looked at navigate but havnt been able to figure out*/}
     </Routes>
     );
@@ -52,6 +51,7 @@ const App = () => {
       <Route path="/" exact element={<HomePage/>} />
       <Route path="/auth" exact element={<AuthPage/>} />
       <Route path="/pagenotfound"  element = {<PageNotFound/>}/> {/* Need to make this the default if path is not found, looked at navigate but havnt been able to figure out*/}
+      
     </Routes>
     );
  }
