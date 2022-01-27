@@ -16,8 +16,9 @@ const ToDoItemModal = props => {
     const [timeDependent,setTimeDependent] = useState(false);
     const[addressDependent,setAddressDependent] = useState(false);
     const[recurringDependent,setRecurringDependent]=useState(false)
-    const [category,setCategory]= useState(props.category())
-    const [formState, inputHandler] = useForm({
+    const[loadedItem,setLoadedItem]= useState(false)
+    
+    const [formState, inputHandler, setFormData] = useForm({
       name: {
         value: '',
         isValid: false
@@ -54,9 +55,52 @@ const ToDoItemModal = props => {
         },
         isValid: false
       }},
-
-
     },false);
+    
+    useEffect( ()=>{
+      const fetchItem = async ()=>{
+          try {
+              const responseData = await sendRequest(`http://localhost:5000/api/todo/getitem/${props.taskId}`);
+              //console.log(responseData);
+              setLoadedItem(responseData.task);
+              //console.log(loadedPlace.id)
+              setFormData({
+                  name: {
+                      value: responseData.task.name,
+                      isValid: true
+                    },
+                    priority: {
+                      value: responseData.task.priority,
+                      isValid: true
+                    },
+                    status: {
+                      value: responseData.task.status,
+                      isValid: true
+                    },
+                    ...(responseData.address) && {address: {
+                      value: responseData.address,
+                      isValid: true
+                    }},
+                    notes: {
+                      value: responseData.task.notes,
+                      isValid: true
+                    },
+                    ...(responseData.due) && {due: {
+                      value: {
+                          date:responseData.due.date,
+                          time:responseData.due.time
+                      },
+                      isValid: true
+                    }},
+              },true);
+            }
+            catch(err){
+              handleError(err);
+            }
+            
+        };
+      if(!props.newItem){fetchItem();}
+  },[sendRequest,setFormData])//eslint-disable-line
 
     const handleError = error =>{
       props.onError(error);
@@ -75,20 +119,27 @@ const ToDoItemModal = props => {
       setRecurringDependent(recurringDependent?false:true)
     }
 
+    const editToDoSubmitHandler = event =>{
+        event.preventDefault();
+        console.log("editing");
+        console.log(formState);
+        props.submitted();//lets parent know its submitted 
+    }
+
     const newToDoSubmitHandler = event =>{
         event.preventDefault();
-        console.log("submitting");
+        console.log("creating");
         console.log(formState);
         props.submitted();//lets parent know its submitted 
     }
 return(<React.Fragment>
     <Modal
       onCancel={props.onCancel}
-      header={`${category.name} - New Task`}
+      header={`${props.category.name} - ${(!props.newItem&&formState.name)? formState.name.value:"New Task" }`} //!------------need to figure out why formState.name.value is undefined here
       show={props.open}
       footer={<React.Fragment>
           <Button onClick={props.onClear}>Cancel</Button>
-          <Button type="submit" onClick = {newToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
+          <Button type="submit" onClick = {props.newItem?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
       <form id ="toDoItemModal__form" >
         {isLoading && <LoadingSpinner asOverlay />}

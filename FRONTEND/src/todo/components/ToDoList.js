@@ -39,7 +39,8 @@ const ToDoList = props=> {
             notes = {todo.notes}
             users = {todo.users}
             onStatusChange ={props.onStatusChange}
-            onDeleteTask = {props.onDeleteTask} />)}
+            onDeleteTask = {props.onDeleteTask}
+            onEditTask = {props.onEditTask} />)}
     </ul>
     );
 }

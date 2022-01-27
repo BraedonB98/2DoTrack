@@ -161,6 +161,7 @@ const editItem = async(req,res,next)=>{
             if(status){item.status = status};
             if(priority){item.priority = priority};
             if(address){item.address = address};//update location at the same time
+            if(due){item.due=due};
             if(notes){item.notes = notes};
 
             

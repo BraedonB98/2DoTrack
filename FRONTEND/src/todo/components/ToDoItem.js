@@ -32,6 +32,7 @@ const ToDoItem = props => {
         //console.log(props.id)
         setShowConfirmModal(true);
     }
+
     const cancelDeleteHandler = () =>{
         setShowConfirmModal(false);
     }
@@ -49,6 +50,10 @@ const ToDoItem = props => {
         console.log("You just got deleted!!!! BOOM");
         setShowConfirmModal(false)
     };
+    const editTaskHandler = () =>{
+        props.onEditTask(props.id);
+    }
+
     const toggleExpand=()=>{
         if(expand)
         {
@@ -132,7 +137,7 @@ return(
             {props.status ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
 
             <Button onClick={openMapHandler}>VIEW ON MAP</Button>
-            <Button to={`/places/${props.id}`}>EDIT</Button>
+            <Button onClick={editTaskHandler}>EDIT</Button>
             <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>
             </div>)}
         </Card>

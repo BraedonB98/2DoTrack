@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { BrowserRouter as Router, Route , Routes, Navigate} from 'react-router-dom'; //also import Navigate for default routing
+import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'; //also import Navigate for default routing
 
 //------------------------Pages-------------------------------
 import PageNotFound from './landing/pages/PageNotFound';
