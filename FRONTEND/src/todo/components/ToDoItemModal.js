@@ -16,13 +16,14 @@ const ToDoItemModal = props => {
     const [timeDependent,setTimeDependent] = useState(false);
     const[addressDependent,setAddressDependent] = useState(false);
     const[recurringDependent,setRecurringDependent]=useState(false)
+    const [category,setCategory]= useState(props.category())
     const [formState, inputHandler] = useForm({
       name: {
         value: '',
         isValid: false
       },
       priority: {
-        value: '0',
+        value: 1,
         isValid: true
       },
       status: {
@@ -83,16 +84,16 @@ const ToDoItemModal = props => {
 return(<React.Fragment>
     <Modal
       onCancel={props.onCancel}
-      header={`New Task - ${props.category}`}
+      header={`${category.name} - New Task`}
       show={props.open}
       footer={<React.Fragment>
           <Button onClick={props.onClear}>Cancel</Button>
-          <Button type="submit" form= "toDoItemModal__form" disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
+          <Button type="submit" onClick = {newToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
-      <form id ="toDoItemModal__form" onSubmit = {newToDoSubmitHandler}>
+      <form id ="toDoItemModal__form" >
         {isLoading && <LoadingSpinner asOverlay />}
         <Input id="name" element="input" type ="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid task name." onInput={inputHandler}/>
-        <Input id="priority" element="input" type = "range" min="1" max ="5" validators={[VALIDATOR_REQUIRE()]} label="Priority"  onInput={inputHandler}/>
+        <Input id="priority" element="input" type = "range" min="1" max ="5" validators={[VALIDATOR_REQUIRE()]} label={`Priority - ${formState.inputs.priority.value}`}  onInput={inputHandler} value ={formState.inputs.priority.value}/>
         <Button onClick = {selectTimeHandler} > {timeDependent?"Remove Date":"Set Date" }</Button>
         {(timeDependent) && <Input id="date" element="date" type = "date" label="Date"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a date if it is due."/>}
         {(timeDependent) && <Input id="time" element="time" type = "time" label="Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a time if it is due."/>}

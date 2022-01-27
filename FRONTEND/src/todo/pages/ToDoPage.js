@@ -82,13 +82,15 @@ const ToDoPage = () => {
             setLoadedCategory(loadedCategories[currentCatIndex-1])
         }
     }
-    
+    const passCategory = async () =>{
+        return (await loadedCategory)
+    }
 
 
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
-            <ToDoItemModal open={taskModal} onClear={()=>{setTaskModal(false)}} />
+            <ToDoItemModal category = {passCategory} open={taskModal} submitted= {()=>setTaskModal(false)} onClear={()=>{setTaskModal(false)}} />
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
