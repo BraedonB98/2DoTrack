@@ -4,7 +4,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import SwipeableHook from "../../shared/hooks/gesture-hook"
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import NewToDoItemModal from "../components/NewToDoItemModal";
+import ToDoItemModal from "../components/ToDoItemModal";
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import Button from '../../shared/components/FormElements/Button';
 import {AuthContext} from "../../shared/context/auth-context";
@@ -16,7 +16,7 @@ import "./styling/ToDoPage.css"
 
 const ToDoPage = () => {
     const{isLoading,error,sendRequest,clearError} = useHttpClient();
-    const [newTask, setNewTask] = useState(true);
+    const [taskModal, setTaskModal] = useState(true);
     const [loadedTasks, setLoadedTasks] = useState();
     const [loadedCategory, setLoadedCategory] = useState();
     const[loadedCategories,setLoadedCategories]= useState();
@@ -88,7 +88,7 @@ const ToDoPage = () => {
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
-            <NewToDoItemModal open={newTask} onClear={()=>{setNewTask(false)}} />
+            <ToDoItemModal open={taskModal} onClear={()=>{setTaskModal(false)}} />
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
@@ -100,7 +100,7 @@ return(
             <div>
                 {(!isLoading && loadedCategory) && 
                     <h1>{loadedCategory.name}
-                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={()=>{setNewTask(true)}}>+</Button>
+                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={()=>{setTaskModal(true)}}>+</Button>
                     </h1> }
                 {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} />}
             </div>

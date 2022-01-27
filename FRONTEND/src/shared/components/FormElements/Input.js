@@ -38,12 +38,21 @@ const Input = props => {
     const touchHandler = () =>{
         dispatch({type: 'TOUCH'});
     };
+    let element; 
+    if (props.element === 'input' && props.type === 'range'){
+        element = <input id={props.id} type={props.type} placeholder={props.placeholder} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value} min = {props.min} max = {props.max}/>
+    }
+    else if(props.element === 'date'||props.element === 'time'){
+        element = <input id={props.id} type={props.type} placeholder={props.placeholder} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value} />
+    }
+    else if(props.element === 'input'){
+        element = <input id={props.id} type={props.type} placeholder={props.placeholder} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value} />
+    }
+    else {
+        element = <textarea id={props.id} rows ={props.rows || 3} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value}/> 
+    }
 
-    const element = props.element === 'input' ? (
-        <input id={props.id} type={props.type} placeholder={props.placeholder} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value} {...props}/>  
-     ):(
-        <textarea id={props.id} rows ={props.rows || 3} onChange={changeHandler} onBlur={touchHandler} value = {inputState.value}/> 
-     )
+   
 
 
     return <div className={`form-control ${!inputState.isValid && inputState.isTouched && 'form-control--invalid'}`}>
