@@ -84,7 +84,6 @@ const ToDoPage = () => {
         }
     }
     const handleEditTask = editTaskId => {
-        console.log(editTaskId);
         setEditTask(editTaskId);
         setTaskModal(true);
     }
@@ -98,7 +97,7 @@ const ToDoPage = () => {
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
-            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {()=>{setTaskModal(false); setEditTask(false);}} onClear={()=>{setTaskModal(false); setEditTask();}} />}
+            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {()=>{setTaskModal(false); setEditTask(false);}} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">

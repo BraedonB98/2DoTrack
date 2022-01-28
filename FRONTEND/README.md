@@ -15,4 +15,5 @@ List Of know issues
     -todoitemmodal
         -need to make range slider have a default value
         -still needs styling
-    
+    -ToDoItemModal
+        -when someone clicks outside of modal page crashes
