@@ -88,13 +88,17 @@ const ToDoPage = () => {
         setEditTask(editTaskId);
         setTaskModal(true);
     }
+    const handleNewTask = () => {
+        setEditTask(false);
+        setTaskModal(true);
+    }
 
 
 
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
-            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {()=>{setTaskModal(false); setEditTask(false);}} onClear={()=>{setTaskModal(false); setEditTask(false);}} />}
+            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {()=>{setTaskModal(false); setEditTask(false);}} onClear={()=>{setTaskModal(false); setEditTask();}} />}
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
@@ -106,7 +110,7 @@ return(
             <div>
                 {(!isLoading && loadedCategory) && 
                     <h1>{loadedCategory.name}
-                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={()=>{setTaskModal(true)}}>+</Button>
+                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={handleNewTask}>+</Button>
                     </h1> }
                 {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
             </div>
