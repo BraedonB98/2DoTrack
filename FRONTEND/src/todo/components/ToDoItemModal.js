@@ -1,7 +1,7 @@
 import React, {useEffect , useState, useContext} from 'react';
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
-import Card from  '../../shared/components/UIElements/Card';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import Modal from '../../shared/components/UIElements/Modal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
@@ -58,60 +58,54 @@ const ToDoItemModal = props => {
       // }},
     },false);
 
-    const handleError = error =>{
-      props.onError(error);
-    }
+   
     useEffect( ()=>{
       const fetchItem = async ()=>{
-        if(!loadedItem || props.taskId!==loadedItem.id){  //using the fact that  with || statements if the first condition is true it will move on before it trys second
+        if(!loadedItem || props.taskId!==loadedItem.id){  //|| will fail out before checking second
           try { 
             let responseData
             responseData = await sendRequest(`http://localhost:5000/api/todo/getitem/${props.taskId}`);
             console.log("updating")
             setLoadedItem(responseData.task);
-            if(loadedItem.due){setTimeDependent(true)}
-            if(loadedItem.address){setAddressDependent(true)}
-            if(loadedItem.recurring){setRecurringDependent(true)}
-            console.log(responseData)
           }
-          catch(err){
-            console.log(err)
-            handleError(err);
-          }
-            
+          catch(err){}
         }
+        
         setFormData({
           name: {
-              value: loadedItem.name,
-              isValid: true
-            },
-            priority: {
-              value: loadedItem.priority,
-              isValid: true
-            },
-            status: {
-              value: loadedItem.status,
-              isValid: true
-            },
-            // ...(loadedItem.address) && {address: {
-            //   value: loadedItem.address,
-            //   isValid: true
-            // }},
-            notes: {
-              value: loadedItem.notes,
-              isValid: true
-            },
-            // ...(loadedItem.due) && {due: {
-            //   value: {
-            //       date:loadedItem.due.date,
-            //       time:loadedItem.due.time
-            //   },
-            //   isValid: true
-            // }},
-      },true);
-      };
-      if(!props.newItem){fetchItem();}
-      
+            value: loadedItem.name,
+            isValid: true
+          },
+          priority: {
+            value: loadedItem.priority,
+            isValid: true
+          },
+          status: {
+            value: loadedItem.status,
+            isValid: true
+          },
+          ...(loadedItem.address) && {address: {
+            value: loadedItem.address,
+            isValid: true
+          }},
+          notes: {
+            value: loadedItem.notes,
+            isValid: true
+          },
+        },true);
+
+
+      if(loadedItem.due){
+        setTimeDependent(true)
+      }
+      if(loadedItem.address){
+        setAddressDependent(true)
+      }
+      if(loadedItem.recurring){
+        setRecurringDependent(true)
+      }
+    };
+    if(!props.newItem){fetchItem();}
   },[sendRequest,setFormData,props.taskId])//eslint-disable-line
 
   
@@ -138,26 +132,28 @@ const ToDoItemModal = props => {
               'PATCH',
               JSON.stringify({
                 name: formState.inputs.name.value,
-                status: formState.inputs.status.value,
                 priority: formState.inputs.priority.value,
                 address: formState.inputs.address.value,
                 notes: formState.inputs.notes.value,
               }),
               {'Content-Type': 'application/json'}
             );
-            props.submitted();//!--lets parent know its submitted and changes so it can update task
+
+            loadedItem.name = formState.inputs.name.value
+            loadedItem.priority = formState.inputs.priority.value
+            loadedItem.address = formState.inputs.address.value
+            loadedItem.notes = formState.inputs.notes.value
+            props.submitted(loadedItem);
         }
-        catch(err){
-          //handleError(err);
-          console.log(err)
-        }
+        catch(err){}
         
     }
 
     const newToDoSubmitHandler = async event =>{
       event.preventDefault();
-      try {
-        await sendRequest(
+      
+        try {
+          var newItem = sendRequest(
             `http://localhost:5000/api/todo/createItem`,
             'POST',
             JSON.stringify({
@@ -170,30 +166,26 @@ const ToDoItemModal = props => {
               uid:uid
             }),
             {'Content-Type': 'application/json'}
-          );
-          props.submitted();//!lets parent know which item was submitted so it can update page of tasks
-      }
-      catch(err){
-        //handleError(err);
-        console.log(err)
-      } 
-    }
-    const handleClear = () =>
-    {
-      props.onClear();
+          )
+          props.submitted(newItem)//!lets parent know which item was submitted so it can update page of tasks
+        }
+        catch(err){} 
+      
+        
     }
 return(<React.Fragment>
+    <ErrorModal error = {error} onClear={clearError}/>
     {isLoading&&
             <div className = "center">
                 <LoadingSpinner/>    
             </div>}
     
     {(!isLoading && (props.newItem||loadedItem.id===props.taskId)) &&  <Modal
-      onCancel={handleClear} 
+      onCancel={() =>{props.onClear();}} 
       header={`${props.category.name} - ${(!props.newItem)? `Editing "${loadedItem.name}"`:"New Task" }`} 
       show={props.open}
       footer={<React.Fragment>
-          <Button onClick={handleClear}>Cancel</Button>
+          <Button onClick={() =>{props.onClear();}}>Cancel</Button>
           <Button type="submit" onClick = {props.newItem?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
       <form id ="toDoItemModal__form" >

@@ -28,7 +28,7 @@ const ToDoList = props=> {
         <ul className= "todo-list">
         {props.items.map( todo =>
          <ToDoItem 
-            id={todo._id} 
+            _id={todo._id} 
             name={todo.name} 
             status={todo.status} 
             priority = {todo.priority}

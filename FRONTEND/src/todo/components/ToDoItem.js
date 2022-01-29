@@ -29,7 +29,6 @@ const ToDoItem = props => {
         setShowMap(false);
     }
     const showDeleteWarningHandler = () =>{
-        //console.log(props.id)
         setShowConfirmModal(true);
     }
 
@@ -42,16 +41,16 @@ const ToDoItem = props => {
             
              await sendRequest(`http://localhost:5000/api/todo/deleteitem/`,'DELETE',
             JSON.stringify({
-              tid : props.id}),
+              tid : props._id}),
               {'Content-Type': 'application/json'});
-            props.onDeleteTask(props.id);
+            props.onDeleteTask(props._id);
        }
         catch(error){}
         console.log("You just got deleted!!!! BOOM");
         setShowConfirmModal(false)
     };
     const editTaskHandler = () =>{
-        props.onEditTask(props.id);
+        props.onEditTask(props._id);
     }
 
     const toggleExpand=()=>{
@@ -67,12 +66,12 @@ const ToDoItem = props => {
 
         try{
             
-            await sendRequest(`http://localhost:5000/api/todo/edititem/${props.id}`,'PATCH',
+            await sendRequest(`http://localhost:5000/api/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Started"}),
              {'Content-Type': 'application/json'});
 
-             props.onStatusChange(props.id,"Started")
+             props.onStatusChange(props._id,"Started")
            
       }
        catch(error){
@@ -83,11 +82,11 @@ const ToDoItem = props => {
     const finishTask = async() => {
         try{
             
-            await sendRequest(`http://localhost:5000/api/todo/edititem/${props.id}`,'PATCH',
+            await sendRequest(`http://localhost:5000/api/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Complete"}),
              {'Content-Type': 'application/json'});
-            props.onStatusChange(props.id,"Complete")
+            props.onStatusChange(props._id,"Complete")
       }
        catch(error){
            console.log("unable to change task status")
@@ -122,7 +121,7 @@ return(
                 } >
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
-        <li className="todo-item " key = {props.id} >
+        <li className="todo-item " key = {props._id} >
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
         <div onClick = {toggleExpand}  className="todo-item__header">

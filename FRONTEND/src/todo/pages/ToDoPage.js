@@ -91,13 +91,35 @@ const ToDoPage = () => {
         setEditTask(false);
         setTaskModal(true);
     }
+    const handleTaskModalError = error => {
+        console.log(error)
+    }
+    const submitEditHandler = editedTask =>{
+        setLoadedTasks(loadedTasks.map((task) => {
+            if(task._id === editedTask._id)
+            {
+                console.log("found")
+                return(editedTask);
+            }
+            else{
+                return(task)
+            }
+        }))
+    }
+    const submitNewHandler = newTask =>{
+        console.log(newTask);
+        const tempLoadedTasks= loadedTasks
+        tempLoadedTasks.push( newTask)
+        console.log(tempLoadedTasks);
+        setLoadedTasks(tempLoadedTasks);
+    }
 
 
 
 return(
     <React.Fragment>
             <ErrorModal error = {error} onClear={clearError}/>
-            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {()=>{setTaskModal(false); setEditTask(false);}} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
+            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
             <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
             {isLoading&&
             <div className = "center">
