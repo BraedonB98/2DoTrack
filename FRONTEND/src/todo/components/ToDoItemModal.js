@@ -12,6 +12,7 @@ import './styling/ToDoItemModal.css';
 
 const ToDoItemModal = props => {
     const auth = useContext(AuthContext);
+    const uid = auth.UID;
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [timeDependent,setTimeDependent] = useState(false);
     const[addressDependent,setAddressDependent] = useState(false);
@@ -31,31 +32,32 @@ const ToDoItemModal = props => {
         value: 'Pending',
         isValid: true
       },
-      ...(addressDependent) && {address: {
-        value: '',
-        isValid: false
-      }},
+      // ...(addressDependent) && {address: {
+      //   value: '',
+      //   isValid: false
+      // }},
 
       notes: {
         value: '',
         isValid: false
       },
-      ...(recurringDependent) && {recurring: {
-        value: {
-            value:false,
-            time:'',//days?
-            category:'',
-        },
-        isValid: false
-      }},
-      ...(timeDependent) && {due: {
-        value: {
-            date:'',
-            time:''
-        },
-        isValid: false
-      }},
+      // ...(recurringDependent) && {recurring: {
+      //   value: {
+      //       value:false,
+      //       time:'',//days?
+      //       category:'',
+      //   },
+      //   isValid: true
+      // }},
+      // ...(timeDependent) && {due: {
+      //   value: {
+      //       date:'',
+      //       time:''
+      //   },
+      //   isValid: true
+      // }},
     },false);
+
     const handleError = error =>{
       props.onError(error);
     }
@@ -71,42 +73,43 @@ const ToDoItemModal = props => {
             if(loadedItem.address){setAddressDependent(true)}
             if(loadedItem.recurring){setRecurringDependent(true)}
             console.log(responseData)
-            setFormData({
-                name: {
-                    value: responseData.task.name,
-                    isValid: true
-                  },
-                  priority: {
-                    value: responseData.task.priority,
-                    isValid: true
-                  },
-                  status: {
-                    value: responseData.task.status,
-                    isValid: true
-                  },
-                  ...(responseData.address) && {address: {
-                    value: responseData.address,
-                    isValid: true
-                  }},
-                  notes: {
-                    value: responseData.task.notes,
-                    isValid: true
-                  },
-                  ...(responseData.due) && {due: {
-                    value: {
-                        date:responseData.due.date,
-                        time:responseData.due.time
-                    },
-                    isValid: true
-                  }},
-            },true);
           }
           catch(err){
             console.log(err)
             handleError(err);
           }
             
-        }};
+        }
+        setFormData({
+          name: {
+              value: loadedItem.name,
+              isValid: true
+            },
+            priority: {
+              value: loadedItem.priority,
+              isValid: true
+            },
+            status: {
+              value: loadedItem.status,
+              isValid: true
+            },
+            // ...(loadedItem.address) && {address: {
+            //   value: loadedItem.address,
+            //   isValid: true
+            // }},
+            notes: {
+              value: loadedItem.notes,
+              isValid: true
+            },
+            // ...(loadedItem.due) && {due: {
+            //   value: {
+            //       date:loadedItem.due.date,
+            //       time:loadedItem.due.time
+            //   },
+            //   isValid: true
+            // }},
+      },true);
+      };
       if(!props.newItem){fetchItem();}
       
   },[sendRequest,setFormData,props.taskId])//eslint-disable-line
@@ -120,24 +123,64 @@ const ToDoItemModal = props => {
     const selectAddressHandler = event =>{
       event.preventDefault();
       setAddressDependent(addressDependent?false:true)
+      
     }
     const recurringHandler = event =>{
       event.preventDefault();
       setRecurringDependent(recurringDependent?false:true)
     }
 
-    const editToDoSubmitHandler = event =>{
+    const editToDoSubmitHandler = async event =>{
         event.preventDefault();
-        console.log("editing");
-        console.log(formState);
-        props.submitted();//lets parent know its submitted 
+        try {
+          await sendRequest(
+              `http://localhost:5000/api/todo/edititem/${props.taskId}`,
+              'PATCH',
+              JSON.stringify({
+                name: formState.inputs.name.value,
+                status: formState.inputs.status.value,
+                priority: formState.inputs.priority.value,
+                address: formState.inputs.address.value,
+                notes: formState.inputs.notes.value,
+              }),
+              {'Content-Type': 'application/json'}
+            );
+            props.submitted();//!--lets parent know its submitted and changes so it can update task
+        }
+        catch(err){
+          //handleError(err);
+          console.log(err)
+        }
+        
     }
 
-    const newToDoSubmitHandler = event =>{
-        event.preventDefault();
-        console.log("creating");
-        console.log(formState);
-        props.submitted();//lets parent know its submitted 
+    const newToDoSubmitHandler = async event =>{
+      event.preventDefault();
+      try {
+        await sendRequest(
+            `http://localhost:5000/api/todo/createItem`,
+            'POST',
+            JSON.stringify({
+              name: formState.inputs.name.value,
+              status: "Pending",
+              priority: formState.inputs.priority.value,
+              address: formState.inputs.address.value,
+              notes: formState.inputs.notes.value,
+              cid: props.category.name,
+              uid:uid
+            }),
+            {'Content-Type': 'application/json'}
+          );
+          props.submitted();//!lets parent know which item was submitted so it can update page of tasks
+      }
+      catch(err){
+        //handleError(err);
+        console.log(err)
+      } 
+    }
+    const handleClear = () =>
+    {
+      props.onClear();
     }
 return(<React.Fragment>
     {isLoading&&
@@ -146,11 +189,11 @@ return(<React.Fragment>
             </div>}
     
     {(!isLoading && (props.newItem||loadedItem.id===props.taskId)) &&  <Modal
-      onCancel={props.onClear} 
+      onCancel={handleClear} 
       header={`${props.category.name} - ${(!props.newItem)? `Editing "${loadedItem.name}"`:"New Task" }`} 
       show={props.open}
       footer={<React.Fragment>
-          <Button onClick={props.onClear}>Cancel</Button>
+          <Button onClick={handleClear}>Cancel</Button>
           <Button type="submit" onClick = {props.newItem?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
       <form id ="toDoItemModal__form" >

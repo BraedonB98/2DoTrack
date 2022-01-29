@@ -100,7 +100,7 @@ const deleteItemHelper = async (req) => {
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
     const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
-
+    console.log(cid);
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -152,7 +152,8 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
 
 const editItem = async(req,res,next)=>{
             const tid = req.params.TDIID;
-            const {name,status,priority,address,notes}= req.body;
+            console.log("item edited")
+            const {name,status,priority,address,notes,due}= req.body;
     
             let item = await getItemById(tid);
             if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
@@ -167,6 +168,7 @@ const editItem = async(req,res,next)=>{
             
             try{
                 await item.save();
+                
             }
             catch(error){
                 console.log(error);
