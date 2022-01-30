@@ -136,7 +136,7 @@ return(
         {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
          {(!isLoading && loadedCategory) && 
             <div className="todo-page__header">
-                <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewCategory}>New Category</Button>
+                <Button className = "todo-page__new-category-button"   onClick={handleNewCategory}>New Category</Button>
                 <div className="todo-page__category-header">
                     <Button className = "todo-page__arrow-item-button"  onClick={toggleLeft}>&lt;</Button>
                     <Button className = "todo-page__current-category-header"  onClick={handleCategoryEditor}>{loadedCategory.name}</Button>
@@ -144,7 +144,7 @@ return(
                 </div>
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
-            {(!isLoading && newCategory ) && <NewCategory/> }
+            {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}}/> }
             {(!isLoading && categoryEditor ) && <CategoryEditor/>}
            
             

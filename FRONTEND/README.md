@@ -15,3 +15,5 @@ List Of know issues
     -todoitemmodal
         -still needs styling
         -when someone is editing and adds recurring need to add a way to make the task recurring/ move it to recurring array in user in backend    
+    -newcategory.js
+        -after you select a category and it closes the modal, show the selected item to the user

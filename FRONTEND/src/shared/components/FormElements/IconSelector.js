@@ -3,23 +3,18 @@ import Icon from '../UIElements/Icons';
 import Input from './Input';
 
 const IconSelector = props=> {
-    const [selectedIcon,setSelectedIcon] = useState();
-    
+    const [searchedIcon,setSearchedIcon] = useState();
 
-    const submitHandler = () =>{
-
-    }
     const iconSearchHandler = event => {
-        console.log(event.target.value);
-        setSelectedIcon(event.target.value);
+        setSearchedIcon(event.target.value);
     }
     const iconClickHandler =  event => {
-        console.log(event.currentTarget.dataset.index);
+        props.onSelectedIcon(event);//to get icon event.currentTarget.dataset.index
     }
     return(
         <React.Fragment>
-        <input id="name" element="input" type ="text" label="SearchIcon"   onChange={iconSearchHandler}/>
-        <Icon onClick = {iconClickHandler} search = {selectedIcon}/>
+        <input id="name" element="input" type ="text" label="SearchIcon"  autocomplete="off" onChange={iconSearchHandler}/>
+        <Icon onClick = {iconClickHandler} search = {searchedIcon}/>
         </React.Fragment>
     );
 }

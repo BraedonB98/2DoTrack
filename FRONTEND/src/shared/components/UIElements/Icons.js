@@ -34,8 +34,8 @@ const icons = [
         value:<AiFillCalculator/>
     },
     {
-        name:"bug",
-        search:["calculator"],
+        name:"calendar",
+        search:["calendar"],
         value:<AiFillCalendar/>
     }
 ]
@@ -45,15 +45,16 @@ const Icon = props => {
         props.onClick(event)
     }
     useEffect( ()=>{
-        setIconsState((icons.filter(icon => icon.search.filter(search => search.includes(props.search)).length!==0)));
-        console.log(iconsState);
+        setIconsState((icons.filter(icon => icon.search.filter(search => search.includes(props.search)).length>0)));
     },[props.search])
     if(props.search){
         return(
             <React.Fragment>
-                { iconsState.map((icon) => <div className={props.className} key={icon.name} data-index={icon.name} onClick={onClickHandler} >{icon.value}</div>) }
+                {iconsState && iconsState.map((icon) => <div className={props.className} key={icon.name} data-index={icon.name} onClick={onClickHandler} >{icon.value}</div>) }
+                {(iconsState.length===0) && (<p>No items found under this name</p>)}
             </React.Fragment>
         )
+        
     }
     if(props.name){
         setIconsState(icons.filter(icon=> icon.name === props.name)[0]);

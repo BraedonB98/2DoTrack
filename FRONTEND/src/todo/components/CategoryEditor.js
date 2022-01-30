@@ -13,7 +13,9 @@ const CategoryEditor = props=> {
     
 
     return(
-        <h1>Edit Category</h1>
+        <Card>
+
+        </Card>
     );
 }
 export default CategoryEditor;
