@@ -29,30 +29,30 @@ const ToDoItemModal = props => {
         isValid: true
       },
      
-      // ...(addressDependent) && {address: {
-      //   value: '',
-      //   isValid: false
-      // }},
+       address: {
+         value: '',
+         isValid: true
+       },
 
       notes: {
         value: '',
         isValid: false
       },
-      // ...(recurringDependent) && {recurring: {
-      //   value: {
-      //       value:false,
-      //       time:'',//days?
-      //       category:'',
-      //   },
-      //   isValid: true
-      // }},
-      // ...(timeDependent) && {due: {
-      //   value: {
-      //       date:'',
-      //       time:''
-      //   },
-      //   isValid: true
-      // }},
+      recurring: {
+        value: {
+            value:false,
+            time:'',//days?
+            category:'',
+        },
+        isValid: true
+      },
+      due: {
+        value: {
+            date:'',
+            time:''
+        },
+        isValid: true
+      },
     },false);
 
    
@@ -66,7 +66,23 @@ const ToDoItemModal = props => {
           }
           catch(err){}
         }
+      };
+      if(props.taskId){fetchItem();}
+      if(loadedItem.address)
+        {
+          setAddressDependent(true)
+        }
+        if(loadedItem.due){
+          setTimeDependent(true)
+        }
         
+        if(loadedItem.recurring){
+          setRecurringDependent(true)
+        }
+    },[sendRequest,props.taskId, loadedItem])
+
+        
+      useEffect( ()=>{
         setFormData({
           name: {
             value: loadedItem.name,
@@ -80,21 +96,31 @@ const ToDoItemModal = props => {
             value: loadedItem.notes,
             isValid: true
           },
+          address: {
+            value: addressDependent?loadedItem.address:"",
+            isValid: true
+          },
+          due: {
+            value: {
+                date:timeDependent&&loadedItem.due?loadedItem.due.date:'',
+                time:timeDependent&&loadedItem.due?loadedItem.due.time:''
+            },
+            isValid: true
+          },
+          recurring: {
+            value: {
+                value:recurringDependent?true:false,
+                time:recurringDependent&&loadedItem.recurring?loadedItem.recurring.value.time:'',//days?
+                category:recurringDependent&&loadedItem.recurring?loadedItem.recurring.value.category:'',
+            },
+            isValid: true
+          }
         },true);
+      },[addressDependent,timeDependent,recurringDependent,loadedItem,setFormData])
 
 
-      if(loadedItem.due){
-        setTimeDependent(true)
-      }
-      if(loadedItem.address){
-        setAddressDependent(true)
-      }
-      if(loadedItem.recurring){
-        setRecurringDependent(true)
-      }
-    };
-    if(props.taskId){fetchItem();}
-  },[sendRequest,setFormData,props.taskId, loadedItem])
+      
+    
 
   
     const selectTimeHandler = event =>{
@@ -154,7 +180,7 @@ const ToDoItemModal = props => {
             }),
             {'Content-Type': 'application/json'}
           )
-          props.submitted(newItem)//!lets parent know which item was submitted so it can update page of tasks
+          props.submitted(newItem)
         }
         catch(err){} 
     }
@@ -174,17 +200,17 @@ return(<React.Fragment>
           <Button type="submit" onClick = {!props.taskId?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
       <form id ="toDoItemModal__form" >
-        <Input id="name" element="input" type ="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid task name." onInput={inputHandler} initialValue = {!props.taskId?"": loadedItem.name}/>
-        <Input id="priority" element="input" type = "range" min="1" max ="5" validators={[VALIDATOR_REQUIRE()]} label={`Priority - ${formState.inputs.priority.value}`}  onInput={inputHandler} initialValue = {!props.taskId?1: loadedItem.priority}/>
+        <Input id="name" element="input" type ="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid task name." onInput={inputHandler} initialValue = {!props.taskId?"": loadedItem.name} initialValid = {!props.taskId?false:true}/>
+        <Input id="priority" element="input" type = "range" min="1" max ="5" validators={[VALIDATOR_REQUIRE()]} label={`Priority - ${formState.inputs.priority.value}`}  onInput={inputHandler} initialValue = {!props.taskId?1: loadedItem.priority} initialValid = {!props.taskId?false:true}/>
         <Button onClick = {selectTimeHandler} > {timeDependent?"Remove Date":"Set Date" }</Button>
-        {(timeDependent) && <Input id="date" element="date" type = "date" label="Date"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a date if it is due." initialValue = {(!props.taskId || !loadedItem.due)?"": loadedItem.due.date}/> }
-        {(timeDependent) && <Input id="time" element="time" type = "time" label="Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a time if it is due."initialValue = {(!props.taskId || !loadedItem.due)?"": loadedItem.due.time}/>}
+        {(timeDependent) && <Input id="date" element="date" type = "date" label="Date"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a date if it is due." initialValue = {(!props.taskId || !loadedItem.due)?"": loadedItem.due.date} initialValid = {!props.taskId?false:true}/> }
+        {(timeDependent) && <Input id="time" element="time" type = "time" label="Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a time if it is due."initialValue = {(!props.taskId || !loadedItem.due)?"": loadedItem.due.time} initialValid = {!props.taskId?false:true}/>}
         {(timeDependent) && <Button onClick = {recurringHandler} > {recurringDependent?"Stop Recurring":"Make Recurring" }</Button> }
         {(timeDependent && !recurringDependent) && <React.Fragment><br/><br/></React.Fragment>}
-        {(recurringDependent) && <Input id="reccuring" element="time" type = "time" label="Recurring Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a recurring time." initialValue = {(!props.taskId )?"": loadedItem.recurring}/>}
+        {(recurringDependent) && <Input id="reccuring" element="time" type = "time" label="Recurring Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a recurring time." initialValue = {(!props.taskId )?"": loadedItem.recurring} initialValid = {!props.taskId?false:true}/>}
         <Button onClick = {selectAddressHandler} > {addressDependent?"Remove Address":"Set Address" }</Button>
-        {(addressDependent) && <Input id="address" element="input" label="Address" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid address." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.address}/>}
-        <Input id="notes" element="textarea" label="Notes" validators={[VALIDATOR_MINLENGTH(5)]} errorText = "Please enter a valid description (at least 5 characters)." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.notes}/>
+        {(addressDependent) && <Input id="address" element="input" label="Address" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid address." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.address} initialValid = {!props.taskId?false:true}/>}
+        <Input id="notes" element="textarea" label="Notes" validators={[VALIDATOR_MINLENGTH(5)]} errorText = "Please enter a valid description (at least 5 characters)." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.notes} initialValid = {!props.taskId?false:true}/>
       </form>
     </Modal>}
 </React.Fragment>)

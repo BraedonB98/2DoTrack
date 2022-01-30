@@ -111,10 +111,10 @@ const ToDoPage = () => {
         }))
     }
     const submitNewHandler = newTask =>{
-        console.log(newTask);
+        //!console.log(newTask);
         const tempLoadedTasks= loadedTasks
         tempLoadedTasks.push( newTask)
-        console.log(tempLoadedTasks);
+        //!console.log(tempLoadedTasks);
         setLoadedTasks(tempLoadedTasks);
     }
     
