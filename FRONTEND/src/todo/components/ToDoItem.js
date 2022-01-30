@@ -46,7 +46,6 @@ const ToDoItem = props => {
             props.onDeleteTask(props._id);
        }
         catch(error){}
-        console.log("You just got deleted!!!! BOOM");
         setShowConfirmModal(false)
     };
     const editTaskHandler = () =>{

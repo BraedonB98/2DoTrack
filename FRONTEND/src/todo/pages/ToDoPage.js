@@ -38,8 +38,8 @@ const ToDoPage = () => {
               }
               catch(err){}
           };
-        fetchCategories();// eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+        fetchCategories();
+    },[sendRequest,UID])
 
     useEffect( ()=>{
         const fetchTasks = async ()=>{
@@ -54,7 +54,6 @@ const ToDoPage = () => {
     },[sendRequest, UID,loadedCategory])
 
     const taskDeletedHandler = (deletedTaskId) => {
-        console.log("deleting")
         setLoadedTasks(prevTasks => prevTasks.filter(task => task._id !== deletedTaskId));
     };
 
@@ -130,7 +129,7 @@ const ToDoPage = () => {
 return(
 <React.Fragment>
     <ErrorModal error = {error} onClear={clearError}/>
-    {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
+    {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask}  submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
     <SwipeableHook className ="todo-page__contents" onSwipedLeft = {toggleRight}  onSwipedRight = {toggleLeft}>{/*This is a div but swipeable events*/}
         {isLoading&&<div className = "center"><LoadingSpinner/></div>}
         {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
