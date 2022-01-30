@@ -135,7 +135,7 @@ return(
             {props.status ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
             {props.status ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
 
-            <Button onClick={openMapHandler}>VIEW ON MAP</Button>
+            {props.location && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
             <Button onClick={editTaskHandler}>EDIT</Button>
             <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>
             </div>)}
