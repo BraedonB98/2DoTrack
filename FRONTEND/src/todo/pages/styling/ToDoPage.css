@@ -22,6 +22,9 @@
     justify-items: center;
     align-items:baseline;
 }
+.todo-page__current-category-header{
+    white-space: nowrap;
+}
 
 .todo-page__arrow-item-button{
     margin-left:0.5;

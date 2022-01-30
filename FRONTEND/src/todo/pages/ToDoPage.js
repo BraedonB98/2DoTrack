@@ -120,9 +120,11 @@ const ToDoPage = () => {
     
     const handleCategoryEditor = () =>{
         categoryEditor?setCategoryEditor(false):setCategoryEditor(true);
+        newCategory&& setNewCategory(false);
     }
     const handleNewCategory = () => {
         newCategory?setNewCategory(false):setNewCategory(true);
+        CategoryEditor&& setCategoryEditor(false);
     }
 
 
