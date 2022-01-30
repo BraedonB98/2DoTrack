@@ -170,8 +170,6 @@ const ToDoItemModal = props => {
           props.submitted(newItem)//!lets parent know which item was submitted so it can update page of tasks
         }
         catch(err){} 
-      
-        
     }
 return(<React.Fragment>
     <ErrorModal error = {error} onClear={clearError}/>

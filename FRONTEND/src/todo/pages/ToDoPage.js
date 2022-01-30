@@ -9,6 +9,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import Button from '../../shared/components/FormElements/Button';
 import {AuthContext} from "../../shared/context/auth-context";
 
+
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";
 
@@ -71,13 +72,13 @@ const ToDoPage = () => {
         {setLoadedCategory(newCategory)}
         
     }
-    const leftSwipe = () =>{
+    const toggleRight = () =>{
         const currentCatIndex = loadedCategories.findIndex(cat => cat.name===loadedCategory.name);
         if(loadedCategories[currentCatIndex+1]){
             setLoadedCategory(loadedCategories[currentCatIndex+1])
         }
     }
-    const rightSwipe = () =>{
+    const toggleLeft = () =>{
         const currentCatIndex = loadedCategories.findIndex(cat => cat.name===loadedCategory.name);
         if(loadedCategories[currentCatIndex-1]){
             setLoadedCategory(loadedCategories[currentCatIndex-1])
@@ -113,31 +114,38 @@ const ToDoPage = () => {
         console.log(tempLoadedTasks);
         setLoadedTasks(tempLoadedTasks);
     }
+    
+    const handleCategorySelect = () =>{
+        
+    }
+    const handleNewCategory = () => {
 
+    }
 
 
 return(
-    <React.Fragment>
-            <ErrorModal error = {error} onClear={clearError}/>
-            {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
-            <SwipeableHook onSwipedLeft = {leftSwipe}  onSwipedRight = {rightSwipe}>{/*This is a div but swipeable events*/}
-            {isLoading&&
-            <div className = "center">
-                <LoadingSpinner/>    
-            </div>}
-            
-                {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
-            
-            <div>
-                {(!isLoading && loadedCategory) && 
-                    <h1>{loadedCategory.name}
-                        <Button className = "todo-page__new-to-do-item-button" category = {loadedCategory.name} onClick={handleNewTask}>+</Button>
-                    </h1> }
-                {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
-            </div>
-            </SwipeableHook>
-        </React.Fragment>
-    
+<React.Fragment>
+    <ErrorModal error = {error} onClear={clearError}/>
+    {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask} newItem = {!editTask} submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
+    <SwipeableHook className ="todo-page__contents" onSwipedLeft = {toggleRight}  onSwipedRight = {toggleLeft}>{/*This is a div but swipeable events*/}
+        {isLoading&&<div className = "center"><LoadingSpinner/></div>}
+        {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }
+         {(!isLoading && loadedCategory) && 
+            <div className="todo-page__header">
+                <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewCategory}>New Category</Button>
+                <div className="todo-page__category-header">
+                    <Button className = "todo-page__arrow-item-button"  onClick={toggleLeft}>&lt;</Button>
+                    <Button className = "todo-page__current-category-header"  onClick={handleCategorySelect}>{loadedCategory.name}</Button>
+                    <Button className = "todo-page__arrow-item-button"  onClick={toggleRight}> &gt;</Button>
+                </div>
+                <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
+            </div> }
+
+        <div className="todo-page__task-list">
+            {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
+        </div>
+    </SwipeableHook>
+</React.Fragment>
 )}
 
 export default ToDoPage;

@@ -19,7 +19,6 @@
 .button:active {
   background: var(--colorSecondaryVariant);
   color: var(--colorOnSecondaryVariant);
-  
 }
 
 .button--inverse {

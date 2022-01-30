@@ -13,7 +13,5 @@ List Of know issues
     -todopage.js
         - doesnt filter correct taskDeletedHandler
     -todoitemmodal
-        -need to make range slider have a default value
         -still needs styling
-    -ToDoItemModal
-        -when someone clicks outside of modal page crashes
+        -when someone is editing and adds recurring need to add a way to make the task recurring/ move it to recurring array in user in backend    
