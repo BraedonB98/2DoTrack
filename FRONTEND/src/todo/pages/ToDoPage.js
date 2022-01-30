@@ -8,6 +8,8 @@ import ToDoItemModal from "../components/ToDoItemModal";
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import Button from '../../shared/components/FormElements/Button';
 import {AuthContext} from "../../shared/context/auth-context";
+import NewCategory from "../components/NewCategory";
+import CategoryEditor from "../components/CategoryEditor";
 
 
 import ToDoList from "../components/ToDoList";
@@ -22,6 +24,8 @@ const ToDoPage = () => {
     const [loadedCategory, setLoadedCategory] = useState();
     const[loadedCategories,setLoadedCategories]= useState();
     const[editTask,setEditTask]= useState(false);
+    const [newCategory, setNewCategory] = useState(false);
+    const [categoryEditor, setCategoryEditor] = useState(false);
     const auth= useContext(AuthContext);
     const UID = auth.UID;
 
@@ -115,11 +119,11 @@ const ToDoPage = () => {
         setLoadedTasks(tempLoadedTasks);
     }
     
-    const handleCategorySelect = () =>{
-        
+    const handleCategoryEditor = () =>{
+        categoryEditor?setCategoryEditor(false):setCategoryEditor(true);
     }
     const handleNewCategory = () => {
-
+        newCategory?setNewCategory(false):setNewCategory(true);
     }
 
 
@@ -135,11 +139,15 @@ return(
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewCategory}>New Category</Button>
                 <div className="todo-page__category-header">
                     <Button className = "todo-page__arrow-item-button"  onClick={toggleLeft}>&lt;</Button>
-                    <Button className = "todo-page__current-category-header"  onClick={handleCategorySelect}>{loadedCategory.name}</Button>
+                    <Button className = "todo-page__current-category-header"  onClick={handleCategoryEditor}>{loadedCategory.name}</Button>
                     <Button className = "todo-page__arrow-item-button"  onClick={toggleRight}> &gt;</Button>
                 </div>
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
+            {(!isLoading && newCategory ) && <NewCategory/> }
+            {(!isLoading && categoryEditor ) && <CategoryEditor/>}
+           
+            
 
         <div className="todo-page__task-list">
             {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
