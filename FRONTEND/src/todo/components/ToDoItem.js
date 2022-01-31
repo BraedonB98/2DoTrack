@@ -130,7 +130,7 @@ return(
             <h2  >{props.name}</h2>
         </div>
         {expand && (<div className="todo-item__expand">
-            <p>{props.notes}</p>
+            <p className = "todo-item__notes" >{props.notes}</p>
             {props.status ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
             {props.status ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
 

@@ -20,6 +20,9 @@
     padding: 1%;
     display:inline;
   }
+  .todo-item__notes{
+    white-space: pre-wrap;
+  }
 
   .todo-item__modal-content {
     padding: 0;

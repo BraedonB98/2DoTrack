@@ -106,7 +106,6 @@ const ToDoPage = () => {
         setLoadedTasks(loadedTasks.map((task) => {
             if(task._id === editedTask._id)
             {
-                console.log("found")
                 return(editedTask);
             }
             else{
