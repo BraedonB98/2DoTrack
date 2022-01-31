@@ -1,0 +1,23 @@
+.icon-selector__icons{
+    display:inline;
+}
+.icon-selector__icon-menu{
+    display:flex;
+    width:50%;
+}
+.icon-selector__icon-menu{
+    display:flex;
+    width:50%;
+}
+.icon-selector__icon-search{
+    width: 80%;
+    font: inherit;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    padding: 0.15rem 0.25rem;
+}
+.icon-selector__cancelButton{
+    width: 10%;
+    margin-left: 5% ;
+    padding:0.3rem;
+    }

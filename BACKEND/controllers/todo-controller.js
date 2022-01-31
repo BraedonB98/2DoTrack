@@ -410,7 +410,7 @@ const createCategory = async(req,res,next)=>{
     }
         
 
-    res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
+    res.status(201).json({category: user.toDoCategories[user.toDoCategories.length-1]})
 }
 
 const renameCategory = async(req,res,next)=>{
@@ -468,7 +468,7 @@ const deleteCategory = async(req,res,next)=>{
 
     //remove category from user
 
-    
+    console.log("deleting"+cid);
     res.status(201).json({message:`deleted ${cid}`})
 }
 const getCategory = async(req,res,next)=>{

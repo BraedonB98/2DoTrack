@@ -152,6 +152,10 @@ const ToDoPage = () => {
         }
         setLoadedCategories(loadedCategories.filter(category => category._id !== deletedCategory._id))
     }
+    const newCategorySubmitHandler = newCategory => {
+        setLoadedCategories(loadedCategories.concat(newCategory));
+        setLoadedCategory(newCategory[0]);
+    }
 
 return(
 <React.Fragment>
@@ -170,7 +174,7 @@ return(
                 </div>
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
-            {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}}/> }
+            {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}} onSubmit = {newCategorySubmitHandler}/> }
             {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onDelete= {deleteCategoryHandler} onRename = {renameCategoryHandler}category = {loadedCategory}/>}
            
             

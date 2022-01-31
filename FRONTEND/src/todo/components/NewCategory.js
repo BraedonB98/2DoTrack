@@ -9,6 +9,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import Input from '../../shared/components/FormElements/Input';
 import IconSelector from '../../shared/components/FormElements/IconSelector';
+import Icon from '../../shared/components/UIElements/Icons';
 //---------------------CSS----------------------------------
 //import "./styling/NewCategory.css"
 
@@ -18,6 +19,7 @@ const NewCategory = props=> {
     const auth = useContext(AuthContext);
     const uid = auth.UID;
     const [showIconSelect,setShowIconSelect]= useState();
+    const [iconSelected,setIconSelected]= useState();
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [formState, inputHandler, setFormData] = useForm({
         name: {
@@ -29,34 +31,50 @@ const NewCategory = props=> {
             isValid: false
           }
       },false);
-      const submitHandler = () =>{
-        console.log(formState);
-      }
-      const handleIconSelect = event => {
+      const submitHandler = async () =>{
+
+        try {
+            const newCategory = await sendRequest(
+             `http://localhost:5000/api/todo/createcategory`,
+             'POST',
+             JSON.stringify({
+               name: formState.inputs.name.value,
+               icon: formState.inputs.icon.value,
+               uid:uid
+             }),
+             {'Content-Type': 'application/json'}
+           )
+           props.onSubmit([newCategory.category]);
+         }
+         catch(err){} 
+     }
+      
+      const handleIconSelect = (event,icon) => {
             const tempName = {
                 value:formState.value?formState.value:"",
                 isValid:formState.isValid
             }
+            setIconSelected(icon)
             setFormData({
                 name:{
                     value:tempName.value?tempName.value:"",
                     isValid:tempName.isValid
                 },
                 icon: {
-                    value: event.currentTarget.dataset.index,
+                    value: icon,
                     isValid: true
                   }
             },tempName.isValid)
             setShowIconSelect(false)
-        //!-------------------------------Show Icon after this
         }
       
     return(
         <Card>
             <form id ="toDoItemModal__form" >
                 <Input id="name" element="input" type ="text" label="Category Name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid category name." onInput={inputHandler}/>
-                <Button onClick={event=>{event.preventDefault();showIconSelect?setShowIconSelect(false):setShowIconSelect(true);}}>Select Icon</Button>
-                {showIconSelect && <IconSelector onSelectedIcon = {handleIconSelect} />}
+                 <Button onClick={event=>{event.preventDefault();showIconSelect?setShowIconSelect(false):setShowIconSelect(true);}}>{showIconSelect?"Cancel Select" : "Select Icon"}</Button>
+                 {iconSelected &&<Icon name={iconSelected}/>}
+                {showIconSelect && <IconSelector onCancel = {()=>{setShowIconSelect(false)}}onSelectedIcon = {handleIconSelect} />}
             </form>
             <Button  onClick = {props.onCancel}> Cancel </Button>
             <Button type="submit" onClick = {submitHandler} disabled={!formState.isValid}> Submit </Button>

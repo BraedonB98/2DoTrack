@@ -1,6 +1,9 @@
 import React, {useState, useContext} from 'react';
 import Icon from '../UIElements/Icons';
+import Button from './Button';
 import Input from './Input';
+
+import "./iconSelector.css"
 
 const IconSelector = props=> {
     const [searchedIcon,setSearchedIcon] = useState();
@@ -9,12 +12,15 @@ const IconSelector = props=> {
         setSearchedIcon(event.target.value);
     }
     const iconClickHandler =  event => {
-        props.onSelectedIcon(event);//to get icon event.currentTarget.dataset.index
+        props.onSelectedIcon(event,event.currentTarget.dataset.index);
     }
     return(
         <React.Fragment>
-        <input id="name" element="input" type ="text" label="SearchIcon"  autocomplete="off" onChange={iconSearchHandler}/>
-        <Icon onClick = {iconClickHandler} search = {searchedIcon}/>
+        <div className={`icon-selector__menu ${props.className}`}>
+            <input className= 'icon-selector__icon-search' id="name" element="input" type ="text" label="SearchIcon"  autoComplete="off" onChange={iconSearchHandler}/>
+            <Button danger className ='icon-selector__cancelButton' onClick = {props.onCancel} >x</Button>
+            <div className='icon-selector__icon-menu'><Icon className= "icon-selector__icons" onClick = {iconClickHandler} search = {searchedIcon}/></div>
+        </div>
         </React.Fragment>
     );
 }
