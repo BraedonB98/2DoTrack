@@ -46,7 +46,6 @@ const deleteItemHelper = async (req) => {
        const {tid,oldCid}= req.body;
        let item = await getItemById(tid);
        if(!!item.error){return({error:item.error, errorMessage:item.errorMessage, errorCode:item.errorCode})}
-       //console.log(item)
        uid= item.creator
        //getting user
        let user = await getUserById(uid); 
@@ -70,7 +69,7 @@ const deleteItemHelper = async (req) => {
         return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
        
        if(item.creator._id.toString() === uid){
-           console.log("removing item for all users")
+           console.log("removing item for all users who share it")
            try {
                const sess = await mongoose.startSession();
                sess.startTransaction();
@@ -100,7 +99,6 @@ const deleteItemHelper = async (req) => {
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
     const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
-    console.log(cid);
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -152,7 +150,6 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
 
 const editItem = async(req,res,next)=>{
             const tid = req.params.TDIID;
-            console.log("item edited")
             const {name,status,priority,address,notes,due}= req.body;
     
             let item = await getItemById(tid);
@@ -374,7 +371,7 @@ const transferCreator = async(req,res,next)=>{//same as move item except with us
 
     
     item.creator = uidCreator
-    console.log(item);
+
         //save task
        // try{
          //   await item.save();
@@ -432,7 +429,6 @@ const renameCategory = async(req,res,next)=>{
         return(next(new HttpError("Category not found in database", 404)))
     }
     const category = user.toDoCategories.filter(category => category.name === newName)[0];
-    console.log(category);
 
     try{
         await user.save();
@@ -446,7 +442,7 @@ const renameCategory = async(req,res,next)=>{
     res.status(201).json({category: category.toObject({getters:true})})
 }
 const deleteCategory = async(req,res,next)=>{ 
-    // const {cid,uid} = req.body;
+     const {cid,uid} = req.body;
     // if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
     // if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
     // //Find User

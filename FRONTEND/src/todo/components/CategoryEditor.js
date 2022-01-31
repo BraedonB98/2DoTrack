@@ -51,15 +51,17 @@ const CategoryEditor = props=> {
         
         try{
             
-            //  await sendRequest(`http://localhost:5000/api/todo/deleteitem/`,'DELETE',
-            // JSON.stringify({
-            //   tid : props._id}),
-            //   {'Content-Type': 'application/json'});
-            // props.onDeleteTask(props._id); //!------------make this so it is for the category not the item
+            await sendRequest(`http://localhost:5000/api/todo/category`,'DELETE',
+            JSON.stringify({
+            uid : uid,
+            cid: props.category.name
+            }),
+            {'Content-Type': 'application/json'});
+            props.onDelete(props.category); 
        }
         catch(error){}
         setShowConfirmModal(false)
-        //!------move to next category in array otherwise it wont be there anymore
+        
     };
     return(
         <React.Fragment>
