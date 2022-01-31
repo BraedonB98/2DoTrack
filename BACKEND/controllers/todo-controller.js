@@ -41,21 +41,18 @@ const itemInDataBase = async(tid) =>{
     return(item);
 }
 
-const deleteItemHelper = async (req) => {
+const deleteItemHelper = async (tid,oldCid) => {
        //getting item
-       const {tid,oldCid}= req.body;
        let item = await getItemById(tid);
        if(!!item.error){return({error:item.error, errorMessage:item.errorMessage, errorCode:item.errorCode})}
        uid= item.creator
        //getting user
        let user = await getUserById(uid); 
        if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
-   
        let oldCategory
        if (oldCid===undefined)
        {
            //find category from searching
-           
            oldCategory = user.toDoCategories.filter(category => 
               category.toDoList.filter(item => 
                    item._id.toString()===tid
@@ -63,12 +60,12 @@ const deleteItemHelper = async (req) => {
            )[0]
        }
        else{ //alot more efficient than way above
-           oldCategory = user.toDoCategories.filter(category => category.name === oldCid)
+           oldCategory = user.toDoCategories.filter(category => category.name === oldCid)[0]
        }
        if (!oldCategory){ 
         return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
-       
-       if(item.creator._id.toString() === uid){
+
+       if(item.creator._id === uid){
            console.log("removing item for all users who share it")
            try {
                const sess = await mongoose.startSession();
@@ -78,20 +75,22 @@ const deleteItemHelper = async (req) => {
                oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
                await user.save({session: sess});
                await sess.commitTransaction();
+               console.log("item Deleted")
              } catch (err) {
-                return({error:error, errorMessage:"Something went wrong, could not delete item", errorCode:500})
+                 console.log(err);
+                return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:500})
              }
        }
        else{
+            oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
            try {
                //removing item from old category
-               oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+               console.log("should not be here")
                await user.save();
              } catch (err) {
-                return({error:error, errorMessage:"Something went wrong, could not delete item", errorCode:"500"})
+                return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:"500"})
              }
             }
-        return({error:false})
 }
 
 
@@ -178,8 +177,9 @@ const editItem = async(req,res,next)=>{
 }
 
 const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
-    const deletingItem = await deleteItemHelper(req);
-    if(!!deletingItem.error){return(next(new HttpError(deletingItem.errorMessage, deletingItem.errorCode)))}
+    const {tid,oldCid}= req.body;
+    const deletingIssue = await deleteItemHelper(tid,oldCid);
+    if(deletingIssue){return(next(new HttpError(deletingIssue.errorMessage, deletingIssue.errorCode)))}
     res.status(201).json({message:"deleted"})
 }
 
@@ -443,33 +443,34 @@ const renameCategory = async(req,res,next)=>{
 }
 const deleteCategory = async(req,res,next)=>{ 
      const {cid,uid} = req.body;
-    // if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
-    // if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
-    // //Find User
-    // let user = await getUserById(uid); 
-    // if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
-    // let category = user.toDoCategories.filter(category => category.name === cid)[0]
-    // if (category.length===0)
-    // {return(next(new HttpError("Category Cant Be Located", 404)))}
-    // console.log(category)
-    // try{
-    //     await category.toDoList.map(async(item) => {
-    //         const itemToRemove={body:{uid:uid,tid:item._id.toString(), oldCid:category.name}}
-    //         console.log(itemToRemove);
-    //         const deletingItem = await deleteItemHelper(itemToRemove);
-    //         if(!!deletingItem.error){return(next(new HttpError(deletingItem.errorMessage, deletingItem.errorCode)))}
-    //     })
-    // }catch(error){
-    //     console.log(error);
-    //     {return(next(new HttpError("Could not delete Items from array", 500)))}
-    // }
-
+     if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
+     if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+    let category = user.toDoCategories.filter(category => category.name === cid)[0]
+    if (!category)
+    {return(next(new HttpError("Category Cant Be Located", 404)))}
+    const oldCat = category
     //delete all items in category array
-
+    try{
+        category.toDoList.map(async(item) => {
+            const deletingIssue = await deleteItemHelper(item._id.toString(),category.name);
+            if(deletingIssue){return(next(new HttpError(deletingIssue.errorMessage, deletingIssue.errorCode)))}
+        })
+    }catch(error){
+        console.log(error);
+        {return(next(new HttpError("Could not delete Items from array", 500)))}
+    }
     //remove category from user
-
-    console.log("deleting"+cid);
-    res.status(201).json({message:`deleted ${cid}`})
+    user.toDoCategories = user.toDoCategories.filter(category => category.name !== cid)
+    try {
+        //removing old category
+        await user.save();
+      } catch (err) {
+        {return(next(new HttpError("could not save user", 500)))}
+      }
+    res.status(200).json({category:oldCat})
 }
 const getCategory = async(req,res,next)=>{
     const {cid,uid} = req.params;
