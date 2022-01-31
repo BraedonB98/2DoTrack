@@ -22,24 +22,35 @@ const ToDoList = props=> {
             </Card>
         </div>);
     }
-
-    return(
+    var priorities = [5,4,3,2,1];
+    return (
         <ul className= "todo-list">
-        {props.items.map( todo =>
-         <ToDoItem 
-            _id={todo._id} 
-            name={todo.name} 
-            status={todo.status} 
-            priority = {todo.priority}
-            due ={todo.due}
-            creator={todo.creator}
-            address = {todo.address}
-            coordinates = {todo.location}
-            notes = {todo.notes}
-            users = {todo.users}
-            onStatusChange ={props.onStatusChange}
-            onDeleteTask = {props.onDeleteTask}
-            onEditTask = {props.onEditTask} />)}
+        {
+        priorities.map(priority => {
+            return(props.items.map( todo => {
+                if(todo.priority === priority){
+                    return (<ToDoItem 
+                     _id={todo._id} 
+                     name={todo.name} 
+                     status={todo.status} 
+                    priority = {todo.priority}
+                    due ={todo.due}
+                    creator={todo.creator}
+                    address = {todo.address}
+                    coordinates = {todo.location}
+                    notes = {todo.notes}
+                     users = {todo.users}
+                    onStatusChange ={props.onStatusChange}
+                    onDeleteTask = {props.onDeleteTask}
+                    onEditTask = {props.onEditTask} />)}
+                else{
+                    return("");
+                }
+            }))
+        })    
+        }
+        
+        
     </ul>
     );
 }

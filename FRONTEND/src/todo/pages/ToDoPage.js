@@ -20,7 +20,7 @@ import "./styling/ToDoPage.css"
 const ToDoPage = () => {
     const{isLoading,error,sendRequest,clearError} = useHttpClient();
     const [taskModal, setTaskModal] = useState(false);
-    const [loadedTasks, setLoadedTasks] = useState();
+    const [loadedTasks, setLoadedTasks] = useState([]);
     const [loadedCategory, setLoadedCategory] = useState();
     const[loadedCategories,setLoadedCategories]= useState();
     const[editTask,setEditTask]= useState(false);
@@ -52,6 +52,7 @@ const ToDoPage = () => {
           };
         fetchTasks();
     },[sendRequest, UID,loadedCategory])
+
 
     const taskDeletedHandler = (deletedTaskId) => {
         setLoadedTasks(prevTasks => prevTasks.filter(task => task._id !== deletedTaskId));
@@ -138,7 +139,7 @@ const ToDoPage = () => {
             }
         }))
 
-        setLoadedCategory (newCategory);//!--may have issue if promise isnt fulfilled yet
+        setLoadedCategory (newCategory);
     }
     const deleteCategoryHandler = deletedCategory => {
         const currentCatIndex = loadedCategories.findIndex(cat => cat.name===loadedCategory.name);
