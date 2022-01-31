@@ -422,7 +422,8 @@ const renameCategory = async(req,res,next)=>{
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
-   
+    if(!name){return(next(new HttpError("Valid Name Not Provided", 400)))}
+    if(!newName){return(next(new HttpError("Valid Rename Name Not Provided", 400)))}
     if (user.toDoCategories.filter(category => category.name === name).length!==0)
     {
         user.toDoCategories.find(category => category.name === name).name = newName;
@@ -430,7 +431,8 @@ const renameCategory = async(req,res,next)=>{
     else{
         return(next(new HttpError("Category not found in database", 404)))
     }
-    
+    const category = user.toDoCategories.filter(category => category.name === newName)[0];
+    console.log(category);
 
     try{
         await user.save();
@@ -441,7 +443,7 @@ const renameCategory = async(req,res,next)=>{
     }
         
 
-    res.status(201).json({category: user.toDoCategories.toObject({getters:true})})
+    res.status(201).json({category: category.toObject({getters:true})})
 }
 const deleteCategory = async(req,res,next)=>{ 
     // const {cid,uid} = req.body;

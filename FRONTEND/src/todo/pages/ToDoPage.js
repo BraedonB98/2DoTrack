@@ -71,7 +71,8 @@ const ToDoPage = () => {
     }
 
     const changeLoadedCategoryHandler = async(newCategory) =>{
-        if(loadedCategory.name!==newCategory.name)
+        
+        if(loadedCategory._id!==newCategory._id)
         {setLoadedCategory(newCategory)}
         
     }
@@ -126,7 +127,19 @@ const ToDoPage = () => {
         newCategory?setNewCategory(false):setNewCategory(true);
         CategoryEditor&& setCategoryEditor(false);
     }
+    const renameCategoryHandler = newCategory => {
+        setLoadedCategories(loadedCategories.map(category => {
+            if(category._id === newCategory._id)
+            {
+                return(newCategory);
+            }
+            else{
+                return(category);
+            }
+        }))
 
+        setLoadedCategory (newCategory);//!--may have issue if promise isnt fulfilled yet
+    }
 
 return(
 <React.Fragment>
@@ -146,7 +159,7 @@ return(
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
             {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}}/> }
-            {(!isLoading && categoryEditor ) && <CategoryEditor/>}
+            {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onRename = {renameCategoryHandler}category = {loadedCategory}/>}
            
             
 
