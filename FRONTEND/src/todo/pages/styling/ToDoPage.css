@@ -10,6 +10,7 @@
 }
 
 .todo-page__new-to-do-item-button {
+    white-space:nowrap;
     font-size: medium; 
     display:flex;
     justify-self:center;
@@ -25,6 +26,9 @@
 .todo-page__current-category-header{
     white-space: nowrap;
 }
+.todo-page__new-category-button{
+    white-space:nowrap;
+}
 
 .todo-page__arrow-item-button{
     margin-left:0.5;
@@ -36,6 +40,6 @@
 
 @media all and (min-width: 1081px) and (-webkit-min-device-pixel-ratio: 0.99) {
     .todo-page__current-category-header{
-        display: none;
+        
     }
 }

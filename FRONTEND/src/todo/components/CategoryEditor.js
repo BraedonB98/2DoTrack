@@ -39,7 +39,6 @@ const CategoryEditor = props=> {
                newName: formState.inputs.name.value
             }),
                {'Content-Type': 'application/json'});
-               console.log(category.category)
             props.onRename(category.category);
             setShowRename(false)
        }

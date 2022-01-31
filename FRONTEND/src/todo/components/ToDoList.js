@@ -14,12 +14,11 @@ const ToDoList = props=> {
     //props.items=DUMMYITEMS;
     //DUMMYITEMS = [];
     if(props.items.length === 0){
-        console.log("no items in props todo list")
         return (
         <div className="todo-list center">
             <Card>
                 <h2>No tasks found, Lets try creating one!</h2>
-                <Button to = "/todo/new">Create Task</Button>
+                <Button onClick = {props.onCreateTask}>Create Task</Button>
             </Card>
         </div>);
     }

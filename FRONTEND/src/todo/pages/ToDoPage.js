@@ -164,7 +164,7 @@ return(
             
 
         <div className="todo-page__task-list">
-            {(!isLoading && loadedTasks) && <ToDoList items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
+            {(!isLoading && loadedTasks) && <ToDoList onCreateTask = {handleNewTask} items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
         </div>
     </SwipeableHook>
 </React.Fragment>
