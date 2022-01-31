@@ -114,11 +114,8 @@ const ToDoPage = () => {
         }))
     }
     const submitNewHandler = newTask =>{
-        //!console.log(newTask);
-        const tempLoadedTasks= loadedTasks
-        tempLoadedTasks.push( newTask)
-        //!console.log(tempLoadedTasks);
-        setLoadedTasks(tempLoadedTasks);
+        
+        setLoadedTasks(newTask.concat(loadedTasks));
     }
     
     const handleCategoryEditor = () =>{

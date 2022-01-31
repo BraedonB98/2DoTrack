@@ -166,7 +166,7 @@ const ToDoItemModal = props => {
     const newToDoSubmitHandler = async event =>{
       event.preventDefault();
         try {
-          var newItem = sendRequest(
+           const newItem = await sendRequest(
             `http://localhost:5000/api/todo/createItem`,
             'POST',
             JSON.stringify({
@@ -180,7 +180,8 @@ const ToDoItemModal = props => {
             }),
             {'Content-Type': 'application/json'}
           )
-          props.submitted(newItem)
+
+          props.submitted([newItem.task]);
         }
         catch(err){} 
     }
