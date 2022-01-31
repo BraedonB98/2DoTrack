@@ -10,7 +10,7 @@ import Button from '../../shared/components/FormElements/Button';
 import {AuthContext} from "../../shared/context/auth-context";
 import NewCategory from "../components/NewCategory";
 import CategoryEditor from "../components/CategoryEditor";
-
+import Icon from "../../shared/components/UIElements/Icons";
 
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";
@@ -126,7 +126,7 @@ const ToDoPage = () => {
         newCategory?setNewCategory(false):setNewCategory(true);
         CategoryEditor&& setCategoryEditor(false);
     }
-    const renameCategoryHandler = newCategory => {
+    const editCategoryHandler = newCategory => {
         setLoadedCategories(loadedCategories.map(category => {
             if(category._id === newCategory._id)
             {
@@ -169,13 +169,13 @@ return(
                 <Button className = "todo-page__new-category-button"   onClick={handleNewCategory}>New Category</Button>
                 <div className="todo-page__category-header">
                     <Button className = "todo-page__arrow-item-button"  onClick={toggleLeft}>&lt;</Button>
-                    <Button className = "todo-page__current-category-header"  onClick={handleCategoryEditor}>{loadedCategory.name}</Button>
+                    <Button className = "todo-page__current-category-header"  onClick={handleCategoryEditor}><Icon name={loadedCategory.icon}/> {loadedCategory.name} <Icon name={loadedCategory.icon}/></Button>
                     <Button className = "todo-page__arrow-item-button"  onClick={toggleRight}> &gt;</Button>
                 </div>
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
             {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}} onSubmit = {newCategorySubmitHandler}/> }
-            {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onDelete= {deleteCategoryHandler} onRename = {renameCategoryHandler}category = {loadedCategory}/>}
+            {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onDelete= {deleteCategoryHandler} onEdit = {editCategoryHandler}category = {loadedCategory}/>}
            
             
 

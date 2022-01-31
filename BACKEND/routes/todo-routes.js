@@ -51,6 +51,10 @@ router.patch('/renamecategory',
     [],
     toDoController.renameCategory)
 
+router.patch('/changecategoryicon',
+    [],
+    toDoController.changeCategoryIcon)
+
 router.delete('/category',
     [],
     toDoController.deleteCategory)

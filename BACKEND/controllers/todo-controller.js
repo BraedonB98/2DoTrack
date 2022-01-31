@@ -412,7 +412,33 @@ const createCategory = async(req,res,next)=>{
 
     res.status(201).json({category: user.toDoCategories[user.toDoCategories.length-1]})
 }
+const changeCategoryIcon = async(req,res,next)=>{
+    const{uid, name , icon}= req.body;
 
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+    if(!name){return(next(new HttpError("Valid Name Not Provided", 400)))}
+    if(!icon){return(next(new HttpError("Valid Rename Name Not Provided", 400)))}
+    if (user.toDoCategories.filter(category => category.name === name).length!==0)
+    {
+        user.toDoCategories.find(category => category.name === name).icon = icon;
+    }
+    else{
+        return(next(new HttpError("Category not found in database", 404)))
+    }
+        const category = user.toDoCategories.filter(category => category.name === name)[0];
+    try{
+        await user.save();
+    }
+    catch(error){
+        console.log(error);
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+        
+
+    res.status(201).json({category: category})
+}
 const renameCategory = async(req,res,next)=>{
     const{uid, name , newName}= req.body;
 
@@ -518,6 +544,7 @@ exports.transferCreator = transferCreator;
 
 exports.createCategory = createCategory;
 exports.renameCategory = renameCategory;
+exports.changeCategoryIcon = changeCategoryIcon;
 exports.deleteCategory = deleteCategory;
 exports.getCategory = getCategory;
 exports.getCategories = getCategories;

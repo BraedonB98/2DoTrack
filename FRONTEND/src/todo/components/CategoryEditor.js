@@ -7,6 +7,7 @@ import Modal from "../../shared/components/UIElements/Modal";
 import Input from '../../shared/components/FormElements/Input';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import IconSelector from '../../shared/components/FormElements/IconSelector';
+import Icon from '../../shared/components/UIElements/Icons';
 import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
@@ -21,7 +22,8 @@ const CategoryEditor = props=> {
     const uid = auth.UID;
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showRename, setShowRename] = useState(false);
-    const [showIcon, setShowIcon] = useState(false);
+    const [showIconSelect,setShowIconSelect]= useState();
+    const [iconSelected,setIconSelected]= useState(props.category.icon);
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [formState, inputHandler, setFormData] = useForm({
         name: {
@@ -39,7 +41,7 @@ const CategoryEditor = props=> {
                newName: formState.inputs.name.value
             }),
                {'Content-Type': 'application/json'});
-            props.onRename(category.category);
+            props.onEdit(category.category);
             setShowRename(false)
        }
         catch(error){
@@ -63,6 +65,25 @@ const CategoryEditor = props=> {
         setShowConfirmModal(false)
         
     };
+
+    const handleIconSelect = async (event,icon) => {
+        setIconSelected(icon)
+        setShowIconSelect(false)
+        try{
+            const category = await sendRequest(`http://localhost:5000/api/todo/changecategoryicon`,'PATCH',
+             JSON.stringify({
+               uid : uid,
+               name : props.category.name,
+               icon: icon
+            }),
+               {'Content-Type': 'application/json'});
+            props.onEdit(category.category);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
     return(
         <React.Fragment>
         <Modal 
@@ -80,7 +101,7 @@ const CategoryEditor = props=> {
             </Modal>
         <Card>
             <Button  onClick={()=>{showRename?setShowRename(false):setShowRename(true)}}>Rename</Button>
-            <Button  onClick={()=>{showIcon?setShowIcon(false):setShowIcon(true)}}>Change Icon</Button>
+            <Button  onClick={()=>{showIconSelect?setShowIconSelect(false):setShowIconSelect(true)}}>Change Icon {iconSelected &&<Icon name={iconSelected}/>}</Button>
             <Button danger onClick={()=>{setShowConfirmModal(true);}}>DELETE</Button>
             {showRename&& <div>
                 <form id ="toDoItemModal__form" >
@@ -88,9 +109,9 @@ const CategoryEditor = props=> {
                 </form>
                 <Button type="submit" onClick = {renameHandler} disabled={!formState.isValid}> Submit </Button>
             </div>}
-            {setShowIcon&& <div>
+            
+            {showIconSelect && <IconSelector onCancel = {()=>{setShowIconSelect(false)}} onSelectedIcon = {handleIconSelect} />}
                 
-                </div>}
         </Card>
         </React.Fragment>
     );
