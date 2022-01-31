@@ -27,6 +27,7 @@ const CategoryList = props=> {
         {props.categories.map( category =>
          <CategoryToggle 
             id={category._id} 
+            key = {category._id}
             name={category.name} 
             icon = {category.icon}
             toDoList = {category.toDoList}

@@ -26,32 +26,50 @@ const ToDoList = props=> {
     return (
         <ul className= "todo-list">
         {
-        priorities.map(priority => {
-            return(props.items.map( todo => {
-                if(todo.priority === priority){
-                    return (<ToDoItem 
-                     _id={todo._id} 
-                     name={todo.name} 
-                     status={todo.status} 
-                    priority = {todo.priority}
-                    due ={todo.due}
-                    creator={todo.creator}
-                    address = {todo.address}
-                    coordinates = {todo.location}
-                    notes = {todo.notes}
-                     users = {todo.users}
-                    onStatusChange ={props.onStatusChange}
-                    onDeleteTask = {props.onDeleteTask}
-                    onEditTask = {props.onEditTask} />)}
-                else{
-                    return("");
-                }
-            }))
-        })    
+        props.items.map( todo => 
+            <ToDoItem 
+            _id={todo._id} 
+            key={todo._id}
+            name={todo.name} 
+            status={todo.status} 
+            priority = {todo.priority}
+            due ={todo.due}
+            creator={todo.creator}
+            address = {todo.address}
+            coordinates = {todo.location}
+            notes = {todo.notes}
+            users = {todo.users}
+            onStatusChange ={props.onStatusChange}
+            onDeleteTask = {props.onDeleteTask}
+            onEditTask = {props.onEditTask} />)}
+            </ul>
+            );
         }
-        
-        
-    </ul>
-    );
-}
-export default ToDoList;
+        export default ToDoList;
+        //!---for filtering by priority
+        // priorities.map(priority => {
+        //     return(props.items.map( todo => {
+        //         if(todo.priority === priority){
+        //             return (<ToDoItem 
+        //              _id={todo._id} 
+        //              key={todo._id}
+        //              name={todo.name} 
+        //              status={todo.status} 
+        //             priority = {todo.priority}
+        //             due ={todo.due}
+        //             creator={todo.creator}
+        //             address = {todo.address}
+        //             coordinates = {todo.location}
+        //             notes = {todo.notes}
+        //              users = {todo.users}
+        //             onStatusChange ={props.onStatusChange}
+        //             onDeleteTask = {props.onDeleteTask}
+        //             onEditTask = {props.onEditTask} />)}
+        //         else{
+        //             return("");
+        //         }
+        //     }))
+        // })    
+        //}
+           
+

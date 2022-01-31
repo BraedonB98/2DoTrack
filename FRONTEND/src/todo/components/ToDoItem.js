@@ -124,10 +124,10 @@ return(
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
         <div onClick = {toggleExpand}  className="todo-item__header">
-            {props.status === "Complete" && <AiOutlineCheck/>}
-            {props.status === "Started" && <AiOutlineFieldTime/>}
-            {props.status === "Pending" && <AiOutlineUnorderedList/>}
-            <h2>{props.name}</h2>
+            {props.status === "Complete" && <AiOutlineCheck className={`todo-item__icon-${props.priority}`}/>}
+            {props.status === "Started" && <AiOutlineFieldTime className={`todo-item__icon-${props.priority}`}/>}
+            {props.status === "Pending" && <AiOutlineUnorderedList className={`todo-item__icon-${props.priority}`}/>}
+            <h2  >{props.name}</h2>
         </div>
         {expand && (<div className="todo-item__expand">
             <p>{props.notes}</p>

@@ -38,3 +38,18 @@
     height:20rem;
     width:100%;
   }
+  .todo-item__icon-1{
+    color:darkslategray;
+  }
+  .todo-item__icon-2{
+    color:black;
+  }
+  .todo-item__icon-3{
+    color:yellow;
+  }
+  .todo-item__icon-4{
+    color:orange;
+  }
+  .todo-item__icon-5{
+    color:red;
+  }
