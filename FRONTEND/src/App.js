@@ -37,21 +37,20 @@ const App = () => {
   if (isLoggedIn){
     routes = ( //if user logged in
     <Routes>
+      <Route path='*'element = {<PageNotFound/>}/> 
       <Route path="/" exact element={<DashBoard/>} />
-      <Route path="/todo" exact element={<ToDoPage/>} />
-      <Route path="/finance" exact element={<FinancePage/>} />
+      <Route path="/todo" element={<ToDoPage/>} />
+      <Route path="/finance" element={<FinancePage/>} />
       <Route path="/auth" exact element={<AuthPage/>} />
-      <Route path="/pagenotfound"  element = {<PageNotFound/>}/> {/* Need to make this the default if path is not found, looked at navigate but havnt been able to figure out*/}
     </Routes>
     );
   }
  else { //if user not logged in
     routes = (
     <Routes>
-      <Route path="/" exact element={<HomePage/>} />
-      <Route path="/auth" exact element={<AuthPage/>} />
-      <Route path="/pagenotfound"  element = {<PageNotFound/>}/> {/* Need to make this the default if path is not found, looked at navigate but havnt been able to figure out*/}
-      
+      <Route path='*'element = {<PageNotFound/>}/> 
+      <Route path="/" element={<HomePage/>} />
+      <Route path="/auth" element={<AuthPage/>} />
     </Routes>
     );
  }
