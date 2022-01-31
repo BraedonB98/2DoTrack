@@ -25,11 +25,7 @@ const NewCategory = props=> {
         name: {
           value: '',
           isValid: false
-        },
-        icon: {
-            value: '',
-            isValid: false
-          }
+        }
       },false);
       const submitHandler = async () =>{
 
@@ -39,7 +35,7 @@ const NewCategory = props=> {
              'POST',
              JSON.stringify({
                name: formState.inputs.name.value,
-               icon: formState.inputs.icon.value,
+               icon: iconSelected,
                uid:uid
              }),
              {'Content-Type': 'application/json'}
@@ -50,21 +46,7 @@ const NewCategory = props=> {
      }
       
       const handleIconSelect = (event,icon) => {
-            const tempName = {
-                value:formState.value?formState.value:"",
-                isValid:formState.isValid
-            }
             setIconSelected(icon)
-            setFormData({
-                name:{
-                    value:tempName.value?tempName.value:"",
-                    isValid:tempName.isValid
-                },
-                icon: {
-                    value: icon,
-                    isValid: true
-                  }
-            },tempName.isValid)
             setShowIconSelect(false)
         }
       
@@ -77,7 +59,7 @@ const NewCategory = props=> {
                 {showIconSelect && <IconSelector onCancel = {()=>{setShowIconSelect(false)}}onSelectedIcon = {handleIconSelect} />}
             </form>
             <Button  onClick = {props.onCancel}> Cancel </Button>
-            <Button type="submit" onClick = {submitHandler} disabled={!formState.isValid}> Submit </Button>
+            <Button type="submit" onClick = {submitHandler} disabled={!formState.isValid ||!iconSelected}> Submit </Button>
         </Card>
     );
 }

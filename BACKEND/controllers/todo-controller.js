@@ -206,9 +206,9 @@ const getItems= async(req,res,next)=>{ //all items from category
     }
 
     var itemArray = await Promise.all(category.toDoList.map(async(item) => { //waits until all promises finish
-        var newItem = (await getItemById(item._id.toString()));
-        if(!!newItem.error){return(next(new HttpError(newItem.errorMessage, newItem.errorCode)))}
-        return(newItem);
+        var item = (await getItemById(item._id.toString()));
+        if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+        return(item);
     } ))
     res.status(200).json({items: itemArray})
 }
