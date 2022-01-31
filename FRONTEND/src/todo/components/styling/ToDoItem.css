@@ -22,6 +22,7 @@
   }
   .todo-item__notes{
     white-space: pre-wrap;
+    margin:1%
   }
 
   .todo-item__modal-content {
