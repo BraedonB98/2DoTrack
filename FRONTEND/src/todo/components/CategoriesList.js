@@ -26,7 +26,7 @@ const CategoryList = props=> {
         <section className= "categories">
         {props.categories.map( category =>
          <CategoryToggle 
-            id={category._id} 
+            _id={category._id} 
             key = {category._id}
             name={category.name} 
             icon = {category.icon}

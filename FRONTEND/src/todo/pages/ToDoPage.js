@@ -42,6 +42,8 @@ const ToDoPage = () => {
     },[sendRequest,UID])
 
     useEffect( ()=>{
+        setNewCategory(false)
+        setCategoryEditor(false)
         const fetchTasks = async ()=>{
             try {
                 const responseData = await sendRequest(`http://localhost:5000/api/todo/getItems/${UID}/${loadedCategory.name}`);

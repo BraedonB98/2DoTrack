@@ -37,7 +37,7 @@ const CategoryToggle = props => {
         const cat = {
             name:props.name,
             icon:props.icon,
-            _id:props.id,
+            _id:props._id,
             toDoList:props.toDoList
         }
         props.onChangeCategory(cat);
@@ -61,7 +61,7 @@ return(
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
         
-        <Card  onClick = {changeCategoryHandler} className="category-toggle">
+        <Card key={props._id} onClick = {changeCategoryHandler} className="category-toggle">
         {isLoading && <LoadingSpinner asOverlay />}
             <div className="category-toggle__header-div">
                 <h2>{props.name}</h2>
