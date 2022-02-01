@@ -1,0 +1,15 @@
+.user-search-item{
+ display: flex;
+ align-content: center;
+ justify-content: flex-start;
+ margin:1rem;
+ padding:0;
+}
+.user-search-item__image{
+width:10%;
+height:10%;
+align-self:center
+}
+.user-search-item__name{
+
+}

@@ -76,7 +76,7 @@ const createUser = async (req,res,next)=>{
     const createdUser = new User({
         name,
         subscription:"noSub",
-        imageUrl:"../uploads/images/2DoFinanceLogo.png",
+        imageUrl:"data/uploads/images/default.svg",
         email,
         phoneNumber:('+1'+phoneNumber),
         password,
@@ -86,7 +86,11 @@ const createUser = async (req,res,next)=>{
             notificationToDo:false,
             notificationFinance:false,
         },
-        toDoCategories:[],
+        toDoCategories:[{
+            name:"To Do",
+            icon:" ",
+            toDoList:[]
+        }],
         recurringTasks:[],
         financeAccounts:[],
         recurringExpenses:[]

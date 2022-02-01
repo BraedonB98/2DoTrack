@@ -1,0 +1,22 @@
+.user-search-modal__content{
+    
+}
+.user-search-modal__search{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin:0.5rem;
+}
+    
+.user-search-modal__button-div{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}    
+.user-search-modal__user-search_input{
+    width: 80%;
+    font: inherit;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    padding: 0.15rem 0.25rem;
+}

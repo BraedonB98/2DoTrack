@@ -20,6 +20,14 @@
     padding: 1%;
     display:inline;
   }
+  .todo-item__share{
+    float:right;
+    margin:auto;
+    padding-bottom: auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+  }
   .todo-item__notes{
     white-space: pre-wrap;
     margin:1%

@@ -1,5 +1,6 @@
 import React,{ useState}from "react";
 import {AiOutlineCheck,AiOutlineFieldTime,AiOutlineUnorderedList} from "react-icons/ai"
+import {IoIosShareAlt} from "react-icons/io";
 //-----------------------Components--------------------------
 import Button from "../../shared/components/FormElements/Button";
 import Card from '../../shared/components/UIElements/Card'
@@ -7,6 +8,7 @@ import Modal from "../../shared/components/UIElements/Modal";
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import Map from '../../shared/components/UIElements/Map';
+import UserSearchModal from '../../users/components/UserSearchModal';
 
 //----------------------Context--------------------------------
 
@@ -22,6 +24,7 @@ const ToDoItem = props => {
     const [expand, setExpand] = useState(false);
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     const openMapHandler = () => {
         setShowMap(true);
     }
@@ -91,6 +94,17 @@ const ToDoItem = props => {
            console.log("unable to change task status")
        }
     }
+    const shareTask = async event =>{
+        console.log(event.target.value)
+        //setShowShareModal(false);
+    }
+    const showShareTask = async event =>{
+        event.stopPropagation();
+        setShowShareModal(true);
+    }
+    const clearShareTask = () =>{
+        setShowShareModal(false);
+    }
 
 return(
     <React.Fragment>
@@ -120,6 +134,7 @@ return(
                 } >
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
+            {showShareModal && <UserSearchModal onClear = {clearShareTask} onSelectedUser = {shareTask}/>}
         <li className="todo-item " key = {props._id} >
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
@@ -128,7 +143,10 @@ return(
             {props.status === "Started" && <AiOutlineFieldTime className={`todo-item__icon-${props.priority}`}/>}
             {props.status === "Pending" && <AiOutlineUnorderedList className={`todo-item__icon-${props.priority}`}/>}
             <h2  >{props.name}</h2>
+            <Button className = "todo-item__share" onClick={showShareTask}><IoIosShareAlt/></Button>
         </div>
+        
+        
         {expand && (<div className="todo-item__expand">
             <p className = "todo-item__notes" >{props.notes}</p>
             {props.status ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}

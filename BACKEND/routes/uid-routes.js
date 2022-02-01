@@ -11,6 +11,8 @@ router.get('/email/:email', uidController.getByEmail)
 
 router.get('/phonenumber/:phoneNumber', uidController.getByPhoneNumber)
 
+router.get('/userssearch/:search', uidController.getUsersSearch)
+
 
 
 

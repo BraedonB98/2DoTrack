@@ -14,7 +14,6 @@ const IconSelector = props=> {
     const iconClickHandler =  event => {
         props.onSelectedIcon(event,event.currentTarget.dataset.index);
     }
-    
     return(
         <React.Fragment>
         <div className={`icon-selector__menu ${props.className}`}>

@@ -43,7 +43,38 @@ const getByPhoneNumber = async (req,res,next)=>{
     }
     res.status(200).json({uid: searchedUser._id});
 }
+
+const getUsersSearch = async (req,res,next)=>{ //dont want to let people search by phone number to prevent giving out personal info
+    const search = req.params.search; 
+    let users = []
+    //checking if email
+    if(search.includes("@"))
+    {
+        //search by email
+        try{
+            users.push(await User.findOne({email:email}));
+        }
+        catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}
+        if(!users)
+        {return(next(new HttpError('Could not find user with that email', 404)));}
+    }
+    //else search by name
+    else{
+        try{
+            users = await User.find({name:{"$regex" : search, "$options":"i"}}).limit(100).sort({name:-1}).select({name:1, imageUrl:1});//Limit of 100 users from the search, may want to add .sort()later
+        }
+        catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}
+        if(!users)
+        {
+            return(next(new HttpError('Could not any users with that name', 404)));
+        }
+    }
+
+    res.status(200).json({users: users});
+}
+
 //---------------------Exports--------------------------
 exports.getByName = getByName;
 exports.getByEmail = getByEmail;
 exports.getByPhoneNumber = getByPhoneNumber;
+exports.getUsersSearch = getUsersSearch;
