@@ -37,18 +37,18 @@ const App = () => {
   if (isLoggedIn){
     routes = ( //if user logged in
     <Routes>
-      <Route path='*'element = {<PageNotFound/>}/> 
+      <Route path='*'element = {<DashBoard/>}/> 
       <Route path="/" exact element={<DashBoard/>} />
       <Route path="/todo" element={<ToDoPage/>} />
       <Route path="/finance" element={<FinancePage/>} />
-      <Route path="/auth" exact element={<AuthPage/>} />
+      
     </Routes>
     );
   }
  else { //if user not logged in
     routes = (
     <Routes>
-      <Route path='*'element = {<PageNotFound/>}/> 
+      <Route path='*'element = {<HomePage/>}/> 
       <Route path="/" element={<HomePage/>} />
       <Route path="/auth" element={<AuthPage/>} />
     </Routes>
