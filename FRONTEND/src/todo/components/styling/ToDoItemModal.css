@@ -1,0 +1,20 @@
+
+
+.to-do-item-modal__content{
+display: flex;
+justify-content: space-evenly;
+width: 95%;
+}
+.to-do-item-modal__text-input{
+    text-align: center;
+    width: 35rem;
+}
+.to-do-item-modal__input{
+    text-align:center;
+}
+
+.to-do-item-modal__button-div{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}

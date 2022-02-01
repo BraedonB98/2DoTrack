@@ -11,7 +11,8 @@
   }
   
   .modal__header {
-    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     padding: 1rem 0.5rem;
     background: var(--colorSecondaryVariant);
     color: var(--colorOnSecondaryVariant);
