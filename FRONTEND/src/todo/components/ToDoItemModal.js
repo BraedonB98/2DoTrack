@@ -134,6 +134,7 @@ const ToDoItemModal = props => {
     const editToDoSubmitHandler = async event =>{
         event.preventDefault();
         let taskEdited = {
+          _id: loadedItem._id,
           name: formState.inputs.name.value,
           priority: formState.inputs.priority.value,
           address: formState.inputs.address.value,

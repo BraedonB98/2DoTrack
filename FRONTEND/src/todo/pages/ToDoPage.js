@@ -103,7 +103,9 @@ const ToDoPage = () => {
         console.log(error)
     }
     const submitEditHandler = editedTask =>{
-        setLoadedTasks(loadedTasks.map((task) => {
+        setLoadedTasks(loadedTasks.map(task => {
+            console.log(task._id);
+            console.log(editedTask)
             if(task._id === editedTask._id)
             {
                 return(editedTask);
@@ -179,7 +181,7 @@ return(
             
 
         <div className="todo-page__task-list">
-            {(!isLoading && loadedTasks && loadedCategories) && <ToDoList onCreateTask = {handleNewTask} items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
+            {(!isLoading && loadedTasks) && <ToDoList onCreateTask = {handleNewTask} items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
         </div>
     </SwipeableHook>
 </React.Fragment>

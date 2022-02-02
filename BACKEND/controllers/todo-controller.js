@@ -179,7 +179,6 @@ const editItem = async(req,res,next)=>{
             }
             if(due){item.due===due}
             else if (!due){
-                console.log("making due undefined");
                 item.due = undefined;
             }
             if(notes){item.notes = notes}
