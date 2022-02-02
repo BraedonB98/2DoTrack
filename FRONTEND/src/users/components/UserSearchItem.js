@@ -1,12 +1,15 @@
-import React,{ useState}from "react";
+import React,{ useState , useEffect}from "react";
 import Card from '../../shared/components/UIElements/Card'
 
 import "./styling/UserSearchItem.css"
 
 const UserSearchItem = props => {
-
+    const [className,setClassName] = useState();
+    useEffect(()=>{
+        setClassName(props.className);
+    } ,[props.className])
     return(
-        <Card onClick = {event =>{event.target.value = props._id;props.onSelectedUser(event);}} className = "user-search-item"> 
+        <Card className={`user-search-item ${className}`} onClick = {event =>{event.target.value = {_id:props._id,name:props.name,imageUrl:props.imageUrl};props.onSelectedUser(event);}}> 
             <img className="user-search-item__image" src={`http://localhost:5000/${props.imageUrl}`} alt = {`${props.name}`}/>
             <h2 className="user-search-item__name">{props.name}</h2>
         </Card>

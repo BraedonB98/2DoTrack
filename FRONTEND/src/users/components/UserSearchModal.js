@@ -37,6 +37,9 @@ const ToDoItemModal = props => {
            console.log(error)
        }
     }
+    const selectedUserHandler = event =>{
+        setSelectedUser(event.target.value)
+    }
 
 
 return(<React.Fragment>
@@ -55,7 +58,7 @@ return(<React.Fragment>
       footerClass = 'user-search-modal__footer'
       footer={<React.Fragment>
           <Button onClick={props.onClear}>Cancel</Button>
-          <Button type="submit" onClick = {props.onSubmit} disabled={!selectedUser}> Submit </Button> </React.Fragment>}
+          <Button type="submit" onClick = {event =>{event.target.value=JSON.stringify(selectedUser);props.onSubmit(event)}} disabled={!selectedUser}> Submit </Button> </React.Fragment>}
        show ={true}
     >
     <div className='user-search-modal__search'>
@@ -63,7 +66,7 @@ return(<React.Fragment>
         <Button  onClick = {event=>{searchUser(searchText)}} disabled={searchText.length<2}> Search </Button> 
     </div>
     {(searchText.length<2 && searchText.length>0) && <p>please enter more of their name or email before searching</p>}
-    {searchedUsers && <UserSearchList onSelectedUser = {props.onSelectedUser} users = {searchedUsers} />}
+    {searchedUsers && <UserSearchList onSelectedUser = {selectedUserHandler} users = {searchedUsers} />}
     </Modal>}
 </React.Fragment>)
 };

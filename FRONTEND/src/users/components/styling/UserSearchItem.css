@@ -13,3 +13,6 @@ align-self:center
 .user-search-item__name{
 
 }
+.user-search-item__selected-item{
+    background: var(--colorSecondaryVariant);
+}

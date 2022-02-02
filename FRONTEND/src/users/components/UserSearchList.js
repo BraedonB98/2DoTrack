@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useState} from "react";
 
 //-----------------------Components--------------------------
 import Card from '../../shared/components/UIElements/Card';
@@ -10,6 +10,7 @@ import "./styling/UserSearchList.css"
 
 
 const UserSearchList = props=> {
+   const [selectedUser,setSelectedUser]= useState();
     if(props.users.length === 0){
         return (
         <div className="user-search-list center">
@@ -18,6 +19,8 @@ const UserSearchList = props=> {
             </Card>
         </div>);
     }
+
+
     return (
         <ul className= "user-search-list">
         {
@@ -25,9 +28,10 @@ const UserSearchList = props=> {
             <UserSearchItem 
             _id={user._id} 
             key={user._id}
+            className = {(user._id === selectedUser)?"user-search-item__selected-item":""}
             name={user.name} 
             imageUrl={user.imageUrl} 
-            onSelectedUser = {props.onSelectedUser} />)}
+            onSelectedUser = {event => {setSelectedUser(event.target.value._id);props.onSelectedUser(event)}} />)}
             </ul>
             );
         }

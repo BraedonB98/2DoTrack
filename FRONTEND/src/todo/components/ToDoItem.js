@@ -95,7 +95,8 @@ const ToDoItem = props => {
        }
     }
     const shareTask = async event =>{
-        console.log(event.target.value)
+        const user = JSON.parse(event.target.value)
+        console.log(user);
         //setShowShareModal(false);
     }
     const showShareTask = async event =>{
@@ -134,7 +135,7 @@ return(
                 } >
                     <p>Are you sure you want to delete this Task?</p>
             </Modal>
-            {showShareModal && <UserSearchModal onClear = {clearShareTask} onSelectedUser = {shareTask}/>}
+            {showShareModal && <UserSearchModal onClear = {clearShareTask} onSubmit = {shareTask}/>}
         <li className="todo-item " key = {props._id} >
         <Card  className="todo-item__content">
         {isLoading && <LoadingSpinner asOverlay />}
