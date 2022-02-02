@@ -7,6 +7,7 @@ import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import TermsOfServiceModal from "../components/TermsOfServiceModal";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { VALIDATOR_EMAIL, VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../shared/util/validators";
@@ -18,7 +19,8 @@ const AuthPage = () => {
     const auth = useContext(AuthContext);
     const [isLogin, setIsLogin]= useState(true);
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
-    
+    const [termsOfService, setTermsOfService]= useState(false);
+    const [displayTermsOfService, setDisplayTermsOfService]= useState(false);
     
     const [formState, inputHandler , setFormData] = useForm(
         {
@@ -102,7 +104,7 @@ const AuthPage = () => {
 return(
     <React.Fragment>
       <ErrorModal error ={error} onClear={clearError}/>
-      
+      {displayTermsOfService && <TermsOfServiceModal onClear={()=>{setDisplayTermsOfService(false)}}/>}
       <Card className="authentication">
           {isLoading && <LoadingSpinner asOverlay />}
       <h2>Login Required</h2>
@@ -112,9 +114,17 @@ return(
       {!isLogin && (<Input element="input" id="phoneNumber" type="text" label="Phone Number" validators={[VALIDATOR_MINLENGTH(10)&&VALIDATOR_MAXLENGTH(10)]} errorText="Please enter a phone number." onInput={inputHandler} />)}
         <Input element="input" id="email" type="email" label="E-Mail" validators={[VALIDATOR_EMAIL()]} errorText="Please enter a valid email address."onInput={inputHandler}/>
         <Input element="input" id="password" type="password" label="Password" validators={[VALIDATOR_MINLENGTH(5)]} errorText="Please enter a valid password." onInput={inputHandler} />
-        <Button type="submit" disabled={!formState.isValid}> {isLogin ? 'LOGIN' : 'SIGNUP'} </Button>
-      </form>
-      <Button inverse onClick = {switchModeHandler}>{isLogin ? 'new to todo finance? Click here to sign up' :'already have an account? Click here to log in'}</Button>
+        {!isLogin && (<div>
+          <div onClick = {()=>{setDisplayTermsOfService(true)}}>
+            <p >View Terms Of Service</p>
+          </div>
+          <input type="checkbox" id="termsOfService" name="termsOfService" value="Agree" onClick = {event=>{termsOfService?setTermsOfService(false):setTermsOfService(true)}}/>
+          <label for="termsOfService"> I Agree &nbsp;&nbsp;&nbsp;&nbsp;</label>
+          <br/><br/>
+          </div>)}
+        <Button type="submit" disabled={(!formState.isValid || ((!isLogin)?(!termsOfService):false))}> {isLogin ? 'LOGIN' : 'SIGNUP'} </Button>
+      </form><br/>
+      <Button  size="small"onClick = {switchModeHandler}>{isLogin ? 'new to todo finance? Click here to sign up' :'already have an account? Click here to log in'}</Button>
     </Card>
     
     </React.Fragment>

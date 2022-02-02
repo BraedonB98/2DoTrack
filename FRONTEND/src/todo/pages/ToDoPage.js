@@ -11,6 +11,8 @@ import {AuthContext} from "../../shared/context/auth-context";
 import NewCategory from "../components/NewCategory";
 import CategoryEditor from "../components/CategoryEditor";
 import Icon from "../../shared/components/UIElements/Icons";
+import PendingTaskModal from "../components/PendingTaskModal";
+import RemoteTaskMenu from "../components/RemoteTaskMenu";
 
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";

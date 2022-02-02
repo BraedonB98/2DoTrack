@@ -6,6 +6,8 @@ import Button from "../../shared/components/FormElements/Button"
 import Modal from "../../shared/components/UIElements/Modal";
 import Input from '../../shared/components/FormElements/Input';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import PendingTaskModal from "../components/PendingTaskModal";
+import RemoteTaskMenu from "../components/RemoteTaskMenu";
 import IconSelector from '../../shared/components/FormElements/IconSelector';
 import Icon from '../../shared/components/UIElements/Icons';
 import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
@@ -13,7 +15,7 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 //---------------------CSS----------------------------------
-//import "./styling/CategoryEditor.css"
+import "./styling/CategoryEditor.css"
 
 
 
@@ -23,6 +25,8 @@ const CategoryEditor = props=> {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showRename, setShowRename] = useState(false);
     const [showIconSelect,setShowIconSelect]= useState();
+    const [showRemoteTask,setShowRemoteTask]= useState(false);
+    const [showPendingTask,setShowPendingTask]= useState(false);
     const [iconSelected,setIconSelected]= useState(props.category.icon);
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [formState, inputHandler, setFormData] = useForm({
@@ -100,15 +104,21 @@ const CategoryEditor = props=> {
                     <p>Are you sure you want to delete this category and <strong>ALL TASKS</strong> within?</p>
             </Modal>
         <Card>
-            <Button  onClick={()=>{showRename?setShowRename(false):setShowRename(true)}}>Rename</Button>
-            <Button  onClick={()=>{showIconSelect?setShowIconSelect(false):setShowIconSelect(true)}}>Change Icon {iconSelected &&<Icon name={iconSelected}/>}</Button>
-            <Button danger onClick={()=>{setShowConfirmModal(true);}}>DELETE</Button>
+            <div className="category-editor__menu-buttons">
+                <Button  onClick={()=>{showRename?setShowRename(false):setShowRename(true)}}>Rename Category</Button>
+                <Button  onClick={()=>{showIconSelect?setShowIconSelect(false):setShowIconSelect(true)}}>{iconSelected &&<Icon name={iconSelected} />} Change Icon</Button>
+                <Button  onClick={()=>{showRemoteTask?setShowRemoteTask(false):setShowRemoteTask(true)}}>SMS/Email Tasks</Button>
+                <Button  onClick={()=>{showPendingTask?setShowPendingTask(false):setShowPendingTask(true)}}>Shared Tasks</Button>
+                <Button danger onClick={()=>{setShowConfirmModal(true);}}>DELETE</Button>
+            </div>
             {showRename&& <div>
                 <form id ="toDoItemModal__form" >
                 <Input id="name" element="input" type ="text" label="Rename Category" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid category name." onInput={inputHandler} initialValue = {props.category.name} initialValid = {true}/>
                 </form>
                 <Button type="submit" onClick = {renameHandler} disabled={!formState.isValid}> Submit </Button>
             </div>}
+            {showRemoteTask && <RemoteTaskMenu category = {props.category}/>}
+            {showPendingTask && <PendingTaskModal category = {props.category} onClear = {()=>{setShowPendingTask(false)}}/>}
             
             {showIconSelect && <IconSelector onCancel = {()=>{setShowIconSelect(false)}} onSelectedIcon = {handleIconSelect} />}
                 

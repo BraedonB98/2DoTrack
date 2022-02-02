@@ -67,7 +67,7 @@ const deleteItemHelper = async (tid,oldCid) => {
         return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
 
        if(item.creator._id === uid){
-           console.log("removing item for all users who share it")
+           //!------------------------------ still need to remove item for all users who share it-----------------------------------------
            try {
                const sess = await mongoose.startSession();
                sess.startTransaction();

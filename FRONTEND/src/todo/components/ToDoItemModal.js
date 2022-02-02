@@ -164,18 +164,26 @@ const ToDoItemModal = props => {
     const newToDoSubmitHandler = async event =>{
       event.preventDefault();
         try {
+          let taskNew = {
+            name: formState.inputs.name.value,
+            status: "Pending",
+            priority: formState.inputs.priority.value,
+            address: formState.inputs.address.value,
+            due: formState.inputs.due.value,
+            notes: formState.inputs.notes.value,
+            cid: props.category.name,
+            uid:uid
+          }
+            if(!addressDependent){
+            taskNew.address=undefined;
+           }
+           if(!timeDependent){
+             taskNew.due=undefined;
+           }
            const newItem = await sendRequest(
             `http://localhost:5000/api/todo/createItem`,
             'POST',
-            JSON.stringify({
-              name: formState.inputs.name.value,
-              status: "Pending",
-              priority: formState.inputs.priority.value,
-              address: formState.inputs.address.value,
-              notes: formState.inputs.notes.value,
-              cid: props.category.name,
-              uid:uid
-            }),
+            JSON.stringify(taskNew),
             {'Content-Type': 'application/json'}
           )
 
@@ -199,7 +207,7 @@ return(<React.Fragment>
       footerClass = 'to-do-item-modal__footer'
       show={props.open}
       footer={<React.Fragment>
-          <Button onClick={() =>{props.onClear();}}>Cancel</Button>
+          <Button onClick={() =>{console.log(formState);props.onClear();}}>Cancel</Button>
           <Button type="submit" onClick = {!props.taskId?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
       <form id ="to-do-item-modal__form" >
