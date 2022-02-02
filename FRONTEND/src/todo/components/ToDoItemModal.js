@@ -154,6 +154,7 @@ const ToDoItemModal = props => {
               JSON.stringify(taskEdited),
               {'Content-Type': 'application/json'}
             );
+            taskEdited.status = loadedItem.status;
             props.submitted(taskEdited);
         }
         catch(err){}
