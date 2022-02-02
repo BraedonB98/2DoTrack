@@ -140,16 +140,24 @@ const ToDoItemModal = props => {
 
     const editToDoSubmitHandler = async event =>{
         event.preventDefault();
+        let taskEdited = {
+          name: formState.inputs.name.value,
+          priority: formState.inputs.priority.value,
+          address: formState.inputs.address.value,
+          due: formState.inputs.due.value,
+          notes: formState.inputs.notes.value,
+        }
         try {
+          if(!addressDependent){
+           taskEdited.address=undefined;
+          }
+          if(!timeDependent){
+            taskEdited.timeDependent=undefined;
+          }
           await sendRequest(
               `http://localhost:5000/api/todo/edititem/${props.taskId}`,
               'PATCH',
-              JSON.stringify({
-                name: formState.inputs.name.value,
-                priority: formState.inputs.priority.value,
-                address: formState.inputs.address.value,
-                notes: formState.inputs.notes.value,
-              }),
+              JSON.stringify(taskEdited),
               {'Content-Type': 'application/json'}
             );
 

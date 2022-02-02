@@ -37,7 +37,7 @@ const ToDoList = props=> {
             due ={todo.due}
             creator={todo.creator}
             address = {todo.address}
-            coordinates = {todo.location}
+            location = {todo.location}
             notes = {todo.notes}
             users = {todo.users}
             onStatusChange ={props.onStatusChange}
