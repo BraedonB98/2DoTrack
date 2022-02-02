@@ -22,6 +22,7 @@ const ToDoList = props=> {
             </Card>
         </div>);
     }
+    
     var priorities = [5,4,3,2,1];
     var status = ["Started","Pending", "Complete"] //working on at top, then not started, then completed
     return (

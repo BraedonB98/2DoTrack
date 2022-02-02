@@ -39,18 +39,11 @@ const ToDoItemModal = props => {
         isValid: false
       },
       recurring: {
-        value: {
-            value:false,
-            time:'',//days?
-            category:'',
-        },
+        value: undefined,
         isValid: true
       },
       due: {
-        value: {
-            date:'',
-            time:''
-        },
+        value: undefined,
         isValid: true
       },
     },false);
@@ -101,10 +94,10 @@ const ToDoItemModal = props => {
             isValid: true
           },
           due: {
-            value: {
+            value: timeDependent?{
                 date:timeDependent&&loadedItem.due?loadedItem.due.date:'',
                 time:timeDependent&&loadedItem.due?loadedItem.due.time:''
-            },
+            }:undefined,
             isValid: true
           },
           recurring: {
@@ -152,7 +145,7 @@ const ToDoItemModal = props => {
            taskEdited.address=undefined;
           }
           if(!timeDependent){
-            taskEdited.timeDependent=undefined;
+            taskEdited.due=undefined;
           }
           await sendRequest(
               `http://localhost:5000/api/todo/edititem/${props.taskId}`,
@@ -160,12 +153,7 @@ const ToDoItemModal = props => {
               JSON.stringify(taskEdited),
               {'Content-Type': 'application/json'}
             );
-
-            loadedItem.name = formState.inputs.name.value
-            loadedItem.priority = formState.inputs.priority.value
-            loadedItem.address = formState.inputs.address.value
-            loadedItem.notes = formState.inputs.notes.value
-            props.submitted(loadedItem);
+            props.submitted(taskEdited);
         }
         catch(err){}
         

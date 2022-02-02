@@ -25,12 +25,7 @@ const ToDoItem = props => {
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
-    const [coordinates, setCoordinates] = useState(props.location);
-
-    useEffect( ()=>{
-        console.log(props.location)
-        setCoordinates(props.location);
-    },[props.location, expand])
+   
     const openMapHandler = () => {
         setShowMap(true);
     }
@@ -169,7 +164,7 @@ return(
             {props.status ==="Pending" && (<Button onClick={startTask}>Start Task</Button>)}
             {props.status ==="Started" && (<Button onClick={finishTask}>Finish Task</Button>)}
 
-            {coordinates && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
+            {props.location && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
             <Button onClick={editTaskHandler}>EDIT</Button>
             <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>
             </div>)}

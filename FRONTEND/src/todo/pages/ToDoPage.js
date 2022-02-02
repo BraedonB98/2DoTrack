@@ -114,7 +114,6 @@ const ToDoPage = () => {
         }))
     }
     const submitNewHandler = newTask =>{
-        
         setLoadedTasks(newTask.concat(loadedTasks));
     }
     
@@ -180,7 +179,7 @@ return(
             
 
         <div className="todo-page__task-list">
-            {(!isLoading && loadedTasks) && <ToDoList onCreateTask = {handleNewTask} items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
+            {(!isLoading && loadedTasks && loadedCategories) && <ToDoList onCreateTask = {handleNewTask} items={loadedTasks} onStatusChange = {taskStatusChangeHandler} onDeleteTask={taskDeletedHandler} onEditTask={handleEditTask} />}
         </div>
     </SwipeableHook>
 </React.Fragment>
