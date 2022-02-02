@@ -115,7 +115,7 @@ const ToDoItemModal = props => {
             },
             isValid: true
           }
-        },formState.valid);
+        },loadedItem?true:formState.valid);
       },[addressDependent,timeDependent,recurringDependent,loadedItem,setFormData])
 
 

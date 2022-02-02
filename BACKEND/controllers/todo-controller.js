@@ -173,9 +173,15 @@ const editItem = async(req,res,next)=>{
                 }
                 item.location = location.coordinates; 
                 item.address = location.address
-            };
-            if(due){item.due=due};
-            if(notes){item.notes = notes};
+            }else if (!address){
+                item.address = undefined;
+                item.location = undefined;
+            }
+            if(due){item.due=due}
+            else if (!address){
+                item.due = undefined;
+            }
+            if(notes){item.notes = notes}
 
             
             try{
