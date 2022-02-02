@@ -11,6 +11,7 @@ sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
 const userController = require('../controllers/user-controller');
 const getUserById = userController.getUserById;
 const getUserByProps = userController.getUserByProps;
+const getCoordsForAddress = require('../util/location');
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const ToDoItem = require('../models/toDoItem-model');
@@ -97,7 +98,7 @@ const deleteItemHelper = async (tid,oldCid) => {
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
-    const{cid, uid, name, recurring, status,due,priority,address,location,notes}= req.body;//creator and users[0]= uid
+    const{cid, uid, name, recurring, status,due,priority,address,notes}= req.body;//creator and users[0]= uid
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -106,7 +107,12 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     {
         return(next(new HttpError("Category not found", 422)))
     }
-    
+    let location; 
+    try{location = await getCoordsForAddress(address);}
+    catch(error){
+        //console.log('google not working');
+        return(next(new HttpError("Could not access cordinates for that address", 502)));
+    }
     //Create Item
     const newItem = new ToDoItem({
         name,
@@ -114,8 +120,8 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
         status,
         due,
         priority,
-        address,
-        location,
+        address:location.address,
+        location:location.coordinates,
         notes,
         creator:uid,
         users:[uid]
@@ -157,7 +163,17 @@ const editItem = async(req,res,next)=>{
             if(name){item.name = name};
             if(status){item.status = status};
             if(priority){item.priority = priority};
-            if(address){item.address = address};//update location at the same time
+            if(address && address !== item.address){
+                //item.address = address
+                let location; 
+                try{location = await getCoordsForAddress(address);}
+                catch(error){
+                    console.log(error);
+                    return(next(new HttpError("Could not access cordinates for that address", 502)));
+                }
+                item.location = location.coordinates; 
+                item.address = location.address
+            };
             if(due){item.due=due};
             if(notes){item.notes = notes};
 
@@ -288,7 +304,7 @@ const shareItem = async(req,res,next)=>{//max size of user inbox == 20
         return(next(new HttpError("Sorry users inbox is currently full", 552)))
     }
     //add to item to new category
-    category.toDoList.push(tid);    
+    category.push(tid);    
 
     //save user
     try{

@@ -96,8 +96,18 @@ const ToDoItem = props => {
     }
     const shareTask = async event =>{
         const user = JSON.parse(event.target.value)
-        console.log(user);
-        //setShowShareModal(false);
+        try{
+            await sendRequest(`http://localhost:5000/api/todo/shareItem`,'PATCH',
+                JSON.stringify({
+                    tid : props._id,
+                    uid: user._id
+                 }),
+                {'Content-Type': 'application/json'});
+
+            setShowShareModal(false);
+        }
+       catch(error){}
+      
     }
     const showShareTask = async event =>{
         event.stopPropagation();
