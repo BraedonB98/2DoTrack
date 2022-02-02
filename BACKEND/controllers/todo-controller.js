@@ -360,14 +360,42 @@ const acceptPendingSharedItem = async(req,res,next)=>{
 
     res.status(201).json({category: category.toObject({getters:true})})
 }
-const getPendingSharedItems = async(req,res,next)=>{
-    const {uid} = req.params;
-    //Find User
+const dismissPendingSharedItem = async(req,res,next)=>{ 
+    const{tid, uid}= req.body;
+    //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
     
+    //removing item from old category
+    user.pendingSharedTasks = user.pendingSharedTasks.filter(item => item._id.toString()!==tid)
     
-    res.status(200).json({items: user.pendingSharedTasks})
+
+
+    //save user
+    try{
+        await user.save();
+    }
+    catch(error){
+        console.log(error)
+        return(next(new HttpError('Could not update user in database', 500)));
+    }
+    
+}
+
+const getPendingSharedItems = async(req,res,next)=>{
+    const uid = req.params.uid;;
+    //Find User
+    let user = await getUserById(uid); 
+    if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+
+    var category = user.pendingSharedTasks;
+    var itemArray = await Promise.all(category.map(async(item) => { //waits until all promises finish
+        var item = (await getItemById(item._id.toString()));
+        if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+        return(item);
+    } ))
+    res.status(200).json({items: itemArray})
+   
 }
 const transferCreator = async(req,res,next)=>{//same as move item except with user not item.
     const{uidOldCreator, uidCreator, tid}= req.body;
@@ -561,6 +589,7 @@ exports.moveItem = moveItem;
 
 exports.shareItem = shareItem;
 exports.acceptPendingSharedItem = acceptPendingSharedItem;
+exports.dismissPendingSharedItem = dismissPendingSharedItem;
 exports.getPendingSharedItems =getPendingSharedItems;
 exports.transferCreator = transferCreator;
 

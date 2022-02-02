@@ -12,6 +12,11 @@ const User = require('../models/user-model');
 //----------------------HelperFunction------------------
 const getUserById = async(uid) =>{
     let user
+    if(typeof(uid) === 'string')
+    {
+        var ObjectID = require('mongodb').ObjectID
+        uid = new ObjectID(uid);
+    }
     try{
         user = await User.findById(uid);
     }

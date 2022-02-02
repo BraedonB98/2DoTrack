@@ -40,7 +40,13 @@ router.patch('/acceptPendingSharedItem',
     [],
     toDoController.acceptPendingSharedItem)
 
-router.get('/getPendingSharedItems',
+router.patch('/dismissPendingSharedItem',
+    [],
+    toDoController.dismissPendingSharedItem)
+
+    
+
+router.get('/getPendingSharedItems/:uid',
     toDoController.getPendingSharedItems)
 
 router.post('/createcategory',

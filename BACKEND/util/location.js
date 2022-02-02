@@ -13,7 +13,6 @@ async function getCoordsForAddress(address){
     if (!data|| data.status === 'REQUEST_DENIED'){
         console.log(data)
         throw (new HttpError('Google denied request.',502));
-        
     }
     
 

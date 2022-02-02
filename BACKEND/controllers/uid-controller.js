@@ -1,7 +1,8 @@
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
-
+const userController = require('../controllers/user-controller');
+const getUserById = userController.getUserById;
 //-----------------------Controllers------------------
 const getByName = async (req,res,next)=>{
     const name = req.params.name;
@@ -44,6 +45,14 @@ const getByPhoneNumber = async (req,res,next)=>{
     res.status(200).json({uid: searchedUser._id});
 }
 
+const getById = async (req,res,next)=> {
+    const uid = req.params.uid;
+    let user = await getUserById(uid); 
+    if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
+    res.status(200).json({user: user});
+}
+
+
 const getUsersSearch = async (req,res,next)=>{ //dont want to let people search by phone number to prevent giving out personal info
     const search = req.params.search; 
     let users = []
@@ -78,3 +87,4 @@ exports.getByName = getByName;
 exports.getByEmail = getByEmail;
 exports.getByPhoneNumber = getByPhoneNumber;
 exports.getUsersSearch = getUsersSearch;
+exports.getById = getById;

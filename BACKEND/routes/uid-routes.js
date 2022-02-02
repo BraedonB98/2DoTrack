@@ -13,7 +13,7 @@ router.get('/phonenumber/:phoneNumber', uidController.getByPhoneNumber)
 
 router.get('/userssearch/:search', uidController.getUsersSearch)
 
-
+router.get('/user/:uid', uidController.getById)
 
 
 module.exports = router;
