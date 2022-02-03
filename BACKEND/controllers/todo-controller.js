@@ -83,9 +83,9 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
              }
        }
        else{
-           console.log(oldCategory.toDoList);
+           
             oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
-            console.log(oldCategory.toDoList);
+            
            try {
                //removing item from old category
                await user.save();
