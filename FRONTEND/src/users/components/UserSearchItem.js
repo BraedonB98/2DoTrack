@@ -10,7 +10,7 @@ const UserSearchItem = props => {
     } ,[props.className])
     return(
         <Card className={`user-search-item ${className}`} onClick = {event =>{event.target.value = {_id:props._id,name:props.name,imageUrl:props.imageUrl};props.onSelectedUser(event);}}> 
-            <img className="user-search-item__image" src={`${process.env.REACT_APP_BACKEND_URL}/${props.imageUrl}`} alt = {`${props.name}`}/>
+            <img className="user-search-item__image" src={`${process.env.REACT_APP_ASSET_URL}/${props.imageUrl}`} alt = {`${props.name}`}/>
             <h2 className="user-search-item__name">{props.name}</h2>
         </Card>
     )

@@ -193,7 +193,7 @@ return(
             {(props.status === "Pending"&& !props.pending ) && <AiOutlineUnorderedList className={`todo-item__icon-${props.priority}`}/>}
             <h2  >{props.name}</h2>
             {(creatorInfo && props.pending)&&<h2 className="to-do-item__creator-name">{creatorInfo.name}</h2>}
-            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`${process.env.REACT_APP_BACKEND_URL}/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
+            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`${process.env.REACT_APP_ASSET_URL}/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
             {!props.pending && <Button className = "todo-item__share" onClick={showShareTask}><IoIosShareAlt/></Button>}
         </div>
         
