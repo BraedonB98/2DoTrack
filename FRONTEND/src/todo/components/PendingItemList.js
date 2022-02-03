@@ -38,6 +38,7 @@ const PendingItemList = props=> {
             notes = {todo.notes}
             users = {todo.users}
             onDismissTask = {props.onDismissTask}
+            onPendingSubmit = {props.onPendingSubmit}
             pending = {true} />)}
             </ul>
             );

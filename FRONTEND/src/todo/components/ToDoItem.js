@@ -51,7 +51,8 @@ const ToDoItem = props => {
             
                 await sendRequest(`http://localhost:5000/api/todo/deleteitem/`,'DELETE',
                JSON.stringify({
-                 tid : props._id}),
+                 tid : props._id,
+                 uid : UID}),
                  {'Content-Type': 'application/json'});
                props.onDeleteTask(props._id);
           }
@@ -150,12 +151,9 @@ const ToDoItem = props => {
         }
         if(props.pending)
         {getCreator();}
-        console.log(props.location);
     },[sendRequest,props.pending,props.creator])
 
-    const acceptPendingTaskHandler = () =>{
-
-    }
+   
 
 return(
     <React.Fragment>
@@ -175,7 +173,7 @@ return(
             <Modal 
                 show = {showConfirmModal}
                 onCancel = {cancelDeleteHandler}
-                header = "Are you sure?"
+                header = {"Are you sure?"}
                 footerClass = "todo-item__modal-actions" 
                 footer = {
                     <React.Fragment>
@@ -183,7 +181,8 @@ return(
                         <Button danger onClick={confirmDeleteHandler}>{props.pending?"DISMISS":"DELETE"}</Button>
                     </React.Fragment>
                 } >
-                    <p>Are you sure you want to {props.pending?"dismiss":"delete"} this task?</p>
+                    
+                    <p>Are you sure you want to {props.pending?"dismiss this task?":((props.creator.toString()===UID)?`delete task for all users?`:`Remove item from your account?`)}</p>
             </Modal>
             {showShareModal && <UserSearchModal onClear = {clearShareTask} onSubmit = {shareTask}/>}
         <li className="todo-item " key = {props._id} >
@@ -204,7 +203,7 @@ return(
             <p className = "todo-item__notes" >{props.notes}</p>
             {(props.status ==="Pending" && !props.pending) && (<Button onClick={startTask}>Start Task</Button>)}
             {(props.status ==="Started" && !props.pending)&& (<Button onClick={finishTask}>Finish Task</Button>)}
-            {props.pending && <Button onClick={acceptPendingTaskHandler}>Accept</Button>}
+            {props.pending && <Button onClick={event=> {event.target.value = JSON.stringify(props); props.onPendingSubmit(event)}}>Accept</Button>}
             {props.location && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
             {!props.pending && <Button onClick={editTaskHandler}>EDIT</Button>}
             <Button danger onClick = {showDeleteWarningHandler}>{props.pending?"DISMISS":"DELETE"}</Button>

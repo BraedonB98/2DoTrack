@@ -118,7 +118,7 @@ const CategoryEditor = props=> {
                 <Button type="submit" onClick = {renameHandler} disabled={!formState.isValid}> Submit </Button>
             </div>}
             {showRemoteTask && <RemoteTaskMenu category = {props.category}/>}
-            {showPendingTask && <PendingTaskModal category = {props.category} onClear = {()=>{setShowPendingTask(false)}}/>}
+            {showPendingTask && <PendingTaskModal category = {props.category} onTaskAccepted={task=>{props.onTaskAccepted(task)}}onClear = {()=>{setShowPendingTask(false)}}/>}
             
             {showIconSelect && <IconSelector onCancel = {()=>{setShowIconSelect(false)}} onSelectedIcon = {handleIconSelect} />}
                 

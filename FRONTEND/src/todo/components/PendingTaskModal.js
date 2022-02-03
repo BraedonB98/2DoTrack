@@ -23,11 +23,37 @@ const PendingTaskModal = props => {
         }
         fetchPendingTasks();
     },[sendRequest,UID])
+
     const taskDismissHandler = (dismissedTaskId) => {
         console.log("pendingTasks");
         setPendingTasks(prevTasks => prevTasks.filter(task => task._id !== dismissedTaskId));
         console.log(pendingTasks);
     };
+
+    const pendingSubmitHandler = async event =>
+    {
+        console.log(JSON.parse(event.target.value));
+        console.log(props.category)
+        
+        try{
+            let taskAccepted = await sendRequest(`http://localhost:5000/api/todo/acceptPendingSharedItem`,'PATCH',
+                JSON.stringify({
+                    tid : (JSON.parse(event.target.value)._id),
+                    uid: UID,
+                    cid: props.category.name
+                 }),
+                {'Content-Type': 'application/json'});
+                taskAccepted = taskAccepted.item
+                setPendingTasks(pendingTasks.filter(task => task._id.toString() !== taskAccepted._id));
+                props.onTaskAccepted(taskAccepted);
+                
+            
+        }
+       catch(error){
+           console.log(error);
+       }
+    }
+
   return (
     <Modal
       onCancel={props.onClear}
@@ -35,7 +61,7 @@ const PendingTaskModal = props => {
       footer={<Button onClick={props.onClear}>Close</Button>}
       show={true}
     >
-    {(!isLoading && pendingTasks) && <PendingItemList onDismissTask = {taskDismissHandler} items = {pendingTasks} />}
+    {(!isLoading && pendingTasks) && <PendingItemList onPendingSubmit = {pendingSubmitHandler} onDismissTask = {taskDismissHandler} items = {pendingTasks} />}
       
     </Modal>
   );

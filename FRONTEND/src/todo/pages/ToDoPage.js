@@ -11,8 +11,7 @@ import {AuthContext} from "../../shared/context/auth-context";
 import NewCategory from "../components/NewCategory";
 import CategoryEditor from "../components/CategoryEditor";
 import Icon from "../../shared/components/UIElements/Icons";
-import PendingTaskModal from "../components/PendingTaskModal";
-import RemoteTaskMenu from "../components/RemoteTaskMenu";
+
 
 import ToDoList from "../components/ToDoList";
 import CategoryList from "../components/CategoriesList";
@@ -159,6 +158,10 @@ const ToDoPage = () => {
         setLoadedCategories(loadedCategories.concat(newCategory));
         setLoadedCategory(newCategory[0]);
     }
+    const handleTaskAccepted = task =>{
+        console.log(loadedTasks.concat(task))
+        setLoadedTasks(loadedTasks.concat(task))
+    }
 
 return(
 <React.Fragment>
@@ -177,8 +180,9 @@ return(
                 </div>
                 <Button className = "todo-page__new-to-do-item-button"  onClick={handleNewTask}>New Task</Button>
             </div> }
+           
             {(!isLoading && newCategory ) && <NewCategory onCancel={()=>{setNewCategory(false)}} onSubmit = {newCategorySubmitHandler}/> }
-            {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onDelete= {deleteCategoryHandler} onEdit = {editCategoryHandler}category = {loadedCategory}/>}
+            {(!isLoading && categoryEditor && loadedCategory ) && <CategoryEditor onTaskAccepted = {handleTaskAccepted}onDelete= {deleteCategoryHandler} onEdit = {editCategoryHandler}category = {loadedCategory}/>}
            
             
 

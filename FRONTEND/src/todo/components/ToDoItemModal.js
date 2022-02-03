@@ -144,6 +144,7 @@ const ToDoItemModal = props => {
         try {
           if(!addressDependent){
            taskEdited.address=undefined;
+           taskEdited.location=undefined;
           }
           if(!timeDependent){
             taskEdited.due=undefined;

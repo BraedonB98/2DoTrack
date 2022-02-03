@@ -42,11 +42,11 @@ const itemInDataBase = async(tid) =>{
     return(item);
 }
 
-const deleteItemHelper = async (tid,oldCid) => {
+const deleteItemHelper = async (tid,oldCid,uid) => {
        //getting item
        let item = await getItemById(tid);
        if(!!item.error){return({error:item.error, errorMessage:item.errorMessage, errorCode:item.errorCode})}
-       uid= item.creator
+       
        //getting user
        let user = await getUserById(uid); 
        if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
@@ -66,7 +66,9 @@ const deleteItemHelper = async (tid,oldCid) => {
        if (!oldCategory){ 
         return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
 
-       if(item.creator._id === uid){
+        console.log(item.creator._id)
+        console.log(uid)
+       if(item.creator._id.toString() === uid){
            //!------------------------------ still need to remove item for all users who share it-----------------------------------------
            try {
                const sess = await mongoose.startSession();
@@ -76,17 +78,19 @@ const deleteItemHelper = async (tid,oldCid) => {
                oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
                await user.save({session: sess});
                await sess.commitTransaction();
-               console.log("item Deleted")
+               console.log("item Deleted forever")
              } catch (err) {
                  console.log(err);
                 return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:500})
              }
        }
        else{
+           console.log(oldCategory.toDoList);
             oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
+            console.log(oldCategory.toDoList);
            try {
                //removing item from old category
-               console.log("should not be here")
+               console.log("just removing for you")
                await user.save();
              } catch (err) {
                 return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:"500"})
@@ -120,6 +124,7 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     });
     if(address){
         let location; 
+        console.log("has address");
         try{
             location = await getCoordsForAddress(address);
             newItem.address=location.address;
@@ -205,8 +210,8 @@ const editItem = async(req,res,next)=>{
 }
 
 const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
-    const {tid,oldCid}= req.body;
-    const deletingIssue = await deleteItemHelper(tid,oldCid);
+    const {tid, oldCid , uid}= req.body;
+    const deletingIssue = await deleteItemHelper(tid,oldCid ,uid);
     if(deletingIssue){return(next(new HttpError(deletingIssue.errorMessage, deletingIssue.errorCode)))}
     res.status(201).json({message:"deleted"})
 }
@@ -235,8 +240,8 @@ const getItems= async(req,res,next)=>{ //all items from category
 
     var itemArray = await Promise.all(category.toDoList.map(async(item) => { //waits until all promises finish
         var item = (await getItemById(item._id.toString()));
-        if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
-        return(item);
+        if(!item.error){return(item);}
+        
     } ))
     res.status(200).json({items: itemArray})
 }
@@ -334,37 +339,50 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
+    
+     //removing item from pending category
+     if(!user.pendingSharedTasks.filter(item => item._id.toString()===tid).length>0)
+     {return(next(new HttpError("task not in your pending tasks", 404)))}
 
-    
-    //get category
-    let oldCategory = user.pendingSharedTasks;
-    if (!oldCategory){return(next(new HttpError("Task/Category Cant Be Located", 422)))};
-    
-    //removing item from old category
-    oldCategory = oldCategory.filter(item => item._id.toString()!==tid)
+     user.pendingSharedTasks = user.pendingSharedTasks.filter(item => item._id.toString()!==tid)
     
     //check item 
-    let itemExists = await itemInDataBase(tid)
-    if(!!itemExists.error){return(next(new HttpError(itemExists.errorMessage, itemExists.errorCode)))}
-    if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
+    let item = await getItemById(tid)
+    if(!item){return(next(new HttpError("to do item not located in db", 404)))}
+    if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+    
+
+  
 
     //get new category
     category = user.toDoCategories.filter(category => category.name === cid)[0]
-    if (!category){return(next(new HttpError("Category Cant Be Located", 422)))};
+    if (!category){return(next(new HttpError("Category Cant Be Located", 404)))};
     
+    //check if item is already in category
+    if(category.toDoList.filter(task=> task._id.toString() === tid).length>0)
+    {return(next(new HttpError("Task Already in Category", 409)))}
     //add to item to new category
     category.toDoList.push(tid);    
 
+    //add user to item
+    item.users.push(user._id)
+
     //save user
     try{
-        await user.save();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await item.save({session: sess})
+        await user.save({session: sess});
+        await sess.commitTransaction();
     }
     catch(error){
+        console.log(error);
+        console.log("issue with sending to db")
         return(next(new HttpError('Could not update user in database', 500)));
     }
 
 
-    res.status(201).json({category: category.toObject({getters:true})})
+    res.status(201).json({item: item})
 }
 const dismissPendingSharedItem = async(req,res,next)=>{ 
     const{tid, uid}= req.body;
@@ -540,7 +558,7 @@ const deleteCategory = async(req,res,next)=>{
     //delete all items in category array
     try{
         category.toDoList.map(async(item) => {
-            const deletingIssue = await deleteItemHelper(item._id.toString(),category.name);
+            const deletingIssue = await deleteItemHelper(item._id.toString(),category.name,uid);
             if(deletingIssue){return(next(new HttpError(deletingIssue.errorMessage, deletingIssue.errorCode)))}
         })
     }catch(error){
