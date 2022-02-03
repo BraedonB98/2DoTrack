@@ -28,7 +28,7 @@ const ToDoItemModal = props => {
     const searchUser = async search =>{
         try{
             if(search.length >= 2){
-            const responseData = await sendRequest(`http://localhost:5000/api/uid/userssearch/${search}`);
+            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/userssearch/${search}`);
             setSearchText("");
             setSearchedUsers(responseData.users)
             }

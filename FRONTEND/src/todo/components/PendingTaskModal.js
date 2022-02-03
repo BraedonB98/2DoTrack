@@ -16,7 +16,7 @@ const PendingTaskModal = props => {
     useEffect( ()=>{
         const fetchPendingTasks = async () =>{
             try {
-                const responseData = await sendRequest(`http://localhost:5000/api/todo/getPendingSharedItems/${UID}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getPendingSharedItems/${UID}`);
                 setPendingTasks(responseData.items);
             }
             catch(err){}
@@ -36,7 +36,7 @@ const PendingTaskModal = props => {
         console.log(props.category)
         
         try{
-            let taskAccepted = await sendRequest(`http://localhost:5000/api/todo/acceptPendingSharedItem`,'PATCH',
+            let taskAccepted = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/acceptPendingSharedItem`,'PATCH',
                 JSON.stringify({
                     tid : (JSON.parse(event.target.value)._id),
                     uid: UID,

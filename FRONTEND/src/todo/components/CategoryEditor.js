@@ -38,7 +38,7 @@ const CategoryEditor = props=> {
     
     const renameHandler = async() =>{
         try{
-            const category = await sendRequest(`http://localhost:5000/api/todo/renamecategory`,'PATCH',
+            const category = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/renamecategory`,'PATCH',
              JSON.stringify({
                uid : uid,
                name : props.category.name,
@@ -57,7 +57,7 @@ const CategoryEditor = props=> {
         
         try{
             
-            await sendRequest(`http://localhost:5000/api/todo/category`,'DELETE',
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/category`,'DELETE',
             JSON.stringify({
             uid : uid,
             cid: props.category.name
@@ -74,7 +74,7 @@ const CategoryEditor = props=> {
         setIconSelected(icon)
         setShowIconSelect(false)
         try{
-            const category = await sendRequest(`http://localhost:5000/api/todo/changecategoryicon`,'PATCH',
+            const category = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/changecategoryicon`,'PATCH',
              JSON.stringify({
                uid : uid,
                name : props.category.name,

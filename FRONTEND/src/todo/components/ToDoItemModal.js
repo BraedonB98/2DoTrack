@@ -49,7 +49,7 @@ const ToDoItemModal = props => {
         if(!loadedItem || props.taskId!==loadedItem.id){  //|| will fail out before checking second
           try { 
             let responseData
-            responseData = await sendRequest(`http://localhost:5000/api/todo/getitem/${props.taskId}`);
+            responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getitem/${props.taskId}`);
             setLoadedItem(responseData.task);
           }
           catch(err){}
@@ -129,8 +129,9 @@ const ToDoItemModal = props => {
           if(!timeDependent){
             taskEdited.due=undefined;
           }
+          
           await sendRequest(
-              `http://localhost:5000/api/todo/edititem/${props.taskId}`,
+              `${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props.taskId}`,
               'PATCH',
               JSON.stringify(taskEdited),
               {'Content-Type': 'application/json'}
@@ -165,7 +166,7 @@ const ToDoItemModal = props => {
              taskNew.due=undefined;
            }
            const newItem = await sendRequest(
-            `http://localhost:5000/api/todo/createItem`,
+            `${process.env.REACT_APP_BACKEND_API_URL}/todo/createItem`,
             'POST',
             JSON.stringify(taskNew),
             {'Content-Type': 'application/json'}

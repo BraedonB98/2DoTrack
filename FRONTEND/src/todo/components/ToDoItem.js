@@ -49,7 +49,7 @@ const ToDoItem = props => {
         {
             try{
             
-                await sendRequest(`http://localhost:5000/api/todo/deleteitem/`,'DELETE',
+                await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/deleteitem/`,'DELETE',
                JSON.stringify({
                  tid : props._id,
                  uid : UID}),
@@ -62,7 +62,7 @@ const ToDoItem = props => {
         else{
             //remove item from pending task list
             try{
-                await sendRequest(`http://localhost:5000/api/todo/dismissPendingSharedItem/`,'PATCH',
+                await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/dismissPendingSharedItem/`,'PATCH',
                JSON.stringify({
                 tid : props._id,
                 uid: UID}),
@@ -94,7 +94,7 @@ const ToDoItem = props => {
 
         try{
             
-            await sendRequest(`http://localhost:5000/api/todo/edititem/${props._id}`,'PATCH',
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Started"}),
              {'Content-Type': 'application/json'});
@@ -110,7 +110,7 @@ const ToDoItem = props => {
     const finishTask = async() => {
         try{
             
-            await sendRequest(`http://localhost:5000/api/todo/edititem/${props._id}`,'PATCH',
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Complete"}),
              {'Content-Type': 'application/json'});
@@ -123,7 +123,7 @@ const ToDoItem = props => {
     const shareTask = async event =>{
         const user = JSON.parse(event.target.value)
         try{
-            await sendRequest(`http://localhost:5000/api/todo/shareItem`,'PATCH',
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/shareItem`,'PATCH',
                 JSON.stringify({
                     tid : props._id,
                     uid: user._id
@@ -144,7 +144,7 @@ const ToDoItem = props => {
     }
     useCallback( ()=>{
         const getCreator = async() =>{
-            const responseData = await sendRequest(`http://localhost:5000/api/uid/user/${props.creator}`)
+            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/user/${props.creator}`)
             console.log(responseData)
             setCreatorInfo(responseData.user);
         }
@@ -193,7 +193,7 @@ return(
             {(props.status === "Pending"&& !props.pending ) && <AiOutlineUnorderedList className={`todo-item__icon-${props.priority}`}/>}
             <h2  >{props.name}</h2>
             {(creatorInfo && props.pending)&&<h2 className="to-do-item__creator-name">{creatorInfo.name}</h2>}
-            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`http://localhost:5000/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
+            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`${process.env.REACT_APP_BACKEND_URL}/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
             {!props.pending && <Button className = "todo-item__share" onClick={showShareTask}><IoIosShareAlt/></Button>}
         </div>
         

@@ -67,7 +67,7 @@ const AuthPage = () => {
         {
           try{
             const responseData = await sendRequest(
-              'http://localhost:5000/api/user/login',
+              `${process.env.REACT_APP_BACKEND_API_URL}/user/login`,
               'POST',
               JSON.stringify({
                 email: formState.inputs.email.value,
@@ -83,7 +83,7 @@ const AuthPage = () => {
         {
           try{
             const responseData = await sendRequest(
-              'http://localhost:5000/api/user/createuser',
+              `${process.env.REACT_APP_BACKEND_API_URL}/user/createuser`,
               'POST',
               JSON.stringify({
                 email: formState.inputs.email.value,

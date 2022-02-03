@@ -31,7 +31,7 @@ const NewCategory = props=> {
 
         try {
             const newCategory = await sendRequest(
-             `http://localhost:5000/api/todo/createcategory`,
+             `${process.env.REACT_APP_BACKEND_API_URL}/todo/createcategory`,
              'POST',
              JSON.stringify({
                name: formState.inputs.name.value,
