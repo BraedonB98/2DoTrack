@@ -102,7 +102,7 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
-    const{cid, uid, name, recurring, status,due,priority,address,notes}= req.body;//creator and users[0]= uid
+    const{cid, uid, name, status,due,priority,address,notes}= req.body;//creator and users[0]= uid
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -114,7 +114,6 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     //Create Item
     const newItem = new ToDoItem({
         name,
-        recurring,
         status,
         due,
         priority,

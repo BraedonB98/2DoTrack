@@ -96,7 +96,6 @@ const createUser = async (req,res,next)=>{
             icon:" ",
             toDoList:[]
         }],
-        recurringTasks:[],
         financeAccounts:[],
         recurringExpenses:[]
     });
