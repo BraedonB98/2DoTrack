@@ -375,10 +375,13 @@ const dismissPendingSharedItem = async(req,res,next)=>{
     try{
         await user.save();
     }
+
     catch(error){
         console.log(error)
         return(next(new HttpError('Could not update user in database', 500)));
     }
+
+    res.status(201).json({message:"dismissed"})
     
 }
 

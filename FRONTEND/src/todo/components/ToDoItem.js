@@ -61,13 +61,11 @@ const ToDoItem = props => {
         else{
             //remove item from pending task list
             try{
-            
                 await sendRequest(`http://localhost:5000/api/todo/dismissPendingSharedItem/`,'PATCH',
                JSON.stringify({
                 tid : props._id,
                 uid: UID}),
                  {'Content-Type': 'application/json'});
-                
                  props.onDismissTask(props._id);
                
           }

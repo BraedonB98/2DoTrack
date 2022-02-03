@@ -24,7 +24,7 @@ const PendingTaskModal = props => {
         fetchPendingTasks();
     },[sendRequest,UID])
     const taskDismissHandler = (dismissedTaskId) => {
-        console.log(pendingTasks);
+        console.log("pendingTasks");
         setPendingTasks(prevTasks => prevTasks.filter(task => task._id !== dismissedTaskId));
         console.log(pendingTasks);
     };
