@@ -12,6 +12,9 @@
   display:none;
   cursor: pointer;
  }
+ .categories__selected-category{
+  background: var(--colorSecondaryVariant);
+}
 /*--------------------------Screen Dependant Styling------------------------------*/
 
 

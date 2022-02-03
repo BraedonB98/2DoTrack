@@ -148,9 +148,7 @@ Finance Item{}
 -------------------------------------------------------Known Issues---------------------------------------
 in user-controller->imageUpload, if image fails to unlink, add it to a log file to be able to delete later
 
-in app.js/ && user files -> still need to handle validation of users
-
-in uid-controller.js->getbyName will need to get all users with same name and show part of personal info to let user decide which one they are looking for.
+in app.js/ && user files -> still need to handle validation/authentication of users
 
 todo-controllers.js -> deleteItem, make sure to go through users list and delete it from task list of all users(both pending or accepted) Also make sure user is the creator. If just a user just remove it from array so they no longer use it.
 
@@ -161,20 +159,13 @@ Finance-routes.js ->still need to add validation to all functions
 
 Need to add a delete user function
 
-Figure out why todo categories have their own object Id when they arnt a mongoose 
-
 Need to standardize emails and phonenumber inputs so a capitalization and stuff doesnt make it not findable when searching.
-
-add change category Icon patch route    
-
-may need to install twilio-cli into project, its installed globally but not for this project
 
 will only work with phone numbers with +1   (USA phone numbers)
 
-need to finish delete category function
-
-need to add a change category Icon route and function
 
 ----------------------------------------------Dev Info----------------------------------
 you need ngrok to be able to open port to internet for sms functionality
+
+may need to install twilio-cli into project, its installed globally but not for this project
 

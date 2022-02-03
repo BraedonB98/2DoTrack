@@ -137,6 +137,7 @@ const ToDoItemModal = props => {
             );
             taskEdited.status = loadedItem.status;
             taskEdited.creator = loadedItem.creator;
+            setLoadedItem(taskEdited);
             props.submitted(taskEdited);
         }
         catch(err){}
