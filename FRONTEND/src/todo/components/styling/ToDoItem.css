@@ -68,8 +68,10 @@
   .to-do-item__creator-image{
     width:5%;
     height:5%;
-    align-self:center
+    align-self:center;
+    display: flex;
+    float:right; 
   }
   .to-do-item__creator-name{
-
+    float:right; clear:both;
   }

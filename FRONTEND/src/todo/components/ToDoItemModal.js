@@ -176,6 +176,7 @@ const ToDoItemModal = props => {
           }
             if(!addressDependent){
             taskNew.address=undefined;
+            taskNew.location=undefined;
            }
            if(!timeDependent){
              taskNew.due=undefined;

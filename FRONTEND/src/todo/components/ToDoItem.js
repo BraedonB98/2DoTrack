@@ -150,13 +150,18 @@ const ToDoItem = props => {
         }
         if(props.pending)
         {getCreator();}
+        console.log(props.location);
     },[sendRequest,props.pending,props.creator])
+
+    const acceptPendingTaskHandler = () =>{
+
+    }
 
 return(
     <React.Fragment>
             <ErrorModal error= {error} onClear = {clearError} />
             <Modal 
-                show = {showMap} 
+                show = {showMap && props.location} 
                 onCancel ={closeMapHandler} 
                 header = {props.address} 
                 contentClass="todo-item__modal-content"
@@ -189,8 +194,8 @@ return(
             {(props.status === "Started"&& !props.pending ) && <AiOutlineFieldTime className={`todo-item__icon-${props.priority}`}/>}
             {(props.status === "Pending"&& !props.pending ) && <AiOutlineUnorderedList className={`todo-item__icon-${props.priority}`}/>}
             <h2  >{props.name}</h2>
-            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`http://localhost:5000/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
             {(creatorInfo && props.pending)&&<h2 className="to-do-item__creator-name">{creatorInfo.name}</h2>}
+            {(creatorInfo && props.pending)&&<img className="to-do-item__creator-image" src={`http://localhost:5000/${creatorInfo.imageUrl}`} alt = {`${creatorInfo.name}`}/>}
             {!props.pending && <Button className = "todo-item__share" onClick={showShareTask}><IoIosShareAlt/></Button>}
         </div>
         
@@ -199,7 +204,7 @@ return(
             <p className = "todo-item__notes" >{props.notes}</p>
             {(props.status ==="Pending" && !props.pending) && (<Button onClick={startTask}>Start Task</Button>)}
             {(props.status ==="Started" && !props.pending)&& (<Button onClick={finishTask}>Finish Task</Button>)}
-
+            {props.pending && <Button onClick={acceptPendingTaskHandler}>Accept</Button>}
             {props.location && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
             {!props.pending && <Button onClick={editTaskHandler}>EDIT</Button>}
             <Button danger onClick = {showDeleteWarningHandler}>{props.pending?"DISMISS":"DELETE"}</Button>

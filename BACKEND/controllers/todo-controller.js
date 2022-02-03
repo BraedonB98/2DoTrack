@@ -107,12 +107,6 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
     {
         return(next(new HttpError("Category not found", 422)))
     }
-    let location; 
-    try{location = await getCoordsForAddress(address);}
-    catch(error){
-        //console.log('google not working');
-        return(next(new HttpError("Could not access cordinates for that address", 502)));
-    }
     //Create Item
     const newItem = new ToDoItem({
         name,
@@ -120,12 +114,24 @@ const createItem = async(req,res,next)=>{ //dont need to check for duplicates be
         status,
         due,
         priority,
-        address:location.address,
-        location:location.coordinates,
         notes,
         creator:uid,
         users:[uid]
     });
+    if(address){
+        let location; 
+        try{
+            location = await getCoordsForAddress(address);
+            newItem.address=location.address;
+            newItem.location=location.coordinates;
+        }
+        catch(error){
+            //console.log('google not working');
+            return(next(new HttpError("Could not access cordinates for that address", 502)));
+        }    
+    }
+    
+    
 
     
     //Save user and todo with sessions like in new place
