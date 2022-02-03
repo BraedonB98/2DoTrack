@@ -66,8 +66,7 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
        if (!oldCategory){ 
         return({error:true, errorMessage:"Task/Category Cant Be Located", errorCode:422})};
 
-        console.log(item.creator._id)
-        console.log(uid)
+       
        if(item.creator._id.toString() === uid){
            //!------------------------------ still need to remove item for all users who share it-----------------------------------------
            try {
@@ -78,7 +77,6 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
                oldCategory.toDoList = oldCategory.toDoList.filter(item => item._id.toString()!==tid)
                await user.save({session: sess});
                await sess.commitTransaction();
-               console.log("item Deleted forever")
              } catch (err) {
                  console.log(err);
                 return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:500})
@@ -90,7 +88,6 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
             console.log(oldCategory.toDoList);
            try {
                //removing item from old category
-               console.log("just removing for you")
                await user.save();
              } catch (err) {
                 return({error:err, errorMessage:"Something went wrong, could not delete item", errorCode:"500"})
