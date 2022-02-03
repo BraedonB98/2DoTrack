@@ -1,11 +1,8 @@
-//-------------------API KEYS---------------------------
-const APIKEYS = require('../apikeys');
-
 //--------------------API imports-------------------------
-const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
+const client = require('twilio')(process.env.TwilioApi_SID, process.env.TwilioApi_Key);
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
+sgMail.setApiKey(process.env.SendGridApi_Key);
 
 //-------------------imports--------------------------
 const userController = require('../controllers/user-controller');

@@ -6,6 +6,7 @@
 /.pnp
 .pnp.js
 /apikeys.js
+/nodemon.json
 # testing
 /coverage
 

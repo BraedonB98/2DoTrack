@@ -169,3 +169,4 @@ you need ngrok to be able to open port to internet for sms functionality
 
 may need to install twilio-cli into project, its installed globally but not for this project
 
+use npm run dev to start, no longer npm start

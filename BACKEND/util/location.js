@@ -1,9 +1,8 @@
 const axios = require('axios');
-const APIKEYS = require ('../apikeys') 
 const HttpError = require('../models/http-error');
 
 async function getCoordsForAddress(address){
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${APIKEYS.GOOGLEMAPSAPIKEY}`); //encodeURIComponent removes all white space and weird things about address   ---- await is the same as adding a then bust easier to read
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GoogleMapsApi_Key}`); //encodeURIComponent removes all white space and weird things about address   ---- await is the same as adding a then bust easier to read
 
     const data = response.data;
 
