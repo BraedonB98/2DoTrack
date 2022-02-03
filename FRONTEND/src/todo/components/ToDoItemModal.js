@@ -156,6 +156,7 @@ const ToDoItemModal = props => {
               {'Content-Type': 'application/json'}
             );
             taskEdited.status = loadedItem.status;
+            taskEdited.creator = loadedItem.creator;
             props.submitted(taskEdited);
         }
         catch(err){}

@@ -240,9 +240,11 @@ const getItems= async(req,res,next)=>{ //all items from category
 
     var itemArray = await Promise.all(category.toDoList.map(async(item) => { //waits until all promises finish
         var item = (await getItemById(item._id.toString()));
-        if(!item.error){return(item);}
-        
+        return(item);
     } ))
+    itemArray = itemArray.filter(item =>!item.error) //error free array
+    let errorArray =  itemArray.filter(item =>item.error) //error array
+    if(errorArray.length>0){console.log(errorArray)};
     res.status(200).json({items: itemArray})
 }
 

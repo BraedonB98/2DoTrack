@@ -105,8 +105,6 @@ const ToDoPage = () => {
     }
     const submitEditHandler = editedTask =>{
         setLoadedTasks(loadedTasks.map(task => {
-            console.log(task._id);
-            console.log(editedTask)
             if(task._id === editedTask._id)
             {
                 return(editedTask);
@@ -166,7 +164,7 @@ const ToDoPage = () => {
 return(
 <React.Fragment>
     <ErrorModal error = {error} onClear={clearError}/>
-    {(!isLoading && loadedCategory)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask}  submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
+    {(!isLoading && loadedCategory && loadedTasks)&& <ToDoItemModal category = {loadedCategory} open={taskModal} taskId = {editTask}  submitted= {task=>{setTaskModal(false); (editTask?submitEditHandler(task):submitNewHandler(task));  setEditTask(false);}} onError = {handleTaskModalError} onClear={()=>{setTaskModal(false); setEditTask();}}  />}
     <SwipeableHook className ="todo-page__contents" onSwipedLeft = {toggleRight}  onSwipedRight = {toggleLeft}>{/*This is a div but swipeable events*/}
         {isLoading&&<div className = "center"><LoadingSpinner/></div>}
         {(!isLoading && loadedCategories) && <CategoryList onChangeCategory={changeLoadedCategoryHandler} categories= {loadedCategories}/> }

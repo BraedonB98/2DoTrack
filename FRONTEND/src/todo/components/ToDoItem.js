@@ -1,4 +1,4 @@
-import React,{ useState, useEffect , useContext }from "react";
+import React,{ useState, useContext, useCallback }from "react";
 import {AiOutlineCheck,AiOutlineFieldTime,AiOutlineUnorderedList} from "react-icons/ai"
 import {IoIosShareAlt} from "react-icons/io";
 //-----------------------Components--------------------------
@@ -142,16 +142,15 @@ const ToDoItem = props => {
     const clearShareTask = () =>{
         setShowShareModal(false);
     }
-    useEffect( ()=>{
+    useCallback( ()=>{
         const getCreator = async() =>{
-            
             const responseData = await sendRequest(`http://localhost:5000/api/uid/user/${props.creator}`)
+            console.log(responseData)
             setCreatorInfo(responseData.user);
-            
         }
-        if(props.pending)
-        {getCreator();}
-    },[sendRequest,props.pending,props.creator])
+        
+        getCreator();
+    },[props.creator,sendRequest])
 
    
 
@@ -205,7 +204,7 @@ return(
             {(props.status ==="Started" && !props.pending)&& (<Button onClick={finishTask}>Finish Task</Button>)}
             {props.pending && <Button onClick={event=> {event.target.value = JSON.stringify(props); props.onPendingSubmit(event)}}>Accept</Button>}
             {props.location && <Button onClick={openMapHandler}>VIEW ON MAP</Button>}
-            {!props.pending && <Button onClick={editTaskHandler}>EDIT</Button>}
+            {(!props.pending && (props.creator.toString()===UID)) && <Button onClick={editTaskHandler}>EDIT</Button>}
             <Button danger onClick = {showDeleteWarningHandler}>{props.pending?"DISMISS":"DELETE"}</Button>
             </div>)}
         </Card>
