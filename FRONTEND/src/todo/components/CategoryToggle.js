@@ -1,5 +1,4 @@
 import React,{useState}from "react";
-import {AiOutlineCheck,AiOutlineFieldTime,AiOutlineUnorderedList} from "react-icons/ai"
 //-----------------------Components--------------------------
 import Button from "../../shared/components/FormElements/Button";
 import Card from '../../shared/components/UIElements/Card'
@@ -19,12 +18,9 @@ import "./styling/CategoryToggle.css"
 
 
 const CategoryToggle = props => {
-    const {isLoading, error, sendRequest, clearError} = useHttpClient();
+    const {isLoading, error, sendRequest, clearError} = useHttpClient(); //eslint-disable-line
     const [showConfirmModal, setShowConfirmModal] = useState(false);
  
-    const showDeleteWarningHandler = () =>{
-        setShowConfirmModal(true);
-    }
     const cancelDeleteHandler = () =>{
         setShowConfirmModal(false);
     }

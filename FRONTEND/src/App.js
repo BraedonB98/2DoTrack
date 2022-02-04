@@ -1,20 +1,31 @@
 import React, {useState, useCallback} from 'react';
 import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'; //also import Navigate for default routing
 
-//------------------------Pages-------------------------------
-import PageNotFound from './landing/pages/PageNotFound';
-import HomePage from './landing/pages/HomePage';
-import AuthPage from './users/pages/AuthPage';
-import DashBoard from './users/pages/DashBoard'
-import ToDoPage from './todo/pages/ToDoPage';
-import FinancePage from './finance/pages/FinancePage';
-
 //-----------------------Components--------------------------
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 
 //----------------------Context--------------------------------
 import { AuthContext } from './shared/context/auth-context';
 import { MobileContext } from './shared/context/mobile-context';
+
+//------------------------Pages-------------------------------(dev)
+//import PageNotFound from './landing/pages/PageNotFound';
+
+// import HomePage from './landing/pages/HomePage';
+// import AuthPage from './users/pages/AuthPage';
+// import DashBoard from './users/pages/DashBoard'
+// import ToDoPage from './todo/pages/ToDoPage';
+// import FinancePage from './finance/pages/FinancePage';
+
+//-------------------------Code Splitting-------------------(production)
+//const PageNotFound = React.lazy(()=> import('./landing/pages/PageNotFound'))
+
+const HomePage = React.lazy(()=> import('./landing/pages/HomePage'))
+const AuthPage = React.lazy(()=> import('./users/pages/AuthPage'))
+const DashBoard = React.lazy(()=> import('./users/pages/DashBoard'))
+const ToDoPage = React.lazy(()=> import('./todo/pages/ToDoPage'))
+const FinancePage = React.lazy(()=> import('./finance/pages/FinancePage'))
+
 
 
 

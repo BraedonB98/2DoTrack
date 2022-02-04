@@ -3,7 +3,7 @@ import React, {useState, useContext} from 'react';
 //-----------------------Components--------------------------
 import Card from '../../shared/components/UIElements/Card';
 import Button from "../../shared/components/FormElements/Button"
-import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
+import {VALIDATOR_REQUIRE} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
@@ -20,8 +20,8 @@ const NewCategory = props=> {
     const uid = auth.UID;
     const [showIconSelect,setShowIconSelect]= useState();
     const [iconSelected,setIconSelected]= useState();
-    const {isLoading, error, sendRequest, clearError} = useHttpClient();
-    const [formState, inputHandler, setFormData] = useForm({
+    const {isLoading, error, sendRequest, clearError} = useHttpClient();//eslint-disable-line
+    const [formState, inputHandler, setFormData] = useForm({ //eslint-disable-line
         name: {
           value: '',
           isValid: false

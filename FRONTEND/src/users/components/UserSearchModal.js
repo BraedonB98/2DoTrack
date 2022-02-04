@@ -1,16 +1,15 @@
-import React, {useEffect , useState, useContext} from 'react';
+import React, { useState} from 'react';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import Modal from '../../shared/components/UIElements/Modal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import UserSearchList from './UserSearchList'
 import { useHttpClient } from '../../shared/hooks/http-hook';
-import { AuthContext } from '../../shared/context/auth-context';
 import './styling/UserSearchModal.css';
 
 const ToDoItemModal = props => {
-    const auth = useContext(AuthContext);
-    const uid = auth.UID;
+    
+   
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [selectedUser , setSelectedUser]= useState();
     const [searchedUsers, setSearchedUsers]= useState();

@@ -5,12 +5,11 @@ import Card from '../../shared/components/UIElements/Card';
 import Button from "../../shared/components/FormElements/Button"
 import Modal from "../../shared/components/UIElements/Modal";
 import Input from '../../shared/components/FormElements/Input';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import PendingTaskModal from "../components/PendingTaskModal";
 import RemoteTaskMenu from "../components/RemoteTaskMenu";
 import IconSelector from '../../shared/components/FormElements/IconSelector';
 import Icon from '../../shared/components/UIElements/Icons';
-import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
+import {VALIDATOR_REQUIRE} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
@@ -28,8 +27,8 @@ const CategoryEditor = props=> {
     const [showRemoteTask,setShowRemoteTask]= useState(false);
     const [showPendingTask,setShowPendingTask]= useState(false);
     const [iconSelected,setIconSelected]= useState(props.category.icon);
-    const {isLoading, error, sendRequest, clearError} = useHttpClient();
-    const [formState, inputHandler, setFormData] = useForm({
+    const {isLoading, error, sendRequest, clearError} = useHttpClient();//eslint-disable-line
+    const [formState, inputHandler, setFormData] = useForm({//eslint-disable-line
         name: {
           value: props.category.name,
           isValid: true

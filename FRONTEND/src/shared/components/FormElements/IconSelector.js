@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import Icon from '../UIElements/Icons';
 import Button from './Button';
-import Input from './Input';
+
 
 import "./iconSelector.css"
 

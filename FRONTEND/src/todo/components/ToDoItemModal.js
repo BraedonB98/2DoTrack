@@ -93,7 +93,7 @@ const ToDoItemModal = props => {
             isValid: true
           }
         },loadedItem?true:formState.valid);
-      },[addressDependent,timeDependent,loadedItem,setFormData])
+      },[addressDependent,timeDependent,loadedItem,setFormData])//eslint-disable-line
 
 
       

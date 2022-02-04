@@ -8,7 +8,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import {AuthContext} from "../../shared/context/auth-context";
 
 const PendingTaskModal = props => {
-    const{isLoading,error,sendRequest,clearError} = useHttpClient();
+    const{isLoading,error,sendRequest,clearError} = useHttpClient();//eslint-disable-line
     const [pendingTasks,setPendingTasks]= useState()
     const auth= useContext(AuthContext);
     const UID = auth.UID;

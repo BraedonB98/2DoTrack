@@ -1,9 +1,9 @@
-import React,{ useContext}from "react";
+import React from "react";
 
-import { AuthContext } from "../../shared/context/auth-context";
+
 
 const DashBoard = () => {
-    const auth = useContext(AuthContext);
+
     
 
 
