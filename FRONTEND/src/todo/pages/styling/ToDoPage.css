@@ -7,6 +7,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
     align-items:baseline;
+    width: 95% !important;
 }
 
 .todo-page__new-to-do-item-button {
@@ -40,6 +41,12 @@
 
 @media all and (min-width: 1081px) and (-webkit-min-device-pixel-ratio: 0.99) {
     .todo-page__current-category-header{
-        
+        font-size: large;
     }
 }
+@media all and (max-width: 725px) and (-webkit-min-device-pixel-ratio: 0.99) {
+    .todo-page__current-category-header{
+        font-size: small;
+    }
+}
+

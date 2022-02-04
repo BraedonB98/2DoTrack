@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback , Suspense} from 'react';
 import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'; //also import Navigate for default routing
 
 //-----------------------Components--------------------------
@@ -10,8 +10,9 @@ import { MobileContext } from './shared/context/mobile-context';
 
 //------------------------Pages-------------------------------(dev)
 //import PageNotFound from './landing/pages/PageNotFound';
+import HomePage from './landing/pages/HomePage';
+import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
-// import HomePage from './landing/pages/HomePage';
 // import AuthPage from './users/pages/AuthPage';
 // import DashBoard from './users/pages/DashBoard'
 // import ToDoPage from './todo/pages/ToDoPage';
@@ -19,8 +20,8 @@ import { MobileContext } from './shared/context/mobile-context';
 
 //-------------------------Code Splitting-------------------(production)
 //const PageNotFound = React.lazy(()=> import('./landing/pages/PageNotFound'))
+//const HomePage = React.lazy(()=> import('./landing/pages/HomePage'))
 
-const HomePage = React.lazy(()=> import('./landing/pages/HomePage'))
 const AuthPage = React.lazy(()=> import('./users/pages/AuthPage'))
 const DashBoard = React.lazy(()=> import('./users/pages/DashBoard'))
 const ToDoPage = React.lazy(()=> import('./todo/pages/ToDoPage'))
@@ -83,7 +84,9 @@ const App = () => {
     <Router>
       <MainNavigation/>
       <main id ="content">
+        <Suspense fallback = {<div className='center'><LoadingSpinner/></div>}>
         {routes}  
+        </Suspense>
       </main>
     </Router>
     </MobileContext.Provider>

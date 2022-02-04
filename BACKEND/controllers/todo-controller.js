@@ -1,16 +1,12 @@
-//-------------------APIAuth-----------------------------
-const APIKEYS = require('../apikeys');
-
 //--------------------imports-------------------------
 const mongoose = require('mongoose');
-const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
+//const client = require('twilio')(process.env.TwilioApi_SID, process.env.TwilioApi_Key);
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
+sgMail.setApiKey(process.env.SendGridApi_Key);
 
 //------------------Modules--------------------------
 const userController = require('../controllers/user-controller');
 const getUserById = userController.getUserById;
-const getUserByProps = userController.getUserByProps;
 const getCoordsForAddress = require('../util/location');
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');

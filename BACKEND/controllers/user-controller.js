@@ -1,10 +1,10 @@
-//-------------------APIAuth-----------------------------
-const APIKEYS = require('../apikeys');
-
 //--------------------imports-------------------------
-const client = require('twilio')(APIKEYS.TWILIOSID, APIKEYS.TWILIOAUTHTOKEN);
+const accountSid = process.env.TwilioApi_SID;
+const authToken = process.env.TwilioApi_Key;
+const client = require('twilio')(accountSid, authToken);
+
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(APIKEYS.SENDGRIDAPIKEY);
+sgMail.setApiKey(process.env.SendGridApi_Key);
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
@@ -110,7 +110,7 @@ const createUser = async (req,res,next)=>{
     client.messages
         .create({
             body: `Welcome ${createdUser.name} to 2DoFinance! We are happy to have you!!!`,
-            from: APIKEYS.TWILIOPHONENUMBER,
+            from: process.env.TwilioApi_PhonNumber,
             to: `${createdUser.phoneNumber}`
         })
         .then(message => console.log(message.sid));
@@ -118,7 +118,7 @@ const createUser = async (req,res,next)=>{
     //Email Notification with SendGrid(twilio)
     const msg = {
         to: createdUser.email,
-        from: APIKEYS.SENDGRIDEMAIL, 
+        from: process.env.SendGridApi_Email, 
         subject: 'Welcome to 2DoFinance!!!',
         text: `message`,
         html: (`<p>Welcome ${createdUser.name},</p> <p>to 2DoFinance! We are happy to have you!!! </p> <p>If this is a mistake please let us know,</p> <p> your friends at,</p><h2>2DoFinance<h2>`)

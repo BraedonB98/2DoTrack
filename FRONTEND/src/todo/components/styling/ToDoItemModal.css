@@ -3,7 +3,7 @@
 .to-do-item-modal__content{
 display: flex;
 justify-content: space-evenly;
-width: 95%;
+width: 95%!important;
 }
 .to-do-item-modal__text-input{
     text-align: center;
@@ -11,10 +11,14 @@ width: 95%;
 }
 .to-do-item-modal__input{
     text-align:center;
+    width:98% !important;
+    display:flex;
+    justify-self: center !important;
+    
 }
 
 .to-do-item-modal__button-div{
     display: flex;
-    width: 100%;
+    width: 100% ;
     justify-content: space-evenly;
 }

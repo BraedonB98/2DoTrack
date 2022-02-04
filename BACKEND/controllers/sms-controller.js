@@ -1,5 +1,5 @@
 //--------------------API imports-------------------------
-const client = require('twilio')(process.env.TwilioApi_SID, process.env.TwilioApi_Key);
+//const client = require('twilio')(process.env.TwilioApi_SID, process.env.TwilioApi_Key);
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SendGridApi_Key);
@@ -8,7 +8,6 @@ sgMail.setApiKey(process.env.SendGridApi_Key);
 const userController = require('../controllers/user-controller');
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
-const User = require('../models/user-model');
 
 //const util = require('util')
 

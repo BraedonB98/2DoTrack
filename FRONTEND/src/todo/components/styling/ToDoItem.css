@@ -1,6 +1,7 @@
 .todo-item__content {
     padding: 0;
     margin :1%;
+    width:98%!important;
   }
 .todo-item__header:hover{
     cursor: pointer;

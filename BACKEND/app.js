@@ -66,7 +66,7 @@ app.use((error, req,res,next)=> {
 mongoose
 .connect(`mongodb+srv://${process.env.MongoDB_User}:${process.env.MongoDB_Password}@${process.env.MongoDB_Server}/${process.env.MongoDB_DBName}?retryWrites=true&w=majority`)
 .then(() =>{
-    app.listen(5000);//start the whole server only if it can successfully connect to mongoose otherwise it wont open the port to receive connections
+    app.listen(process.env.PORT || 5000)
 })
 .catch(error =>{
     console.log(error);
