@@ -1,20 +1,26 @@
 
-
+.to-do-item-modal{
+   
+}
 .to-do-item-modal__content{
 display: flex;
-justify-content: space-evenly;
-width: 95%!important;
+justify-content:space-evenly;
+width: 96%!important;
+padding:2%;
+
+}
+.to-do-item-modal__form{
+    display: flex;
 }
 .to-do-item-modal__text-input{
+    display:inline;
     text-align: center;
-    width: 35rem;
+    width: 100%;
 }
 .to-do-item-modal__input{
-    text-align:center;
-    width:98% !important;
-    display:flex;
-    justify-self: center !important;
-    
+    display:inline;
+    text-align: center;
+    width: 100%;
 }
 
 .to-do-item-modal__button-div{

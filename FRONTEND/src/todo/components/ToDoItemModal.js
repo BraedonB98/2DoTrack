@@ -195,7 +195,7 @@ return(<React.Fragment>
           <Button onClick={() =>{props.onClear();}}>Cancel</Button>
           <Button type="submit" onClick = {!props.taskId?newToDoSubmitHandler:editToDoSubmitHandler} disabled={!formState.isValid}> Submit </Button> </React.Fragment>}
     >
-      <form id ="to-do-item-modal__form" >
+      <div id ="to-do-item-modal__form" >
         <Input className = "to-do-item-modal__text-input to-do-item-modal__input" id="name" element="input" type ="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid task name." onInput={inputHandler} initialValue = {!props.taskId?"": loadedItem.name} initialValid = {!props.taskId?false:true}/>
         <Input className = "to-do-item-modal__input" id="priority" element="input" type = "range" min="1" max ="5" validators={[VALIDATOR_REQUIRE()]} label={`Priority - ${formState.inputs.priority.value}`}  onInput={inputHandler} initialValue = {!props.taskId?1: loadedItem.priority} initialValid = {true}/>
         <div className='to-do-item-modal__button-div'>
@@ -206,7 +206,7 @@ return(<React.Fragment>
         {(timeDependent) && <Input className = "to-do-item-modal__input" id="time" element="time" type = "time" label="Time"  onInput={inputHandler} validators={[VALIDATOR_REQUIRE()]} errorText = "Please select a time if it is due."initialValue = {(!props.taskId || !loadedItem.due)?"": loadedItem.due.time} initialValid = {!props.taskId?false:true}/>}
         {(addressDependent) && <Input className = "to-do-item-modal__text-input" id="address" element="input" label="Address" validators={[VALIDATOR_REQUIRE()]} errorText = "Please enter a valid address." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.address} initialValid = {!props.taskId?false:true}/>}
         <Input className = "to-do-item-modal__text-input" id="notes" element="textarea" label="Notes" validators={[VALIDATOR_MINLENGTH(5)]} errorText = "Please enter a valid description (at least 5 characters)." onInput={inputHandler} initialValue = {(!props.taskId)?"": loadedItem.notes} initialValid = {!props.taskId?false:true}/>
-      </form>
+      </div>
     </Modal>}
 </React.Fragment>)
 };
