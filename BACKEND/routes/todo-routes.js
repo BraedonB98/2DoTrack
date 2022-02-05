@@ -1,10 +1,11 @@
 const express = require('express');
-
+const checkAuth = require('../middleware/check-auth')
 
 const toDoController = require('../controllers/todo-controller');
 
 const router = express.Router();
 
+router.use(checkAuth);// every route after this requires an token
 
 router.post('/createitem',
     [],

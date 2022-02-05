@@ -5,6 +5,11 @@ const client = require('twilio')(accountSid, authToken);
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SendGridApi_Key);
+
+//------------------Auth----------------------------
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 //------------------Models------------------------------
 const HttpError = require('../models/http-error');
 const User = require('../models/user-model');
@@ -77,6 +82,14 @@ const createUser = async (req,res,next)=>{
         return(next(new HttpError('Could not create user, credentials already in use'),422));
     }
 
+    let hashedPassword;
+    try{
+        hashedPassword = await bcrypt.hash(password, 12);//12 is the number of salting rounds(how secure)
+    }
+    catch(error){
+        return(next(new HttpError('Could not set password correctly',500)));
+    }
+
     //Creating new user
     const createdUser = new User({
         name,
@@ -84,7 +97,7 @@ const createUser = async (req,res,next)=>{
         imageUrl:"data/uploads/images/default.svg",
         email,
         phoneNumber:('+1'+phoneNumber),
-        password,
+        password : hashedPassword,
         preferences:{
             notificationTime:0,
             notificationType:"None",
@@ -106,6 +119,18 @@ const createUser = async (req,res,next)=>{
     catch(error){
         return(next(new HttpError('Creating user failed',500)));
     };
+
+    //JWT Token
+    let token;
+    try{
+        token = jwt.sign({_id: createUser.id, email: createdUser.email, name: createUser.name }, process.env.JWT_Key,{expiresIn:'2h'})
+    }
+    catch(error)
+    {
+        return(next(new HttpError('Creating user failed',500)));
+    }
+
+
     //SMS Notification with Twilio
     client.messages
         .create({
@@ -132,7 +157,7 @@ const createUser = async (req,res,next)=>{
         })
 
 
-    res.status(201).json({user:createdUser.toObject({getters:true})})
+    res.status(201).json({_id:createUser._id,email:createdUser.email,token:token})
 }
 const login = async (req,res,next)=>{
     const { email, phoneNumber, password }= req.body;
@@ -146,11 +171,30 @@ const login = async (req,res,next)=>{
         existingUser=await getUserByProp ('phoneNumber',phoneNumber);
         if(!!existingUser.error){return(next(new HttpError(existingUser.errorMessage, existingUser.errorCode)))}
     }   
+    
     //Checking Passwords
-    if( existingUser.password !== password){
+    let isValidPassword
+    try{
+        isValidPassword = await bcrypt.compare(password, existingUser.password)
+    }
+    catch(error)
+    {
+        return(next(new HttpError("Not able to check credentials", 500)));
+    }
+    if(!isValidPassword){
         return(next(new HttpError('Login Failed,invalid credentials', 401)));
     }
-    res.json({message: 'Logged in!' , user: existingUser.toObject({getters:true})})
+     //JWT Token
+     let token;
+     try{
+         token = jwt.sign({_id: existingUser.id, email: existingUser.email, name: existingUser.name }, process.env.JWT_Key,{expiresIn:'2h'})
+     }
+     catch(error)
+     {
+         return(next(new HttpError('Logging in user failed',500)));
+     }
+
+    res.json({_id:existingUser._id,email:existingUser.email,token:token})
 }
 
 const photoUpload = async(req,res,next)=>{
