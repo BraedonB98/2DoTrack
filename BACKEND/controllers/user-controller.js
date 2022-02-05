@@ -134,7 +134,7 @@ const createUser = async (req,res,next)=>{
     //SMS Notification with Twilio
     client.messages
         .create({
-            body: `Welcome ${createdUser.name} to 2DoFinance! We are happy to have you!!!`,
+            body: `Welcome ${createdUser.name} to 2DoTrack! We are happy to have you!!!`,
             from: process.env.TwilioApi_PhonNumber,
             to: `${createdUser.phoneNumber}`
         })
@@ -144,9 +144,9 @@ const createUser = async (req,res,next)=>{
     const msg = {
         to: createdUser.email,
         from: process.env.SendGridApi_Email, 
-        subject: 'Welcome to 2DoFinance!!!',
+        subject: 'Welcome to 2DoTrack!!!',
         text: `message`,
-        html: (`<p>Welcome ${createdUser.name},</p> <p>to 2DoFinance! We are happy to have you!!! </p> <p>If this is a mistake please let us know,</p> <p> your friends at,</p><h2>2DoFinance<h2>`)
+        html: (`<p>Welcome ${createdUser.name},</p> <p>to 2DoTrack! We are happy to have you!!! </p> <p>If this is a mistake please let us know,</p> <p> your friends at,</p><h2>2DoTrack<h2>`)
       }
       sgMail.send(msg)
         .then(() => {

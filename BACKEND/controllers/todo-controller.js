@@ -502,10 +502,7 @@ const transferCreator = async(req,res,next)=>{//same as move item except with us
     if(!!creator.error){return(next(new HttpError(creator.errorMessage, creator.errorCode)))}
     if(!creator){return(next(new HttpError("creator(new) not located in db", 404)))}
 
-    if(!item.users.includes(uidCreator))
-    {
-        return(next(new HttpError("Please share item with attempted new creator before transfering", 500)));
-    }
+    if(!item.users.includes(uidCreator)){return(next(new HttpError("Please share item with attempted new creator before transfering", 500)));}
 
     item.creator = uidCreator
 

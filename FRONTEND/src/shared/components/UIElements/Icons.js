@@ -1,7 +1,7 @@
 import React,{ useState, useEffect} from "react";
 import {AiFillAmazonCircle,AiFillAndroid,AiFillApple,AiFillBook,AiFillBug,AiFillCalculator,AiFillCalendar,AiFillCamera,AiFillCar,AiFillClockCircle,AiFillContacts,AiFillControl,AiFillCopyrightCircle,AiFillCreditCard,AiFillCrown,AiFillCustomerService,AiFillDashboard,AiFillDatabase,AiFillDelete,AiFillEdit,AiFillFacebook,AiFillFastBackward,AiFillFastForward,AiFillFileAdd,AiFillFileExcel,AiFillFileExclamation,AiFillFileImage,AiFillFilePpt,AiFillFileText,AiFillFire,AiFillFlag,AiFillFolderOpen,AiFillFormatPainter,AiFillFrown,AiFillFund,AiFillGift,AiFillGithub,AiFillGitlab,AiFillGoogleCircle,AiFillHeart,AiFillHighlight,AiFillHome,AiFillHourglass,AiFillIdcard,AiFillInfoCircle,AiFillInstagram,AiFillLayout,AiFillLike,AiFillLinkedin,AiFillLock,AiFillMedicineBox,AiFillMeh,AiFillMessage,AiFillMobile,AiFillPhone,AiFillPicture,AiFillPieChart,AiFillPrinter,AiFillRead,AiFillRobot,AiFillRocket,AiFillSetting,AiFillShop,AiFillShopping,AiFillSignal,AiFillSkin,AiFillSlackCircle,AiFillSliders,AiFillSmile,AiFillTablet,AiFillTags,AiFillThunderbolt,AiFillTool,AiFillUsb,AiFillVideoCamera,AiFillWallet, AiOutlineConsoleSql} from "react-icons/ai"
 import { BsFillBagFill } from "react-icons/bs";
-//const icons = [AiFillAmazonCircle,AiFillAndroid,AiFillApple,AiFillBook,AiFillBug,AiFillCalculator,AiFillCalendar,AiFillCamera,AiFillCar,AiFillClockCircle,AiFillContacts,AiFillControl,AiFillCopyrightCircle,AiFillCreditCard,AiFillCrown,AiFillCustomerService,AiFillDashboard,AiFillDatabase,AiFillDelete,AiFillEdit,AiFillFacebook,AiFillFastBackward,AiFillFastForward,AiFillFileAdd,AiFillFileExcel,AiFillFileExclamation,AiFillFileImage,AiFillFilePpt,AiFillFileText,AiFillFire,AiFillFlag,AiFillFolderOpen,AiFillFormatPainter,AiFillFrown,AiFillFund,AiFillGift,AiFillGithub,AiFillGitlab,AiFillGoogleCircle,AiFillHeart,AiFillHighlight,AiFillHome,AiFillHourglass,AiFillIdcard,AiFillInfoCircle,AiFillInstagram,AiFillLayout,AiFillLike,AiFillLinkedin,AiFillLock,AiFillMedicineBox,AiFillMeh,AiFillMessage,AiFillMobile,AiFillPhone,AiFillPicture,AiFillPieChart,AiFillPrinter,AiFillRead,AiFillRobot,AiFillRocket,AiFillSetting,AiFillShop,AiFillShopping,AiFillSignal,AiFillSkin,AiFillSlackCircle,AiFillSliders,AiFillSmile,AiFillTablet,AiFillTags,AiFillThunderbolt,AiFillTool,AiFillUsb,AiFillVideoCamera,AiFillWallet]
+
 const icons = [
     {
         name:"amazon",
@@ -42,7 +42,7 @@ const icons = [
         name:"calendar",
         search:["calendar"],
         value:<AiFillCalendar/>
-    },//!------------
+    },
     {
         name:"camera",
         search:["camera"],
