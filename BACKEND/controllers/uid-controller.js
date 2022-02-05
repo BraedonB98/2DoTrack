@@ -49,7 +49,13 @@ const getById = async (req,res,next)=> {
     const uid = req.params.uid;
     let user = await getUserById(uid); 
     if(!!user.error){return({error:user.error, errorMessage:user.errorMessage, errorCode:user.errorCode})}
-    res.status(200).json({user: user});
+    const userRestricted = {
+        name:user.name,
+        _id:user._id,
+        imageUrl:user.imageUrl,
+
+    }
+    res.status(200).json({user: userRestricted});
 }
 
 
@@ -79,7 +85,14 @@ const getUsersSearch = async (req,res,next)=>{ //dont want to let people search 
         }
     }
 
-    res.status(200).json({users: users});
+    const userRestricted = {
+        name:user.name,
+        _id:user._id,
+        imageUrl:user.imageUrl,
+
+    }
+
+    res.status(200).json({user: userRestricted});
 }
 
 //---------------------Exports--------------------------

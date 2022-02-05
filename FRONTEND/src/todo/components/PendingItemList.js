@@ -10,8 +10,6 @@ import "./styling/PendingTaskList.css"
 
 
 const PendingItemList = props=> {
-    //props.items=DUMMYITEMS;
-    //DUMMYITEMS = [];
     if(props.items.length === 0){
         return (
         <div className="todo-list center">

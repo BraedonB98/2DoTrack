@@ -134,7 +134,7 @@ const ToDoItemModal = props => {
               `${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props.taskId}`,
               'PATCH',
               JSON.stringify(taskEdited),
-              {'Content-Type': 'application/json'}
+              {'Content-Type': 'application/json' , 'Authorization':`Bearer ${auth.token}`}
             );
             taskEdited.status = loadedItem.status;
             taskEdited.creator = loadedItem.creator;
@@ -169,7 +169,7 @@ const ToDoItemModal = props => {
             `${process.env.REACT_APP_BACKEND_API_URL}/todo/createItem`,
             'POST',
             JSON.stringify(taskNew),
-            {'Content-Type': 'application/json'}
+            {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`}
           )
 
           props.submitted([newItem.task]);

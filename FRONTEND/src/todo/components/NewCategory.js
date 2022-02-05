@@ -38,7 +38,7 @@ const NewCategory = props=> {
                icon: iconSelected,
                uid:uid
              }),
-             {'Content-Type': 'application/json'}
+             {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`}
            )
            props.onSubmit([newCategory.category]);
          }

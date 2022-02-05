@@ -31,22 +31,22 @@ const FinancePage = React.lazy(()=> import('./finance/pages/FinancePage'))
 
 
 const App = () => {
-  const [isLoggedIn,setIsLoggedIn]=useState(false)
-  const[UID,setUID]= useState(false);
+  const [token,setToken]=useState()
+  const[UID,setUID]= useState();
   const[mobileDevice,setMobileDevice] = useState(false);// eslint-disable-line
   const[OS,setOS] = useState(false);// eslint-disable-line
-  const login = useCallback((uid) => {
+  const login = useCallback((uid,token) => {
     //console.log("logging in");
-    setIsLoggedIn(true);
+    setToken(token);
     setUID(uid);
   },[])
   const logout = useCallback(() => {
     //console.log("logging out");
-    setIsLoggedIn(false);
+    setToken(null);
     setUID(null);
   },[])
   let routes;
-  if (isLoggedIn){
+  if (token){
     routes = ( //if user logged in
     <Routes>
       <Route path='*'element = {<DashBoard/>}/> 
@@ -71,7 +71,8 @@ const App = () => {
   return (
     <AuthContext.Provider 
     value = {{
-      isLoggedIn,
+      isLoggedIn:!!token,
+      token,
       UID,
       login,
       logout}}

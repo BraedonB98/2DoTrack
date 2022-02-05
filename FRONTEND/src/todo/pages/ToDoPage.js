@@ -33,28 +33,28 @@ const ToDoPage = () => {
     useEffect( ()=>{
         const fetchCategories = async ()=>{
             try {
-                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/categories/${UID}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/categories/${auth.UID}`,'GET',null,{'Authorization':`Bearer ${auth.token}`});
                 setLoadedCategories(responseData.categories);
                 setLoadedCategory(responseData.categories[0]);
               }
               catch(err){}
           };
         fetchCategories();
-    },[sendRequest,UID])
+    },[sendRequest,auth])
 
     useEffect( ()=>{
         setNewCategory(false)
         setCategoryEditor(false)
         const fetchTasks = async ()=>{
             try {
-                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getItems/${UID}/${loadedCategory.name}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getItems/${auth.UID}/${loadedCategory.name}`,'GET',null,{'Authorization':`Bearer ${auth.token}`});
                 setLoadedTasks(responseData.items);
               }
               catch(err){}
       
           };
         fetchTasks();
-    },[sendRequest, UID,loadedCategory])
+    },[sendRequest, auth,loadedCategory])
 
 
     const taskDeletedHandler = (deletedTaskId) => {

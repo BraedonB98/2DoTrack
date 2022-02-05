@@ -43,7 +43,7 @@ const CategoryEditor = props=> {
                name : props.category.name,
                newName: formState.inputs.name.value
             }),
-               {'Content-Type': 'application/json'});
+               {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
             props.onEdit(category.category);
             setShowRename(false)
        }
@@ -61,7 +61,7 @@ const CategoryEditor = props=> {
             uid : uid,
             cid: props.category.name
             }),
-            {'Content-Type': 'application/json'});
+            {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
             props.onDelete(props.category); 
        }
         catch(error){}
@@ -79,7 +79,7 @@ const CategoryEditor = props=> {
                name : props.category.name,
                icon: icon
             }),
-               {'Content-Type': 'application/json'});
+               {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
             props.onEdit(category.category);
         }
         catch(error){

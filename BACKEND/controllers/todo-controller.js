@@ -15,6 +15,7 @@ const ToDoItem = require('../models/toDoItem-model');
 //-----------------------HelperFunctions-----------------------
 const getItemById = async(tid) =>{
     let item
+
     try{
         item = await ToDoItem.findById(tid);
     }
@@ -24,6 +25,8 @@ const getItemById = async(tid) =>{
     if(!item){
         return({error:true,errorMessage:'Task not in database',errorCode:404})
     }
+
+
     return(item);
 }
 
@@ -64,7 +67,35 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
 
        
        if(item.creator._id.toString() === uid){
-           //!------------------------------ still need to remove item for all users who share it-----------------------------------------
+           try{
+            item.users.map( async user => {
+                var found = false;
+                user = await getUserById(uid);
+                const index = user.pendingSharedTasks.indexOf(tid);
+                if (index > -1) { //removes pending requests
+                    found = true;//task inside of pending tasks
+                    user.pendingSharedTasks.splice(index, 1);
+                }  
+                user.categories.map( category => {
+                    const index = category.toDoList.indexOf(tid);
+                    if (index > -1) {
+                        found = true; //task inside of categories list
+                        category.toDoList.splice(index, 1);
+                    }  
+                })
+                if(found){
+                    await user.save();
+                }
+                else{
+                    return(null);
+                }
+            })
+            item.user.item.users.filter(user => user!=null);
+            await item.save();
+           }
+           catch(err){
+                return({error:err, errorMessage:"Something went wrong, could not from every user", errorCode:500})
+           }
            try {
                const sess = await mongoose.startSession();
                sess.startTransaction();
@@ -95,7 +126,8 @@ const deleteItemHelper = async (tid,oldCid,uid) => {
 
 //-----------------------Controllers------------------
 const createItem = async(req,res,next)=>{ //dont need to check for duplicates because they are ok
-    const{cid, uid, name, status,due,priority,address,notes}= req.body;//creator and users[0]= uid
+    const{cid, name, status,due,priority,address,notes}= req.body;//creator and users[0]= uid
+    uid = req.userData._id;
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -162,6 +194,10 @@ const editItem = async(req,res,next)=>{
     
             let item = await getItemById(tid);
             if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
+
+            if(!item.users.includes(req.userData._id)){
+                return(next(new HttpError("you are not authorized for editing this item", 401)));
+            }
     
             if(name){item.name = name};
             if(status){item.status = status};
@@ -202,7 +238,8 @@ const editItem = async(req,res,next)=>{
 }
 
 const deleteItem = async(req,res,next)=>{//make sure to delete entire if user is creator, otherwise just remove them from user list and item from category
-    const {tid, oldCid , uid}= req.body;
+    const {tid, oldCid }= req.body;
+    var uid = req.userData._id
     const deletingIssue = await deleteItemHelper(tid,oldCid ,uid);
     if(deletingIssue){return(next(new HttpError(deletingIssue.errorMessage, deletingIssue.errorCode)))}
     res.status(201).json({message:"deleted"})
@@ -213,14 +250,18 @@ const getItem = async(req,res,next)=>{
     //getting item from DB
     let item = await getItemById(tid);
     if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
- 
+
+    if(!item.users.includes(req.userData._id)){
+        return(next(new HttpError("you are not authorized for viewing this item", 401)));
+    }
 
     res.status(200).json({task: item.toObject({getters:true})});
 
 }
 
 const getItems= async(req,res,next)=>{ //all items from category
-    const {cid,uid} = req.params;
+    const {cid} = req.params;
+    uid = req.userData._id;
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -242,7 +283,8 @@ const getItems= async(req,res,next)=>{ //all items from category
 
 const moveItem = async(req,res,next)=>{ 
 
-    const{tid, uid, cid, oldCid}= req.body;
+    const{tid, cid, oldCid}= req.body;
+    const uid = req.userData._id;
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -307,6 +349,10 @@ const shareItem = async(req,res,next)=>{//max size of user inbox == 20
     if(!!itemExists.error){return(next(new HttpError(itemExists.errorMessage, itemExists.errorCode)))}
     if(!itemExists){return(next(new HttpError("to do item not located in db", 404)))}
 
+    if(!item.creator===req.userData._id){
+        return(next(new HttpError("you are not authorized for sharing this item, Only creators can share tasks", 401)));
+    }
+
     //get new category
     category = user.pendingSharedTasks;
     if (!category){return(next(new HttpError("Category Cant Be Located", 422)))};
@@ -317,9 +363,16 @@ const shareItem = async(req,res,next)=>{//max size of user inbox == 20
     //add to item to new category
     category.push(tid);    
 
+    //add user to item
+    item.users.push(user._id)
+
     //save user
     try{
-        await user.save();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await item.save({session: sess})
+        await user.save({session: sess});
+        await sess.commitTransaction();
     }
     catch(error){
         return(next(new HttpError('Could not update user in database', 500)));
@@ -329,7 +382,8 @@ const shareItem = async(req,res,next)=>{//max size of user inbox == 20
     res.status(201).json({category: category.toObject({getters:true})})
 }
 const acceptPendingSharedItem = async(req,res,next)=>{ 
-    const{tid, uid, cid}= req.body;
+    const{tid, cid}= req.body;
+    const uid = req.userData._id
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -344,9 +398,6 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     let item = await getItemById(tid)
     if(!item){return(next(new HttpError("to do item not located in db", 404)))}
     if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
-    
-
-  
 
     //get new category
     category = user.toDoCategories.filter(category => category.name === cid)[0]
@@ -358,16 +409,11 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     //add to item to new category
     category.toDoList.push(tid);    
 
-    //add user to item
-    item.users.push(user._id)
+    
 
     //save user
     try{
-        const sess = await mongoose.startSession();
-        sess.startTransaction();
-        await item.save({session: sess})
-        await user.save({session: sess});
-        await sess.commitTransaction();
+        await user.save();
     }
     catch(error){
         console.log(error);
@@ -379,7 +425,8 @@ const acceptPendingSharedItem = async(req,res,next)=>{
     res.status(201).json({item: item})
 }
 const dismissPendingSharedItem = async(req,res,next)=>{ 
-    const{tid, uid}= req.body;
+    const{tid}= req.body;
+    const uid = req.userData._id;
     //get user
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -387,11 +434,24 @@ const dismissPendingSharedItem = async(req,res,next)=>{
     //removing item from old category
     user.pendingSharedTasks = user.pendingSharedTasks.filter(item => item._id.toString()!==tid)
     
+    //check item 
+    let item = await getItemById(tid)
+    if(!item){return(next(new HttpError("to do item not located in db", 404)))}
+    if(!!item.error){return(next(new HttpError(item.errorMessage, item.errorCode)))}
 
+    //remove user from user array
+    const index = user.pendingSharedTasks.indexOf(tid);
+    if (index > -1) {
+        user.pendingSharedTasks.splice(index, 1);
+    }  
 
     //save user
     try{
-        await user.save();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await item.save({session: sess})
+        await user.save({session: sess});
+        await sess.commitTransaction();
     }
 
     catch(error){
@@ -404,7 +464,7 @@ const dismissPendingSharedItem = async(req,res,next)=>{
 }
 
 const getPendingSharedItems = async(req,res,next)=>{
-    const uid = req.params.uid;;
+    const uid = req.userData._id;
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -419,10 +479,10 @@ const getPendingSharedItems = async(req,res,next)=>{
    
 }
 const transferCreator = async(req,res,next)=>{//same as move item except with user not item.
-    const{uidOldCreator, uidCreator, tid}= req.body;
-
+    const{uidCreator, tid}= req.body;
+    const uidOldCreator = req.userData._id; // only the authentic creator can transfer creator
     //make sure its not the same creator
-    if(uidOldCreator=== uidCreator){ return(next(new HttpError("You are already the owner", 409)))}
+    if(uidOldCreator === uidCreator){ return(next(new HttpError("You are already the owner", 409)))}
 
     //get task
     let item = await getItemById(tid);
@@ -430,6 +490,8 @@ const transferCreator = async(req,res,next)=>{//same as move item except with us
 
     //make sure user owns item
     if(uidOldCreator!==item.creator._id.toString()){ return(next(new HttpError("Sorry you are not the creator of this task", 409)))}
+
+    
 
     //Make sure users exist
     let creator = await userController.userInDataBase(uidOldCreator)
@@ -440,22 +502,30 @@ const transferCreator = async(req,res,next)=>{//same as move item except with us
     if(!!creator.error){return(next(new HttpError(creator.errorMessage, creator.errorCode)))}
     if(!creator){return(next(new HttpError("creator(new) not located in db", 404)))}
 
-    
+    if(!item.users.includes(uidCreator))
+    {
+        return(next(new HttpError("Please share item with attempted new creator before transfering", 500)));
+    }
+
     item.creator = uidCreator
 
         //save task
-       // try{
-         //   await item.save();
-       // }
-        //catch(error){
-         //   return(next(new HttpError('Could not update user in database', 500)));
-        //}
+        try{
+           await item.save();
+        }
+        catch(error){
+            return(next(new HttpError('Could not update item in database', 500)));
+        }
 
     res.status(201).json({item:item.toObject({getters:true})})
 }
 const createCategory = async(req,res,next)=>{
-    const{uid, name, icon}= req.body;
-
+    const{name, icon}= req.body;
+    const uid = req.userData._id;
+    if(!icon)
+    {
+        return(next(new HttpError("Please Select a valid icon", 422)))
+    }
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -484,8 +554,8 @@ const createCategory = async(req,res,next)=>{
     res.status(201).json({category: user.toDoCategories[user.toDoCategories.length-1]})
 }
 const changeCategoryIcon = async(req,res,next)=>{
-    const{uid, name , icon}= req.body;
-
+    const{ name , icon}= req.body;
+    const uid = req.userData._id;
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -511,8 +581,8 @@ const changeCategoryIcon = async(req,res,next)=>{
     res.status(201).json({category: category})
 }
 const renameCategory = async(req,res,next)=>{
-    const{uid, name , newName}= req.body;
-
+    const{name , newName}= req.body;
+    const uid = req.userData._id;
     //Find User
     let user = await getUserById(uid); 
     if(!!user.error){return(next(new HttpError(user.errorMessage, user.errorCode)))}
@@ -539,7 +609,8 @@ const renameCategory = async(req,res,next)=>{
     res.status(201).json({category: category.toObject({getters:true})})
 }
 const deleteCategory = async(req,res,next)=>{ 
-     const {cid,uid} = req.body;
+     const {cid} = req.body;
+     const uid = req.userData._id;
      if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
      if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
     //Find User
@@ -570,7 +641,8 @@ const deleteCategory = async(req,res,next)=>{
     res.status(200).json({category:oldCat})
 }
 const getCategory = async(req,res,next)=>{
-    const {cid,uid} = req.params;
+    const {cid} = req.params;
+    const uid = req.userData._id;
     if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
     if(cid===undefined){return(next(new HttpError("Please provide cid", 400 )))}
     //Find User
@@ -585,7 +657,7 @@ const getCategory = async(req,res,next)=>{
 }
 
 const getCategories = async (req,res,next)=>{
-    const {uid} = req.params;
+    const uid = req.userData._id;
     if(uid===undefined){return(next(new HttpError("Please provide uid", 400 )))}
     //Find User
     let user = await getUserById(uid); 

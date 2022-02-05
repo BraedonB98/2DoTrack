@@ -64,7 +64,7 @@ const userInDataBase = async(uid) =>{
 //-----------------------Controllers------------------
 const createUser = async (req,res,next)=>{
     const{name, email,phoneNumber, password }= req.body;
-
+    
     //Checking if user already has account
     let existingUser; 
     try{
@@ -106,7 +106,7 @@ const createUser = async (req,res,next)=>{
         },
         toDoCategories:[{
             name:"To Do",
-            icon:" ",
+            icon:"setting",
             toDoList:[]
         }],
         financeAccounts:[],
@@ -160,6 +160,7 @@ const createUser = async (req,res,next)=>{
     res.status(201).json({_id:createUser._id,email:createdUser.email,token:token})
 }
 const login = async (req,res,next)=>{
+    
     const { email, phoneNumber, password }= req.body;
     //Locating User
     let existingUser;
@@ -198,8 +199,7 @@ const login = async (req,res,next)=>{
 }
 
 const photoUpload = async(req,res,next)=>{
-    //getting params from url
-    const uid = req.params.uid;
+    const uid = req.userData._id;
     
     //getting user from DB
     let user = await getUserById(uid);
@@ -230,7 +230,7 @@ const photoUpload = async(req,res,next)=>{
 }
 const getPreferences = async (req,res,next)=>{
     //getting params from url
-    const uid = req.params.uid;
+    const uid = req.userData._id;
     
     //getting user from DB
     let user = await getUserById(uid);
@@ -240,8 +240,8 @@ const getPreferences = async (req,res,next)=>{
     res.status(200).json({preferences: user.preferences.toObject({getters:true})});
 }
 const updatePreferences = async (req,res,next)=>{
-        //getting params from url
-        const uid = req.params.uid;
+        
+        const uid = req.userData._id;
         const {preferences}= req.body;
 
         //getting user from DB

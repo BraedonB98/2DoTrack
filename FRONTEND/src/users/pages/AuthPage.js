@@ -73,7 +73,8 @@ const AuthPage = () => {
                 email: formState.inputs.email.value,
                 password : formState.inputs.password.value}),
                 {'Content-Type': 'application/json'});
-            auth.login(responseData.user._id);
+                console.log(responseData)
+            auth.login(responseData._id, responseData.token);
             navigate('/');
 
           }
@@ -91,7 +92,7 @@ const AuthPage = () => {
                 phoneNumber: formState.inputs.phoneNumber.value,
                 password : formState.inputs.password.value}),
                 {'Content-Type': 'application/json'});
-            auth.login(responseData.user._id);
+            auth.login(responseData._id,responseData.token);
             navigate('/')
           }
           catch(error){}

@@ -53,7 +53,7 @@ const ToDoItem = props => {
                JSON.stringify({
                  tid : props._id,
                  uid : UID}),
-                 {'Content-Type': 'application/json'});
+                 {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
                props.onDeleteTask(props._id);
           }
            catch(error){}
@@ -66,7 +66,7 @@ const ToDoItem = props => {
                JSON.stringify({
                 tid : props._id,
                 uid: UID}),
-                 {'Content-Type': 'application/json'});
+                 {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
                  props.onDismissTask(props._id);
                
           }
@@ -97,7 +97,7 @@ const ToDoItem = props => {
             await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Started"}),
-             {'Content-Type': 'application/json'});
+             {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
 
              props.onStatusChange(props._id,"Started")
            
@@ -113,7 +113,7 @@ const ToDoItem = props => {
             await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props._id}`,'PATCH',
            JSON.stringify({
              status : "Complete"}),
-             {'Content-Type': 'application/json'});
+             {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
             props.onStatusChange(props._id,"Complete")
       }
        catch(error){
@@ -128,7 +128,7 @@ const ToDoItem = props => {
                     tid : props._id,
                     uid: user._id
                  }),
-                {'Content-Type': 'application/json'});
+                {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
 
             setShowShareModal(false);
         }
@@ -144,13 +144,13 @@ const ToDoItem = props => {
     }
     useCallback( ()=>{
         const getCreator = async() =>{
-            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/user/${props.creator}`)
+            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/user/${props.creator}`,'GET',null,{'Authorization':`Bearer ${auth.token}`})
             console.log(responseData)
             setCreatorInfo(responseData.user);
         }
         
         getCreator();
-    },[props.creator,sendRequest])
+    },[props.creator,sendRequest, auth.token])
 
    
 

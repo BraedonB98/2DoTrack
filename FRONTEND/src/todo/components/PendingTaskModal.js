@@ -16,13 +16,13 @@ const PendingTaskModal = props => {
     useEffect( ()=>{
         const fetchPendingTasks = async () =>{
             try {
-                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getPendingSharedItems/${UID}`);
+                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getPendingSharedItems/${auth.UID}`,'GET', null, {'Authorization':`Bearer ${auth.token}`});
                 setPendingTasks(responseData.items);
             }
             catch(err){}
         }
         fetchPendingTasks();
-    },[sendRequest,UID])
+    },[sendRequest,auth])
 
     const taskDismissHandler = (dismissedTaskId) => {
         console.log("pendingTasks");
@@ -42,7 +42,7 @@ const PendingTaskModal = props => {
                     uid: UID,
                     cid: props.category.name
                  }),
-                {'Content-Type': 'application/json'});
+                {'Content-Type': 'application/json', 'Authorization':`Bearer ${auth.token}`});
                 taskAccepted = taskAccepted.item
                 setPendingTasks(pendingTasks.filter(task => task._id.toString() !== taskAccepted._id));
                 props.onTaskAccepted(taskAccepted);
