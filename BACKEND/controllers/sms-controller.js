@@ -11,20 +11,13 @@ const HttpError = require('../models/http-error');
 
 //const util = require('util')
 
+
 const smsManager = async (req,res,next)=>{
     const twiml = new MessagingResponse();
-    //const phoneNumber = twiml.from;
-    phoneNumber = req.body.From;
-    console.log(phoneNumber)
-    const user = await userController.getUserByProp('phoneNumber',phoneNumber) ;
-    console.log(user)
+    const user = req.userData ;
     if(!!user.error){return(next(new HttpError(user.error.message, user.error.code)))}
     //console.log(util.inspect(req.body, {showHidden: false, depth: null, colors: true}))
-    console.log(req.body.Body);
-    
-
-    twiml.message(`Hi ${user.name}, I see you are contacting us from ${phoneNumber}, thank you for contacting 2do finance we value your business and will try to contact you shortly about your issue with" ${req.body.Body}"`);
-  
+    twiml.message(`Hi ${user.name}, I see you are contacting us from ${user.phoneNumber}, thank you for contacting 2dotrack we value your business and will try to contact you shortly about your issue with" ${req.body.Body}"`);
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
 }

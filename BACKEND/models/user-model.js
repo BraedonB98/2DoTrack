@@ -33,7 +33,8 @@ const userSchema = new Schema({
             transactionList:[{type:mongoose.Types.ObjectId, ref: 'Transaction'}]
         }]
     }],
-    recurringExpenses:[{type:mongoose.Types.ObjectId, ref: 'Transaction'}]
+    recurringExpenses:[{type:mongoose.Types.ObjectId, ref: 'Transaction'}],
+    conversationSID:{type:String}
 });
 
 

@@ -49,7 +49,7 @@ const ToDoItemModal = props => {
         if(!loadedItem || props.taskId!==loadedItem.id){  //|| will fail out before checking second
           try { 
             let responseData
-            responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getitem/${props.taskId}`);
+            responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getitem/${props.taskId}`,'GET',null,{ 'Authorization':`Bearer ${auth.token}`});
             setLoadedItem(responseData.task);
           }
           catch(err){}

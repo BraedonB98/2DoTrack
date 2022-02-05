@@ -36,10 +36,13 @@ const getUserById = async(uid) =>{
 
 const getUserByProp = async(prop,value) =>{
     let user
+    console.log(value)
+    console.log(prop)
     try{
         user = await User.findOne({[prop]:value});//dynamic property
     }
     catch(error){
+        console.log(error)
         return({error:error,errorMessage:`Accessing database failed`, errorCode:500})
     };
     if(!user){
