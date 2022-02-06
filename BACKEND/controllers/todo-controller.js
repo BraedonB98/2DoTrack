@@ -57,15 +57,7 @@ const deleteItemHelper = async (tid, oldCid, uid) => {
     };
   }
 
-  //getting user
-  let user = await getUserById(uid);
-  if (!!user.error) {
-    return {
-      error: user.error,
-      errorMessage: user.errorMessage,
-      errorCode: user.errorCode,
-    };
-  }
+
 
   if (item.creator._id.toString() === uid) {
     //if user is creator
@@ -105,34 +97,27 @@ const deleteItemHelper = async (tid, oldCid, uid) => {
       }
     } 
     else {
-    //if user is just shared
-    let oldCategory;
-    if (oldCid === undefined) {
-      //find category from searching
-      oldCategory = user.toDoCategories.filter(
-        (category) =>
-          category.toDoList.filter((item) => item._id.toString() === tid)
-            .length !== 0
-      )[0];
-    } else {
-      //alot more efficient than way above
-      oldCategory = user.toDoCategories.filter(
-        (category) => category.name === oldCid
-      )[0];
-    }
-    if (!oldCategory) {
-      return {
-        error: true,
-        errorMessage: "Task/Category Cant Be Located",
-        errorCode: 422,
-      };
-    }
-    oldCategory.toDoList = oldCategory.toDoList.filter(
-      (item) => item._id.toString() !== tid
-    );
+      //getting user
+  let user = await getUserById(uid);
+  if (!!user.error) {
+    return {
+      error: user.error,
+      errorMessage: user.errorMessage,
+      errorCode: user.errorCode,
+    };
+  } 
 
+  
+    user = await getUserById(uid);
+    user.pendingSharedTasks = user.pendingSharedTasks.filter(task => task._id.toString()!==tid)
+
+    user.toDoCategories = user.toDoCategories.map((category) => {
+        category.toDoList = category.toDoList.filter((task)=>task._id.toString()!==tid)
+        return(category);
+    });
+    item.users = item.users.filter(user => user.toString() !== uid);
     try {
-      //removing item from old category
+      await item.save()
       await user.save();
     } catch (err) {
       return {
