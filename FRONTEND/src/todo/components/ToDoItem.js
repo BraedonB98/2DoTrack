@@ -122,6 +122,7 @@ const ToDoItem = props => {
     }
     const shareTask = async event =>{
         const user = JSON.parse(event.target.value)
+        console.log(user);
         try{
             await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/shareItem`,'PATCH',
                 JSON.stringify({

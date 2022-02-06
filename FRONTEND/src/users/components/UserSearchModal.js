@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useContext} from 'react';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import Modal from '../../shared/components/UIElements/Modal';
@@ -6,10 +6,11 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import UserSearchList from './UserSearchList'
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import './styling/UserSearchModal.css';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const ToDoItemModal = props => {
     
-   
+    const auth = useContext(AuthContext);
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [selectedUser , setSelectedUser]= useState();
     const [searchedUsers, setSearchedUsers]= useState();
@@ -27,7 +28,7 @@ const ToDoItemModal = props => {
     const searchUser = async search =>{
         try{
             if(search.length >= 2){
-            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/userssearch/${search}`);
+            const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/uid/userssearch/${search}`,'GET',null,{ 'Authorization':`Bearer ${auth.token}`});
             setSearchText("");
             setSearchedUsers(responseData.users)
             }

@@ -26,9 +26,9 @@ const UserSearchList = props=> {
         {
         props.users.map( user => 
             <UserSearchItem 
-            _id={user._id} 
-            key={user._id}
-            className = {(user._id === selectedUser)?"user-search-item__selected-item":""}
+            _id={user._id.toString()} 
+            key={user._id.toString()}
+            className = {(user._id.toString() === selectedUser)?"user-search-item__selected-item":""}
             name={user.name} 
             imageUrl={user.imageUrl} 
             onSelectedUser = {event => {setSelectedUser(event.target.value._id);props.onSelectedUser(event)}} />)}

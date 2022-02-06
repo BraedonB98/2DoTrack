@@ -46,7 +46,8 @@ const ToDoItemModal = props => {
    
     useEffect( ()=>{
       const fetchItem = async ()=>{
-        if(!loadedItem || props.taskId!==loadedItem.id){  //|| will fail out before checking second
+        
+        if(!loadedItem || props.taskId!==loadedItem.id){  //Only run fetch if loaded item has changed
           try { 
             let responseData
             responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_API_URL}/todo/getitem/${props.taskId}`,'GET',null,{ 'Authorization':`Bearer ${auth.token}`});
@@ -55,16 +56,13 @@ const ToDoItemModal = props => {
           catch(err){}
         }
       };
-      if(props.taskId){fetchItem();}
-      if(loadedItem.address)
-        {
-          setAddressDependent(true)
-        }
-        if(loadedItem.due){
-          setTimeDependent(true)
-        }
+      if(props.taskId){fetchItem();}//if its an edited item
+      if(loadedItem.address){setAddressDependent(true)}//these should run even if it is the same item
+      else{setAddressDependent(false)}
+      if(loadedItem.due){setTimeDependent(true)}
+      else{setTimeDependent(false)}
         
-    },[sendRequest,props.taskId, loadedItem])
+    },[sendRequest,props.taskId, loadedItem ,auth.token])
 
         
       useEffect( ()=>{
@@ -82,13 +80,13 @@ const ToDoItemModal = props => {
             isValid: loadedItem?true:formState.inputs.notes.valid
           },
           address: {
-            value: addressDependent?loadedItem.address:"",
+            value: loadedItem.address?loadedItem.address:"",
             isValid: true
           },
           due: {
-            value: timeDependent?{
-                date:timeDependent&&loadedItem.due?loadedItem.due.date:'',
-                time:timeDependent&&loadedItem.due?loadedItem.due.time:''
+            value: loadedItem.due?{
+                date:loadedItem.due.date?loadedItem.due.date:'',
+                time:loadedItem.due.time?loadedItem.due.time:''
             }:undefined,
             isValid: true
           }
@@ -121,25 +119,23 @@ const ToDoItemModal = props => {
           due: formState.inputs.due.value,
           notes: formState.inputs.notes.value,
         }
+        
         try {
           if(!addressDependent){
-           taskEdited.address=undefined;
-           taskEdited.location=undefined;
+            taskEdited.address=undefined;
           }
           if(!timeDependent){
             taskEdited.due=undefined;
           }
           
-          await sendRequest(
+          const itemEdited = await sendRequest(
               `${process.env.REACT_APP_BACKEND_API_URL}/todo/edititem/${props.taskId}`,
               'PATCH',
               JSON.stringify(taskEdited),
               {'Content-Type': 'application/json' , 'Authorization':`Bearer ${auth.token}`}
             );
-            taskEdited.status = loadedItem.status;
-            taskEdited.creator = loadedItem.creator;
-            setLoadedItem(taskEdited);
-            props.submitted(taskEdited);
+            setLoadedItem(itemEdited.item);
+            props.submitted(itemEdited.item);
         }
         catch(err){}
         
@@ -160,7 +156,6 @@ const ToDoItemModal = props => {
           }
             if(!addressDependent){
             taskNew.address=undefined;
-            taskNew.location=undefined;
            }
            if(!timeDependent){
              taskNew.due=undefined;

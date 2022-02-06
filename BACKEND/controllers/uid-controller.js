@@ -67,7 +67,14 @@ const getUsersSearch = async (req,res,next)=>{ //dont want to let people search 
     {
         //search by email
         try{
-            users.push(await User.findOne({email:email}));
+            const user = await User.findOne({email:email})
+            const userRestricted = {
+                name:user.name,
+                _id:user._id,
+                imageUrl:user.imageUrl,
+        
+            }
+            users.push(userRestricted);
         }
         catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}
         if(!users)
@@ -76,7 +83,7 @@ const getUsersSearch = async (req,res,next)=>{ //dont want to let people search 
     //else search by name
     else{
         try{
-            users = await User.find({name:{"$regex" : search, "$options":"i"}}).limit(100).sort({name:-1}).select({name:1, imageUrl:1});//Limit of 100 users from the search, may want to add .sort()later
+            users = await User.find({name:{"$regex" : search, "$options":"i"}}).limit(100).sort({name:-1}).select({name:1, imageUrl:1 , _id:1});//Limit of 100 users from the search, may want to add .sort()later
         }
         catch(error){return(next(new HttpError('Login Failed,Could not access database', 500)));}
         if(!users)
@@ -84,15 +91,10 @@ const getUsersSearch = async (req,res,next)=>{ //dont want to let people search 
             return(next(new HttpError('Could not any users with that name', 404)));
         }
     }
+    
+    
 
-    const userRestricted = {
-        name:user.name,
-        _id:user._id,
-        imageUrl:user.imageUrl,
-
-    }
-
-    res.status(200).json({user: userRestricted});
+    res.status(200).json({users: users});
 }
 
 //---------------------Exports--------------------------
