@@ -17,7 +17,6 @@ const User = require("../models/user-model");
 //----------------------HelperFunction------------------
 const getUserById = async (uid) => {
   let user;
-  console.log(user);
   if (typeof uid === "string") {
     var ObjectID = require("mongodb").ObjectID;
     uid = new ObjectID(uid);
@@ -43,8 +42,6 @@ const getUserById = async (uid) => {
 
 const getUserByProp = async (prop, value) => {
   let user;
-  console.log(value);
-  console.log(prop);
   try {
     user = await User.findOne({ [prop]: value }); //dynamic property
   } catch (error) {
@@ -155,13 +152,11 @@ const createUser = async (req, res, next) => {
   }
 
   //SMS Notification with Twilio
-  client.messages
-    .create({
-      body: `Welcome ${createdUser.name} to 2DoTrack! We are happy to have you!!!`,
-      from: process.env.TwilioApi_PhonNumber,
-      to: `${createdUser.phoneNumber}`,
-    })
-    .then((message) => console.log(message.sid));
+  client.messages.create({
+    body: `Welcome ${createdUser.name} to 2DoTrack! We are happy to have you!!!`,
+    from: process.env.TwilioApi_PhonNumber,
+    to: `${createdUser.phoneNumber}`,
+  });
 
   //Email Notification with SendGrid(twilio)
   const msg = {
@@ -171,14 +166,9 @@ const createUser = async (req, res, next) => {
     text: `message`,
     html: `<p>Welcome ${createdUser.name},</p> <p>to 2DoTrack! We are happy to have you!!! </p> <p>If this is a mistake please let us know,</p> <p> your friends at,</p><h2>2DoTrack<h2>`,
   };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log(`Email to ${createdUser.email}`);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  sgMail.send(msg).catch((error) => {
+    console.error(error);
+  });
 
   res
     .status(201)
