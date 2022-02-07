@@ -219,10 +219,10 @@ const ToDoPage = () => {
         {!isLoading && loadedCategory && (
           <div className="todo-page__header">
             <Button
-              className="todo-page__new-category-button"
+              className="todo-page__header-button todo-page__header-category-button"
               onClick={handleNewCategory}
             >
-              New Category
+              {/*New Category text set is css */}
             </Button>
             <div className="todo-page__category-header">
               <Button
@@ -232,7 +232,7 @@ const ToDoPage = () => {
                 &lt;
               </Button>
               <Button
-                className="todo-page__current-category-header"
+                className="todo-page__header-button"
                 onClick={handleCategoryEditor}
               >
                 <Icon name={loadedCategory.icon} /> {loadedCategory.name}{" "}
@@ -247,7 +247,7 @@ const ToDoPage = () => {
               </Button>
             </div>
             <Button
-              className="todo-page__new-to-do-item-button"
+              className="todo-page__header-button"
               onClick={handleNewTask}
             >
               New Task

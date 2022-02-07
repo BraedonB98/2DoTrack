@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
 
-:root{
-  --colorPrimary: #316B83; 
-  --colorPrimaryVariant: #316B83; 
-  --colorSecondary: #6D8299; /* Cards Buttons */
-  --colorSecondaryVariant: #8CA1A5; /* Nav Bar, Modal Header*/
-  --colorBackground: #D5BFBF; /*Page Background*/
-  --colorSurface: #D5BFBF;
+:root {
+  --colorPrimary: #316b83;
+  --colorPrimaryVariant: #316b83;
+  --colorSecondary: #6d8299; /* Cards Buttons */
+  --colorSecondaryVariant: #8ca1a5; /* Nav Bar, Modal Header*/
+  --colorBackground: #d5bfbf; /*Page Background*/
+  --colorSurface: #d5bfbf;
   --colorError: red;
   --colorOnPrimary: black;
   --colorOnSecondary: black;
@@ -17,23 +17,13 @@
   --colorOnError: black;
 }
 
-
-
-
-.header {width:10%; }
-
 #content {
-  padding-left:2.5%;
-  width:95%;
+  width: 100%;
   height: 100%;
-  
 }
 
-
-
-
 html {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 body {
@@ -68,7 +58,3 @@ body {
   justify-content: center;
   align-items: center;
 }
-
-
-
-

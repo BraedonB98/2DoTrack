@@ -1,52 +1,58 @@
-.todo-page__contents{
-    display:inline;
-    align-content:center;
+.todo-page__header {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  align-items: baseline;
+  margin: 1%;
 }
-.todo-page__header{ 
-    display:grid;
+.todo-page__header-button {
+  white-space: nowrap;
+  padding-left: 0%;
+  padding-right: 0%;
+}
+.todo-page__category-header {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  align-items: baseline;
+}
+
+.todo-page__arrow-item-button {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.todo-page__header-category-button:after {
+  content: "New Cat";
+}
+
+@media all and (min-width: 1081px) {
+  .todo-page__current-category-header {
+    font-size: x-large;
+  }
+  .todo-page__header {
+    font-size: x-large;
+  }
+  .todo-page__header-category-button:after {
+    content: "New Category";
+  }
+}
+@media all and (min-width: 630px) and (max-width: 1080px) {
+  .todo-page__header-category-button:after {
+    content: "New Category";
+  }
+}
+
+@media all and (max-width: 450px) {
+  .todo-page__header {
+    font-size: x-small;
+  }
+  .todo-page__arrow-item-button {
+    display: none;
+  }
+  .todo-page__header {
     grid-template-columns: 1fr 1fr 1fr;
-    justify-items: center;
-    align-items:baseline;
-    width: 95% !important;
+  }
+  .todo-page__category-header {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }
-
-.todo-page__new-to-do-item-button {
-    white-space:nowrap;
-    font-size: medium; 
-    display:flex;
-    justify-self:center;
-    margin: 2%;
-    
-}
-.todo-page__category-header{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-items: center;
-    align-items:baseline;
-}
-.todo-page__current-category-header{
-    white-space: nowrap;
-}
-.todo-page__new-category-button{
-    white-space:nowrap;
-}
-
-.todo-page__arrow-item-button{
-    margin-left:0.5;
-    margin-right:0.5;
-}
-.todo-page__task-list{
-    width:100%;
-}
-
-@media all and (min-width: 1081px) and (-webkit-min-device-pixel-ratio: 0.99) {
-    .todo-page__current-category-header{
-        font-size: large;
-    }
-}
-@media all and (max-width: 725px) and (-webkit-min-device-pixel-ratio: 0.99) {
-    .todo-page__current-category-header{
-        font-size: small;
-    }
-}
-

@@ -1,78 +1,149 @@
-.todo-item__content {
-    padding: 0;
-    margin :1%;
-    width:98%!important;
-  }
-.todo-item__header:hover{
-    cursor: pointer;
-  }
+.todo-item__container {
+  padding: 0;
+  margin: 1%;
+}
+
+/*Header Item Styling*/
+.todo-item__header:hover {
+  cursor: pointer;
+}
 
 .todo-item__header {
-    padding: 1%;
-    display:block;
-  }
-  .todo-item__header p {
-    margin: 0;
-    padding: 1%;
-    
-  }
-  .todo-item__header h2 {
-    margin: 0;
-    padding: 1%;
-    display:inline;
-  }
-  .todo-item__share{
-    float:right;
-    margin:auto;
-    padding-bottom: auto;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-  }
-  .todo-item__notes{
-    white-space: pre-wrap;
-    margin:1%
+  padding: 1%;
+}
+.todo-item__header p {
+  margin: 0;
+  padding: 1%;
+}
+.todo-item__header h2 {
+  margin: 0;
+  padding: 1%;
+  display: inline;
+}
+.todo-item__share {
+  float: right;
+  padding: 1%;
+  margin: 1%;
+}
+
+/*Expanded Item Styling*/
+.todo-item__expand {
+  padding: 0rem;
+  padding-bottom: 2%;
+  text-align: center;
+  border-top: 1px solid var(--colorSecondaryVariant);
+}
+.todo-item__expand-buttons {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  margin: 0;
+  margin-left: 1%;
+  padding: 0;
+}
+.todo-item__notes {
+  white-space: pre-wrap;
+  margin: 1%;
+}
+
+/*Icon Coloring*/
+.todo-item__icon-1 {
+  color: darkslategray;
+}
+.todo-item__icon-2 {
+  color: black;
+}
+.todo-item__icon-3 {
+  color: yellow;
+}
+.todo-item__icon-4 {
+  color: orange;
+}
+.todo-item__icon-5 {
+  color: red;
+}
+
+/*Map modal styling*/
+.todo-item__map-container {
+  height: 20rem;
+}
+.todo-item__map-modal-content {
+  padding: 0;
+}
+.todo-item__map-modal-actions {
+  text-align: right;
+}
+
+/*Media Sizing*/
+.todo-item__view-map-button:after {
+  content: "Map";
+}
+.todo-item__start-task-button:after {
+  content: "Start";
+}
+.todo-item__finish-task-button:after {
+  content: "Finish";
+}
+.todo-item__delete-button:after {
+  content: "Delete";
+}
+.todo-item__dismiss-button:after {
+  content: "Dismiss";
+}
+.todo-item__edit-button:after {
+  content: "Edit";
+}
+
+@media all and (min-width: 1081px) {
+  .todo-item__start-task-button:after {
+    content: "Start Task";
   }
 
-  .todo-item__modal-content {
-    padding: 0;
+  .todo-item__finish-task-button:after {
+    content: "Finish Task";
   }
-  .todo-item__modal-actions {
-    text-align: right;
+  .todo-item__view-map-button:after {
+    content: "View On Map";
   }
+}
+@media all and (min-width: 680px) and (max-width: 1080px) {
+  .todo-item__start-task-button:after {
+    content: "Start Task";
+  }
+  .todo-item__view-map-button:after {
+    content: "View On Map";
+  }
+  .todo-item__finish-task-button:after {
+    content: "Finish Task";
+  }
+}
 
-  .todo-item__expand {
-    padding: 0rem;
-    padding-bottom: 2%;
-    text-align: center;
-    border-top: 1px solid var(--colorSecondaryVariant);
+@media all and (max-width: 450px) {
+  .todo-item__header {
+    font-size: smaller;
   }
-  .map-container {
-    height:20rem;
-    width:100%;
+  .todo-item__notes {
+    font-size: small;
   }
-  .todo-item__icon-1{
-    color:darkslategray;
+  .todo-item__start-task-button:after {
+    content: "Start";
+    font-size: small;
   }
-  .todo-item__icon-2{
-    color:black;
+  .todo-item__delete-button:after {
+    font-size: small;
   }
-  .todo-item__icon-3{
-    color:yellow;
+  .todo-item__dismiss-button:after {
+    font-size: small;
   }
-  .todo-item__icon-4{
-    color:orange;
+  .todo-item__edit-button:after {
+    font-size: small;
   }
-  .todo-item__icon-5{
-    color:red;
+  .todo-item__view-map-button:after {
+    content: "Map";
+    font-size: small;
   }
-  .to-do-item__creator-image{
-    width:5%;
-    height:5%;
-    align-self:center;
-    display: flex;
-    float:right; 
+  .todo-item__finish-task-button:after {
+    content: "Finish";
+    font-size: small;
   }
-  .to-do-item__creator-name{
-    float:right; clear:both;
-  }
+}

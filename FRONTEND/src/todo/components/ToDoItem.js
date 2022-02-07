@@ -29,7 +29,6 @@ const ToDoItem = (props) => {
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [creatorInfo, setCreatorInfo] = useState();
   const auth = useContext(AuthContext);
   const UID = auth.UID;
 
@@ -170,7 +169,6 @@ const ToDoItem = (props) => {
         { Authorization: `Bearer ${auth.token}` }
       );
       console.log(responseData);
-      setCreatorInfo(responseData.user);
     };
 
     getCreator();
@@ -183,11 +181,11 @@ const ToDoItem = (props) => {
         show={showMap && !!props.location}
         onCancel={closeMapHandler}
         header={props.address}
-        contentClass="todo-item__modal-content"
-        footerClass="todo-item__modal-actions"
+        contentClass="todo-item__map-modal-content"
+        footerClass="todo-item__map-modal-actions"
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
-        <div className="map-container">
+        <div className="todo-item__map-container">
           <Map center={props.location} zoom={16} />
         </div>
       </Modal>
@@ -220,7 +218,7 @@ const ToDoItem = (props) => {
         <UserSearchModal onClear={clearShareTask} onSubmit={shareTask} />
       )}
       <li className="todo-item " key={props._id}>
-        <Card className="todo-item__content">
+        <Card className="todo-item__container">
           {isLoading && <LoadingSpinner asOverlay />}
           <div onClick={toggleExpand} className="todo-item__header">
             {props.status === "Complete" && !props.pending && (
@@ -237,16 +235,7 @@ const ToDoItem = (props) => {
               />
             )}
             <h2>{props.name}</h2>
-            {creatorInfo && props.pending && (
-              <h2 className="to-do-item__creator-name">{creatorInfo.name}</h2>
-            )}
-            {creatorInfo && props.pending && (
-              <img
-                className="to-do-item__creator-image"
-                src={`${process.env.REACT_APP_ASSET_URL}/${creatorInfo.imageUrl}`}
-                alt={`${creatorInfo.name}`}
-              />
-            )}
+
             {!props.pending && (
               <Button className="todo-item__share" onClick={showShareTask}>
                 <IoIosShareAlt />
@@ -257,31 +246,51 @@ const ToDoItem = (props) => {
           {expand && (
             <div className="todo-item__expand">
               <p className="todo-item__notes">{props.notes}</p>
-              {props.status === "Pending" && !props.pending && (
-                <Button onClick={startTask}>Start Task</Button>
-              )}
-              {props.status === "Started" && !props.pending && (
-                <Button onClick={finishTask}>Finish Task</Button>
-              )}
-              {props.pending && (
+              <div className="todo-item__expand-buttons">
+                {props.status === "Pending" && !props.pending && (
+                  <Button
+                    onClick={startTask}
+                    className="todo-item__start-task-button"
+                  ></Button>
+                )}
+                {props.status === "Started" && !props.pending && (
+                  <Button
+                    onClick={finishTask}
+                    className="todo-item__finish-task-button"
+                  ></Button>
+                )}
+                {props.pending && (
+                  <Button
+                    onClick={(event) => {
+                      event.target.value = JSON.stringify(props);
+                      props.onPendingSubmit(event);
+                    }}
+                  >
+                    Accept
+                  </Button>
+                )}
+                {props.location && (
+                  <Button
+                    onClick={openMapHandler}
+                    className="todo-item__view-map-button"
+                  ></Button>
+                )}
+                {!props.pending && props.creator.toString() === UID && (
+                  <Button
+                    onClick={editTaskHandler}
+                    className="todo-item__edit-button"
+                  ></Button>
+                )}
                 <Button
-                  onClick={(event) => {
-                    event.target.value = JSON.stringify(props);
-                    props.onPendingSubmit(event);
-                  }}
-                >
-                  Accept
-                </Button>
-              )}
-              {props.location && (
-                <Button onClick={openMapHandler}>VIEW ON MAP</Button>
-              )}
-              {!props.pending && props.creator.toString() === UID && (
-                <Button onClick={editTaskHandler}>EDIT</Button>
-              )}
-              <Button danger onClick={showDeleteWarningHandler}>
-                {props.pending ? "DISMISS" : "DELETE"}
-              </Button>
+                  danger
+                  onClick={showDeleteWarningHandler}
+                  className={
+                    props.pending
+                      ? "todo-item__dismiss-button"
+                      : "todo-item__delete-button"
+                  }
+                ></Button>
+              </div>
             </div>
           )}
         </Card>
