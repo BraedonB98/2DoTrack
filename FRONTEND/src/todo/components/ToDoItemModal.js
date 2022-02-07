@@ -66,17 +66,32 @@ const ToDoItemModal = props => {
 
         
       useEffect( ()=>{
+        if(!loadedItem)
+        {
+          setLoadedItem(
+            {
+              name: (formState.inputs.name.value!== '')?formState.inputs.name.value:'',
+              status: "Pending",
+              priority: (formState.inputs.priority.value!== 1)?formState.inputs.priority.value:'',
+              address: (formState.inputs.address.value!== '')?formState.inputs.address.value:'',
+              due: (formState.inputs.due.value)?formState.inputs.due.value:undefined,
+              notes: (formState.inputs.notes.value!== '')?formState.inputs.notes.value:'',
+          }
+          )
+        }
+        
+        if(formState.inputs.name.value!== ''){}
         setFormData({
           name: {
-            value: loadedItem?loadedItem.name:formState.inputs.name.value,
+            value: loadedItem.name?loadedItem.name:formState.inputs.name.value,
             isValid: loadedItem?true:formState.inputs.name.valid
           },
           priority: {
-            value: loadedItem?loadedItem.priority:formState.inputs.priority.value,
+            value: loadedItem.priority?loadedItem.priority:formState.inputs.priority.value,
             isValid: true
           },
           notes: {
-            value: loadedItem?loadedItem.notes:formState.inputs.notes.value,
+            value: loadedItem.notes?loadedItem.notes:formState.inputs.notes.value,
             isValid: loadedItem?true:formState.inputs.notes.valid
           },
           address: {
@@ -85,12 +100,13 @@ const ToDoItemModal = props => {
           },
           due: {
             value: loadedItem.due?{
-                date:loadedItem.due.date?loadedItem.due.date:'',
+                date:loadedItem.due.date?loadedItem.due.date:(''),
                 time:loadedItem.due.time?loadedItem.due.time:''
             }:undefined,
             isValid: true
           }
-        },loadedItem?true:formState.valid);
+        },(loadedItem.name && loadedItem.notes)?true:formState.valid);
+        console.log(formState)
       },[addressDependent,timeDependent,loadedItem,setFormData])//eslint-disable-line
 
 

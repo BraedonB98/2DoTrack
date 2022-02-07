@@ -57,25 +57,20 @@ const deleteItemHelper = async (tid, oldCid, uid) => {
     };
   }
 
-
-
   if (item.creator._id.toString() === uid) {
     //if user is creator
     try {
-        console.log("------------tid to delete------------")
-        console.log(tid)
-        console.log("----------------before-----------------")
-        console.log(user.toDoCategories);
-        item.users = item.users.map(async (uid) => {
+      item.users = item.users.map(async (uid) => {
         user = await getUserById(uid);
-        user.pendingSharedTasks = user.pendingSharedTasks.filter(task => task._id.toString()!==tid)
-
+        user.pendingSharedTasks = user.pendingSharedTasks.filter(
+          (task) => task._id.toString() !== tid
+        );
         user.toDoCategories = user.toDoCategories.map((category) => {
-            category.toDoList = category.toDoList.filter((task)=>task._id.toString()!==tid)
-            return(category);
+          category.toDoList = category.toDoList.filter(
+            (task) => task._id.toString() !== tid
+          );
+          return category;
         });
-        console.log("----------------after-----------------")
-        console.log(user.toDoCategories)
         await user.save();
       });
     } catch (err) {
@@ -86,38 +81,40 @@ const deleteItemHelper = async (tid, oldCid, uid) => {
       };
     }
     try {
-        await item.remove();
-      } catch (err) {
-        console.log(err);
-        return {
-          error: err,
-          errorMessage: "Something went wrong, could not delete item",
-          errorCode: 500,
-        };
-      }
-    } 
-    else {
-      //getting user
-  let user = await getUserById(uid);
-  if (!!user.error) {
-    return {
-      error: user.error,
-      errorMessage: user.errorMessage,
-      errorCode: user.errorCode,
-    };
-  } 
+      await item.remove();
+    } catch (err) {
+      console.log(err);
+      return {
+        error: err,
+        errorMessage: "Something went wrong, could not delete item",
+        errorCode: 500,
+      };
+    }
+  } else {
+    //getting user
+    let user = await getUserById(uid);
+    if (!!user.error) {
+      return {
+        error: user.error,
+        errorMessage: user.errorMessage,
+        errorCode: user.errorCode,
+      };
+    }
 
-  
     user = await getUserById(uid);
-    user.pendingSharedTasks = user.pendingSharedTasks.filter(task => task._id.toString()!==tid)
+    user.pendingSharedTasks = user.pendingSharedTasks.filter(
+      (task) => task._id.toString() !== tid
+    );
 
     user.toDoCategories = user.toDoCategories.map((category) => {
-        category.toDoList = category.toDoList.filter((task)=>task._id.toString()!==tid)
-        return(category);
+      category.toDoList = category.toDoList.filter(
+        (task) => task._id.toString() !== tid
+      );
+      return category;
     });
-    item.users = item.users.filter(user => user.toString() !== uid);
+    item.users = item.users.filter((user) => user.toString() !== uid);
     try {
-      await item.save()
+      await item.save();
       await user.save();
     } catch (err) {
       return {
@@ -157,13 +154,11 @@ const createItem = async (req, res, next) => {
   });
   if (address) {
     let location;
-    console.log("has address");
     try {
       location = await getCoordsForAddress(address);
       newItem.address = location.address;
       newItem.location = location.coordinates;
     } catch (error) {
-      //console.log('google not working');
       return next(
         new HttpError("Could not access cordinates for that address", 502)
       );
@@ -405,15 +400,15 @@ const shareItem = async (req, res, next) => {
       )
     );
   }
-  
-  if(item.users.filter(user => user.toString() === uid).length!==0)//checking if user already has item
-  {
+
+  if (item.users.filter((user) => user.toString() === uid).length !== 0) {
+    //checking if user already has item
     return next(new HttpError("item already shared with this user", 409));
   }
 
   //get new category
   category = user.pendingSharedTasks;
-  
+
   if (category.length >= 20) {
     return next(new HttpError("Sorry users inbox is currently full", 552));
   }
@@ -486,7 +481,6 @@ const acceptPendingSharedItem = async (req, res, next) => {
     await user.save();
   } catch (error) {
     console.log(error);
-    console.log("issue with sending to db");
     return next(new HttpError("Could not update user in database", 500));
   }
 
@@ -514,7 +508,7 @@ const dismissPendingSharedItem = async (req, res, next) => {
   if (!!item.error) {
     return next(new HttpError(item.errorMessage, item.errorCode));
   }
-  item.users=item.users.filter(user => user.toString()!==uid)
+  item.users = item.users.filter((user) => user.toString() !== uid);
 
   //remove user from user array
   const index = user.pendingSharedTasks.indexOf(tid);
@@ -547,23 +541,21 @@ const getPendingSharedItems = async (req, res, next) => {
 
   var category = user.pendingSharedTasks;
   var itemArray;
-  try{
+  try {
     var itemArray = await Promise.all(
-        category.map(async (item) => {
-          //waits until all promises finish
-          var item = await getItemById(item._id.toString());
-          if (!!item.error) {
-            console.log("getPendingShared Items error")
-            return next(new HttpError(item.errorMessage, item.errorCode));
-          }
-          return item;
-        })
-      );
-  }
-  catch(error){
+      category.map(async (item) => {
+        //waits until all promises finish
+        var item = await getItemById(item._id.toString());
+        if (!!item.error) {
+          return next(new HttpError(item.errorMessage, item.errorCode));
+        }
+        return item;
+      })
+    );
+  } catch (error) {
     return next(new HttpError("failed to obtain items", 404));
   }
-  
+
   res.status(200).json({ items: itemArray });
 };
 
