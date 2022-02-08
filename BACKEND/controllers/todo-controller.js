@@ -581,16 +581,8 @@ const transferCreator = async (req, res, next) => {
     );
   }
 
-  //Make sure users exist
-  let creator = await userController.userInDataBase(uidOldCreator);
-  if (!!creator.error) {
-    return next(new HttpError(creator.errorMessage, creator.errorCode));
-  }
-  if (!creator) {
-    return next(new HttpError("oldCreator not located in db", 404));
-  }
-
-  creator = await userController.userInDataBase(uidCreator);
+  //Make sure new creator exist
+  let creator = await userController.userInDataBase(uidCreator);
   if (!!creator.error) {
     return next(new HttpError(creator.errorMessage, creator.errorCode));
   }
@@ -607,7 +599,7 @@ const transferCreator = async (req, res, next) => {
     );
   }
 
-  item.creator = uidCreator;
+  item.creator = new ObjectID(uidCreator);
 
   //save task
   try {
@@ -616,7 +608,7 @@ const transferCreator = async (req, res, next) => {
     return next(new HttpError("Could not update item in database", 500));
   }
 
-  res.status(201).json({ item: item.toObject({ getters: true }) });
+  res.status(201).json({ item: item });
 };
 const createCategory = async (req, res, next) => {
   const { name, icon } = req.body;
@@ -738,6 +730,9 @@ const deleteCategory = async (req, res, next) => {
   let user = await getUserById(uid);
   if (!!user.error) {
     return next(new HttpError(user.errorMessage, user.errorCode));
+  }
+  if (user.toDoCategories.length === 1) {
+    return next(new HttpError("Can not delete your last category", 409));
   }
   let category = user.toDoCategories.filter(
     (category) => category.name === cid

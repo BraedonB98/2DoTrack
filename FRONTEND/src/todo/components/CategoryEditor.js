@@ -8,7 +8,9 @@ import Input from "../../shared/components/FormElements/Input";
 import PendingTaskModal from "../components/PendingTaskModal";
 import RemoteTaskMenu from "../components/RemoteTaskMenu";
 import IconSelector from "../../shared/components/FormElements/IconSelector";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Icon from "../../shared/components/UIElements/Icons";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -103,6 +105,7 @@ const CategoryEditor = (props) => {
 
   return (
     <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showConfirmModal}
         onCancel={() => {
@@ -132,6 +135,7 @@ const CategoryEditor = (props) => {
         </p>
       </Modal>
       <Card className="category-editor__menu">
+        {isLoading && <LoadingSpinner asOverlay />}
         <div className="category-editor__menu-buttons">
           <Button
             className="category-editor__button"
