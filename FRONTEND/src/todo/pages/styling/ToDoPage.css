@@ -1,3 +1,6 @@
+.todo-page__contents {
+  min-height: 92vh;
+}
 .todo-page__header {
   display: grid;
   grid-template-columns: 20% 60% 20%;
