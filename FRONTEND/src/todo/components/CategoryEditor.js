@@ -6,7 +6,6 @@ import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
 import Input from "../../shared/components/FormElements/Input";
 import PendingTaskModal from "../components/PendingTaskModal";
-import RemoteTaskMenu from "../components/RemoteTaskMenu";
 import IconSelector from "../../shared/components/FormElements/IconSelector";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Icon from "../../shared/components/UIElements/Icons";
@@ -24,13 +23,11 @@ const CategoryEditor = (props) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showRename, setShowRename] = useState(false);
   const [showIconSelect, setShowIconSelect] = useState();
-  const [showRemoteTask, setShowRemoteTask] = useState(false);
   const [showPendingTask, setShowPendingTask] = useState(false);
   const [iconSelected, setIconSelected] = useState(props.category.icon);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient(); //eslint-disable-line
-  const [formState, inputHandler, setFormData] = useForm(
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [formState, inputHandler] = useForm(
     {
-      //eslint-disable-line
       name: {
         value: props.category.name,
         isValid: true,
@@ -157,15 +154,7 @@ const CategoryEditor = (props) => {
             {"Icon "}
             {iconSelected && <Icon name={iconSelected} />}
           </Button>
-          <Button
-            className="category-editor__button"
-            id="category-editor__remote-button"
-            onClick={() => {
-              showRemoteTask
-                ? setShowRemoteTask(false)
-                : setShowRemoteTask(true);
-            }}
-          ></Button>
+
           <Button
             className="category-editor__button"
             id="category-editor__pending-button"
@@ -211,7 +200,6 @@ const CategoryEditor = (props) => {
             </Button>
           </div>
         )}
-        {showRemoteTask && <RemoteTaskMenu category={props.category} />}
         {showPendingTask && (
           <PendingTaskModal
             category={props.category}
