@@ -3,9 +3,7 @@
 }
 .to-do-item-modal__content {
   margin: 0;
-
   padding: 3%;
-  background-color: pink;
 }
 
 .to-do-item-modal__text-input {
