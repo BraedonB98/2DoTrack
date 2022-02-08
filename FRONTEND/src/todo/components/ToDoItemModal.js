@@ -215,6 +215,7 @@ const ToDoItemModal = (props) => {
           footer={
             <React.Fragment>
               <Button
+                className="to-do-item-modal__button"
                 onClick={() => {
                   props.onClear();
                 }}
@@ -222,6 +223,7 @@ const ToDoItemModal = (props) => {
                 Cancel
               </Button>
               <Button
+                className="to-do-item-modal__button"
                 type="submit"
                 onClick={
                   !props.taskId ? newToDoSubmitHandler : editToDoSubmitHandler
@@ -262,19 +264,21 @@ const ToDoItemModal = (props) => {
             />
             <div className="to-do-item-modal__button-div">
               <Button
-                className="to-do-item-modal__button"
+                className={`to-do-item-modal__button  ${
+                  timeDependent
+                    ? "to-do-item-modal__remove-date-button"
+                    : "to-do-item-modal__set-date-button"
+                }`}
                 onClick={selectTimeHandler}
-              >
-                {" "}
-                {timeDependent ? "Remove Date" : "Set Date"}
-              </Button>
+              ></Button>
               <Button
-                className="to-do-item-modal__button"
+                className={`to-do-item-modal__button  ${
+                  addressDependent
+                    ? "to-do-item-modal__remove-address-button"
+                    : "to-do-item-modal__set-address-button"
+                }`}
                 onClick={selectAddressHandler}
-              >
-                {" "}
-                {addressDependent ? "Remove Address" : "Set Address"}
-              </Button>
+              ></Button>
             </div>
             {timeDependent && (
               <Input

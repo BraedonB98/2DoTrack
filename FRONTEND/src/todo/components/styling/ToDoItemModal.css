@@ -1,25 +1,69 @@
+.to-do-item-modal {
+  padding: 0;
+}
 .to-do-item-modal__content {
-  display: flex;
-  justify-content: space-evenly;
-  width: 96% !important;
-  padding: 2%;
-}
-.to-do-item-modal__form {
-  display: flex;
-}
-.to-do-item-modal__text-input {
-  display: inline;
-  text-align: center;
-  width: 100%;
-}
-.to-do-item-modal__input {
-  display: inline;
-  text-align: center;
-  width: 100%;
+  margin: 0;
+
+  padding: 3%;
+  background-color: pink;
 }
 
+.to-do-item-modal__text-input {
+  text-align: center;
+  margin-right: 1rem;
+}
+.to-do-item-modal__input {
+  text-align: center;
+  margin-right: 1rem;
+  box-sizing: border-box;
+}
+.to-do-item-modal__footer {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
 .to-do-item-modal__button-div {
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+
+.to-do-item-modal__set-date-button:after {
+  content: "Set Date";
+}
+.to-do-item-modal__remove-date-button:after {
+  content: "Remove Date";
+}
+.to-do-item-modal__remove-address-button:after {
+  content: "Address";
+}
+.to-do-item-modal__set-address-button:after {
+  content: "Address";
+}
+
+@media all and (min-width: 680px) {
+  .to-do-item-modal__remove-address-button:after {
+    content: "Remove Address";
+  }
+  .to-do-item-modal__set-address-button:after {
+    content: "Set Address";
+  }
+}
+
+@media all and (max-width: 450px) {
+  .to-do-item-modal__button {
+    font-size: small;
+  }
+  .to-do-item-modal__set-date-button:after {
+    content: "Date";
+  }
+  .to-do-item-modal__remove-date-button:after {
+    content: "Date";
+  }
+  .to-do-item-modal__remove-address-button:after {
+    content: "Address";
+  }
+  .to-do-item-modal__set-address-button:after {
+    content: "Address";
+  }
 }

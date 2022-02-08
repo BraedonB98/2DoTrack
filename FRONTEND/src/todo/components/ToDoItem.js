@@ -222,16 +222,18 @@ const ToDoItem = (props) => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div onClick={toggleExpand} className="todo-item__header">
             {props.status === "Complete" && !props.pending && (
-              <AiOutlineCheck className={`todo-item__icon-${props.priority}`} />
+              <AiOutlineCheck
+                className={`todo-item__icon todo-item__icon-${props.priority}`}
+              />
             )}
             {props.status === "Started" && !props.pending && (
               <AiOutlineFieldTime
-                className={`todo-item__icon-${props.priority}`}
+                className={`todo-item__icon todo-item__icon-${props.priority}`}
               />
             )}
             {props.status === "Pending" && !props.pending && (
               <AiOutlineUnorderedList
-                className={`todo-item__icon-${props.priority}`}
+                className={`todo-item__icon todo-item__icon-${props.priority}`}
               />
             )}
             <h2>{props.name}</h2>

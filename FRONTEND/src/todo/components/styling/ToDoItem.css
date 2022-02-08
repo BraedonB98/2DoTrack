@@ -1,6 +1,6 @@
 .todo-item__container {
   padding: 0;
-  margin: 1%;
+  margin: 1% !important;
 }
 
 /*Header Item Styling*/
@@ -9,11 +9,16 @@
 }
 
 .todo-item__header {
-  padding: 1%;
-}
-.todo-item__header p {
   margin: 0;
-  padding: 1%;
+  padding: 0;
+  display: grid;
+  grid-auto-columns: 0.25fr 5fr 0.5fr;
+  grid-auto-flow: column;
+  align-items: center;
+}
+.todo-item__icon {
+  font-size: x-large;
+  margin: 1rem;
 }
 .todo-item__header h2 {
   margin: 0;
@@ -22,8 +27,8 @@
 }
 .todo-item__share {
   float: right;
-  padding: 1%;
-  margin: 1%;
+  padding: 0.5rem;
+  margin: 0.25rem;
 }
 
 /*Expanded Item Styling*/
