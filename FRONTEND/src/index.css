@@ -8,6 +8,7 @@
   --colorBackground: #d5bfbf; /*Page Background*/
   --colorSurface: #d5bfbf;
   --colorError: red;
+  --colorOnImages: white;
   --colorOnPrimary: black;
   --colorOnSecondary: black;
   --colorOnPrimaryVariant: black;

@@ -1,0 +1,17 @@
+.WelcomeSlideShow__each-slide > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 350px;
+}
+
+.WelcomeSlideShow__each-slide span {
+  padding: 2%;
+  font-size: 20px;
+  background: transparent;
+  text-align: center;
+  align-self: flex-end;
+  color: var(--colorOnImages);
+  font-weight: bold;
+}
