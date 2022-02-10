@@ -1,0 +1,31 @@
+.dashboard-item {
+  margin-bottom: 0.5rem !important;
+  padding: 0;
+}
+
+.dashboard-item__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+}
+.dashboard-item__toggle-button {
+  padding: 0.1rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  font-size: medium;
+  text-align: center;
+}
+.dashboard-item__config-button {
+  padding: 0.1rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+
+  font-size: medium;
+  margin: 0;
+}
+.dashboard-item__content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

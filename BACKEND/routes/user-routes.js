@@ -18,8 +18,8 @@ router.patch(
   userController.photoUpload
 );
 
-router.patch("/:uid/info/preferences", userController.updatePreferences);
+router.patch("/info/preferences", userController.updatePreferences);
 
-router.get("/:uid/info/preferences", userController.getPreferences);
+router.get("/info/preferences", userController.getPreferences);
 
 module.exports = router;

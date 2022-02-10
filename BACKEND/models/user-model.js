@@ -15,6 +15,15 @@ const userSchema = new Schema({
     notificationType: { type: String },
     notificationToDo: { type: Boolean },
     notificationFinance: { type: Boolean },
+    dashboardLayout: [
+      [
+        {
+          feature: { type: String }, //item list or finance value
+          reference: { type: String }, //location/id
+          configuration: { type: String }, //modifiers
+        },
+      ],
+    ],
   },
   toDoCategories: [
     {
@@ -23,7 +32,6 @@ const userSchema = new Schema({
       toDoList: [{ type: mongoose.Types.ObjectId, ref: "ToDoItem" }],
     },
   ],
-  recurringTasks: [{ type: mongoose.Types.ObjectId, ref: "ToDoItem" }], //may have some issue making shared enter recurring folder
   pendingSharedTasks: [{ type: mongoose.Types.ObjectId, ref: "ToDoItem" }], //could just make this a category but easier to be able to clear occasionally this way
   financeAccounts: [
     {
@@ -40,7 +48,6 @@ const userSchema = new Schema({
     },
   ],
   recurringExpenses: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],
-  conversationSID: { type: String },
 });
 
 module.exports = mongoose.model("User", userSchema);

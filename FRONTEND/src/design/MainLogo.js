@@ -5,8 +5,8 @@ const MainLogo = (props) => {
   return (
     <img
       className={props.styling}
-      src={`${process.env.REACT_APP_ASSET_URL}/data/frontendref/images/2DoTrackLogo.png`}
-      alt="2 DO Finance"
+      src={`${process.env.REACT_APP_ASSET_URL}/data/frontendref/images/2DoTrackLogo.svg`}
+      alt="2 DO Track"
     />
   );
 };

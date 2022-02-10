@@ -1,0 +1,10 @@
+.home-page__content-text {
+  text-align: center;
+}
+
+@media all and (min-width: 1081px) {
+  .home-page__content-text {
+    text-align: start;
+    margin-left: 2%;
+  }
+}

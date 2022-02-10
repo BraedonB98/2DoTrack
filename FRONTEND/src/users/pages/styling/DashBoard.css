@@ -1,0 +1,23 @@
+.dashboard__header {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dashboard__content {
+  min-height: 80vh;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  margin-bottom: 0.5rem;
+}
+.dashboard__column {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: row;
+  margin-left: 0.5rem;
+}
+.dashboard__column:last-child {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
