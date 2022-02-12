@@ -5,6 +5,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import DashBoardItem from "../components/DashBoardItem";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { AiFillEdit } from "react-icons/ai";
 
 import "./styling/DashBoard.css";
 import react from "react";
@@ -39,6 +40,7 @@ const DashBoard = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [user, setUser] = useState();
   const [preferences, setPreferences] = useState();
+  const [dashBoardLayout, setDashBoardLayout] = useState();
 
   useEffect(() => {
     const fetchName = async () => {
@@ -64,6 +66,7 @@ const DashBoard = () => {
         );
         responseData = responseData.preferences;
         setPreferences(responseData);
+        setDashBoardLayout(DUMMYDASHBOARDLAYOUT);
       } catch (error) {}
     };
 
@@ -71,32 +74,51 @@ const DashBoard = () => {
     fetchPreferences();
   }, [sendRequest, UID, auth.token]);
 
+  const editDashBoardHandler = (event) => {
+    event.preventDefault();
+  };
+  const deleteItemHandler = (row, column) => {
+    let newDashBoardLayout = [...dashBoardLayout];
+    console.log(dashBoardLayout);
+    newDashBoardLayout[column].splice(row, 1);
+    if (newDashBoardLayout[column].length === 0) {
+      newDashBoardLayout.splice(column, 1);
+    }
+    setDashBoardLayout(newDashBoardLayout);
+    console.log(dashBoardLayout);
+  };
   return (
     <react.Fragment>
       {!isLoading && (
         <div className="dashboard">
           <div className="dashboard__header">
             {user && <h1>{user.shortName}'s DashBoard</h1>}
+            <Button onClick={editDashBoardHandler}>
+              <AiFillEdit />
+            </Button>
           </div>
 
-          <div className="dashboard__content">
-            {DUMMYDASHBOARDLAYOUT.map((column, indexColumn) => {
-              return (
-                <div key={indexColumn} className="dashboard__column">
-                  {column.map((item, indexRow) => {
-                    return (
-                      <DashBoardItem
-                        key={[indexColumn, indexRow]}
-                        item={item}
-                        column={indexColumn}
-                        row={indexRow}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
+          {dashBoardLayout && (
+            <div className="dashboard__content">
+              {dashBoardLayout.map((column, indexColumn) => {
+                return (
+                  <div key={indexColumn} className="dashboard__column">
+                    {column.map((item, indexRow) => {
+                      return (
+                        <DashBoardItem
+                          key={[indexColumn, indexRow]}
+                          item={item}
+                          column={indexColumn}
+                          row={indexRow}
+                          onDelete={deleteItemHandler}
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </react.Fragment>

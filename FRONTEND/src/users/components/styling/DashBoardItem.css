@@ -8,14 +8,14 @@
   justify-content: space-between;
   padding: 0;
 }
-.dashboard-item__toggle-button {
+.dashboard-item__settings-button {
   padding: 0.1rem;
   padding-left: 0.3rem;
   padding-right: 0.3rem;
   font-size: medium;
   text-align: center;
 }
-.dashboard-item__config-button {
+.dashboard-item__remove-button {
   padding: 0.1rem;
   padding-left: 0.3rem;
   padding-right: 0.3rem;

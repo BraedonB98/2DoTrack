@@ -4,14 +4,27 @@ import React, { useState } from "react";
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 import { AiFillSetting } from "react-icons/ai";
+import { BsFillTrashFill } from "react-icons/bs";
 //---------------------CSS----------------------------------
 import "./styling/DashBoardItem.css";
+import react from "react";
 
 const DashBoardItem = (props) => {
-  const itemSelectDropDown = (event) => {
+  const itemSelectHandler = (event) => {
     event.preventDefault();
     console.log(props.column);
     console.log(props.row);
+  };
+
+  const itemSettingsHandler = (event) => {
+    event.preventDefault();
+    console.log(props.column);
+    console.log(props.row);
+  };
+
+  const deleteItemHandler = (event) => {
+    event.preventDefault();
+    props.onDelete(props.row, props.column);
   };
 
   let component;
@@ -20,16 +33,16 @@ const DashBoardItem = (props) => {
     component = (
       <div className="dashboard-item__header">
         <Button
-          className="dashboard-item__toggle-button"
-          onClick={itemSelectDropDown}
-        >
-          ▼
-        </Button>
-        <Button
-          className="dashboard-item__config-button"
-          onClick={itemSelectDropDown}
+          className="dashboard-item__settings-button"
+          onClick={itemSettingsHandler}
         >
           <AiFillSetting />
+        </Button>
+        <Button
+          className="dashboard-item__remove-button"
+          onClick={deleteItemHandler}
+        >
+          <BsFillTrashFill />
         </Button>
       </div>
     );
@@ -37,14 +50,30 @@ const DashBoardItem = (props) => {
     //to do list priority
   } else {
     component = (
-      <div className="dashboard-item__content">
-        <Button
-          className="dashboard-item__select-button"
-          onClick={itemSelectDropDown}
-        >
-          Select DashBoard Item
-        </Button>
-      </div>
+      <react.Fragment>
+        <div className="dashboard-item__header">
+          <Button
+            className="dashboard-item__settings-button"
+            onClick={itemSelectHandler}
+          >
+            <AiFillSetting />
+          </Button>
+          <Button
+            className="dashboard-item__remove-button"
+            onClick={deleteItemHandler}
+          >
+            <BsFillTrashFill />
+          </Button>
+        </div>
+        <div className="dashboard-item__content">
+          <Button
+            className="dashboard-item__select-button"
+            onClick={itemSelectHandler}
+          >
+            Select DashBoard Item
+          </Button>
+        </div>
+      </react.Fragment>
     );
   }
 

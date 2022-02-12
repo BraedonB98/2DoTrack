@@ -78,7 +78,7 @@ import {
   AiFillWallet,
   AiOutlineConsoleSql,
 } from "react-icons/ai";
-import { BsFillBagFill } from "react-icons/bs";
+import { BsFillBagFill, BsFillTrashFill } from "react-icons/bs";
 
 const icons = [
   {
@@ -450,6 +450,11 @@ const icons = [
     name: "tool",
     search: ["tool"],
     value: <AiFillTool />,
+  },
+  {
+    name: "trash",
+    search: ["trash"],
+    value: <BsFillTrashFill />,
   },
   {
     name: "usb",
