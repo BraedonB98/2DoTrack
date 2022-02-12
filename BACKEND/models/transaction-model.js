@@ -12,9 +12,10 @@ const transactionSchema = new Schema({
     category: { type: String, required: false }, //not all transactions are recurring
   },
   amount: { type: Number, required: true }, //Profit = Positive, Negative = Deficit
-  date: { type: Number, required: true },
+  date: { type: Date, required: true },
   notes: { type: String, required: false },
   category: { type: String, required: true },
+  creator: { type: mongoose.Types.ObjectId, ref: "User" },
 });
 
 module.exports = mongoose.model("Transaction", transactionSchema);

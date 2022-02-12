@@ -35,8 +35,9 @@ const userSchema = new Schema({
   pendingSharedTasks: [{ type: mongoose.Types.ObjectId, ref: "ToDoItem" }], //could just make this a category but easier to be able to clear occasionally this way
   financeAccounts: [
     {
-      account: { type: String },
+      name: { type: String },
       balance: { type: Number },
+      icon: { type: String },
       transactionList: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],
     },
   ],
@@ -44,6 +45,7 @@ const userSchema = new Schema({
     {
       name: { type: String },
       icon: { type: String },
+      transactionList: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],
     },
   ],
   recurringExpenses: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],

@@ -7,23 +7,28 @@ const router = express.Router();
 
 router.use(checkAuth); // every route after this requires an token
 
-router.post("/createtransaction", [], toDoController.createTransaction);
+router.post("/createtransaction", [], financeController.createTransaction);
 
-router.patch("/editTransaction/", [], toDoController.editTransaction);
+router.patch("/edittransaction/", [], financeController.editTransaction);
 
-router.delete("/deleteTransaction", [], toDoController.deleteTransaction);
+router.delete("/deletetransaction", [], financeController.deleteTransaction);
 
-router.get("/getTransaction/", toDoController.getTransaction);
+router.get("/gettransaction/", financeController.getTransaction);
 
-//create transaction
-//edit transaction
-//delete transaction
-//get transaction
-//edit category
-//create category
-//delete category
-//get category
-//create account
-//edit account
-//delete account
-//get account
+router.post("/createcategory", [], financeController.createCategory);
+
+router.patch("/editcategory/", [], financeController.editCategory);
+
+router.delete("/deletecategory", [], financeController.deleteCategory);
+
+router.get("/getcategory/", financeController.getCategory);
+
+router.post("/createaccount", [], financeController.createAccount);
+
+router.patch("/editaccount/", [], financeController.editAccount);
+
+router.delete("/deleteaccount", [], financeController.deleteAccount);
+
+router.get("/getaccount/", financeController.getAccount);
+
+module.exports = router;

@@ -10,7 +10,7 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 //-------------------Routes-----------------------
-//const financeRoutes = require('./routes/finance-routes');
+const financeRoutes = require("./routes/finance-routes");
 const todoRoutes = require("./routes/todo-routes");
 const uidRoutes = require("./routes/uid-routes");
 const userRoutes = require("./routes/user-routes");
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 app.use("/api/uid", uidRoutes); // /api/UID...
 app.use("/api/user", userRoutes); // /api/user...
 app.use("/api/todo", todoRoutes); // /api/todo...
-//app.use('/api/finance',financeRoutes); // /api/finance...
+app.use("/api/finance", financeRoutes); // /api/finance...
 //allows for a different body parser for sms so you can read messages
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/sms", smsRoutes);

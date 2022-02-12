@@ -172,7 +172,7 @@ const createItem = async (req, res, next) => {
 
     await newItem.save({ session: sess });
     category.toDoList.push(newItem);
-    user.toDoCategories.filter((category) => category.name === cid);
+    //user.toDoCategories.filter((category) => category.name === cid);
 
     //user.toDoCategories.filter(category => category.name === cid)[toDoList].push(newItem);
     await user.save({ session: sess });
