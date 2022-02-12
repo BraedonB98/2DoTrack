@@ -37,14 +37,13 @@ const userSchema = new Schema({
     {
       account: { type: String },
       balance: { type: Number },
-      financeCategories: [
-        {
-          category: { type: String },
-          transactionList: [
-            { type: mongoose.Types.ObjectId, ref: "Transaction" },
-          ],
-        },
-      ],
+      transactionList: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],
+    },
+  ],
+  financeCategories: [
+    {
+      name: { type: String },
+      icon: { type: String },
     },
   ],
   recurringExpenses: [{ type: mongoose.Types.ObjectId, ref: "Transaction" }],

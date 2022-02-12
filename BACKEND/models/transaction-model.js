@@ -14,12 +14,7 @@ const transactionSchema = new Schema({
   amount: { type: Number, required: true }, //Profit = Positive, Negative = Deficit
   date: { type: Number, required: true },
   notes: { type: String, required: false },
-  color: { type: String, required: true },
-  address: { type: String, required: false },
-  location: {
-    lat: { type: Number, required: false },
-    lng: { type: Number, required: false },
-  },
+  category: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Transaction", transactionSchema);
