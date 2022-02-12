@@ -106,11 +106,9 @@ const createCategory = async (req, res, next) => {
     return next(new HttpError("Could not update user in database", 500));
   }
 
-  res
-    .status(201)
-    .json({
-      category: user.financeCategories[user.financeCategories.length - 1],
-    });
+  res.status(201).json({
+    category: user.financeCategories[user.financeCategories.length - 1],
+  });
 };
 
 const editCategory = async (req, res, next) => {};
