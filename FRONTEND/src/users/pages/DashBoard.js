@@ -6,6 +6,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import DashBoardItem from "../components/DashBoardItem";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AiFillEdit } from "react-icons/ai";
+import DashBoardEditModal from "../components/DashBoardEditModal";
 
 import "./styling/DashBoard.css";
 import react from "react";
@@ -41,6 +42,7 @@ const DashBoard = () => {
   const [user, setUser] = useState();
   const [preferences, setPreferences] = useState();
   const [dashBoardLayout, setDashBoardLayout] = useState();
+  const [showEditDashBoard, setShowEditDashBoard] = useState(false);
 
   useEffect(() => {
     const fetchName = async () => {
@@ -76,6 +78,7 @@ const DashBoard = () => {
 
   const editDashBoardHandler = (event) => {
     event.preventDefault();
+    setShowEditDashBoard(true);
   };
   const deleteItemHandler = (row, column) => {
     let newDashBoardLayout = [...dashBoardLayout];
@@ -89,6 +92,13 @@ const DashBoard = () => {
   };
   return (
     <react.Fragment>
+      {isLoading && <LoadingSpinner />}
+      <DashBoardEditModal
+        onClear={() => {
+          setShowEditDashBoard(false);
+        }}
+        open={showEditDashBoard}
+      />
       {!isLoading && (
         <div className="dashboard">
           <div className="dashboard__header">
