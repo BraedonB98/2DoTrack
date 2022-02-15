@@ -4,7 +4,7 @@ import Modal from "../../shared/components/UIElements/Modal";
 import Button from "../../shared/components/FormElements/Button";
 
 const DashBoardEditModal = (props) => {
-  const [columnSlider, setColumnSlider] = useState();
+  const [columnSlider, setColumnSlider] = useState([]);
 
   const columnSliderHandler = (event) => {
     console.log(event.target.value);

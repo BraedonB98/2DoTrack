@@ -48,7 +48,7 @@ const DashBoard = () => {
     const fetchName = async () => {
       try {
         let responseData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_API_URL}/uid/user/${UID}`,
+          `${process.env.REACT_APP_BACKEND_API_URL}/uid/user/${auth.UID}`,
           "GET",
           null,
           { Authorization: `Bearer ${auth.token}` }
@@ -58,6 +58,9 @@ const DashBoard = () => {
         setUser(responseData);
       } catch (error) {}
     };
+    fetchName();
+  }, [sendRequest, auth]);
+  useEffect(() => {
     const fetchPreferences = async () => {
       try {
         let responseData = await sendRequest(
@@ -72,9 +75,8 @@ const DashBoard = () => {
       } catch (error) {}
     };
 
-    fetchName();
     fetchPreferences();
-  }, [sendRequest, UID, auth.token]);
+  }, [sendRequest, auth]);
 
   const editDashBoardHandler = (event) => {
     event.preventDefault();

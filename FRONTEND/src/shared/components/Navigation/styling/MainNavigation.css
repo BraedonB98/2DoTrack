@@ -41,5 +41,6 @@
 
   .main-navigation__header-nav {
     display: block;
+    margin: 1rem;
   }
 }

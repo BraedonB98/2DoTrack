@@ -49,13 +49,17 @@ const getByPhoneNumber = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const uid = req.params.uid;
-  let user = await getUserById(uid);
-  if (!!user.error) {
-    return {
-      error: user.error,
-      errorMessage: user.errorMessage,
-      errorCode: user.errorCode,
-    };
+  let user;
+  if (uid === null) {
+    new HttpError("no uid provided", 400);
+  }
+  try {
+    user = await getUserById(uid);
+    if (!!user.error) {
+      return new HttpError(user.errorMessage, user.errorCode);
+    }
+  } catch (error) {
+    return new HttpError("could not locate user", 404);
   }
   const userRestricted = {
     name: user.name,

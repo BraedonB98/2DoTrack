@@ -1,0 +1,27 @@
+.Nav-Item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Nav-Item__Button {
+  --button-size: 1.5rem;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 300ms;
+}
+.Nav-Item__Button:hover {
+  filter: brightness(1.2);
+}
+.Nav-Item__image {
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: 50%;
+}
+.Nav-Item__Button:hover {
+  cursor: pointer;
+}

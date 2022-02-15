@@ -17,6 +17,13 @@ const User = require("../models/user-model");
 //----------------------HelperFunction------------------
 const getUserById = async (uid) => {
   let user;
+  if (uid === null) {
+    return {
+      error: error,
+      errorMessage: "no uid provided",
+      errorCode: 400,
+    };
+  }
   if (typeof uid === "string") {
     var ObjectID = require("mongodb").ObjectID;
     uid = new ObjectID(uid);
@@ -220,8 +227,15 @@ const login = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError("Logging in user failed", 500));
   }
+  const userRestricted = {
+    name: existingUser.name,
+    email: existingUser.email,
+    _id: existingUser._id,
+    token: token,
+    imageUrl: existingUser.imageUrl,
+  };
 
-  res.json({ _id: existingUser._id, email: existingUser.email, token: token });
+  res.json(userRestricted);
 };
 
 const photoUpload = async (req, res, next) => {

@@ -1,29 +1,33 @@
-import React, {useContext} from "react";
-import { NavLink } from 'react-router-dom'
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import NavItem from "./NavItem";
 
-import DropdownNavLinks from "./DropDownNavLinks";
+import UserDropDown from "./UserDropDown";
 
 import { AuthContext } from "../../context/auth-context";
 
-import './NavLinks.css';
+import "./styling/NavLinks.css";
 
-const NavLinks = props => {
-    const auth = useContext(AuthContext);
+const NavLinks = (props) => {
+  const auth = useContext(AuthContext);
 
-    
-    return (
-        <ul className = "nav-links">
-            <li>
-                <NavLink to ="/" >{auth.isLoggedIn? "DashBoard" : "Home" }</NavLink>
-            </li>
-            {!auth.isLoggedIn && ( <li><NavLink to ="/auth" >Login</NavLink></li>)}
+  return (
+    <ul className="nav-links">
+      <NavItem to="/" title={auth.isLoggedIn ? "DashBoard" : "Home"}></NavItem>
 
-
-            {auth.isLoggedIn && (<li> <NavLink to ="/todo" >ToDo</NavLink> </li>)}
-            {auth.isLoggedIn && (<li> <NavLink to ="/finance" >Finance</NavLink> </li>)}
-            {auth.isLoggedIn && (<li> <DropdownNavLinks/></li>)}
-        </ul>
-    )
-}
+      {!auth.isLoggedIn && <NavItem to="/auth" title="Login"></NavItem>}
+      {auth.isLoggedIn && <NavItem to="/todo" title="To Do"></NavItem>}
+      {auth.isLoggedIn && <NavItem to="/finance" title="Finance"></NavItem>}
+      {auth.isLoggedIn && (
+        <NavItem
+          className="Nav-Item__Button"
+          icon={`${process.env.REACT_APP_ASSET_URL}/data/uploads/images/default.svg`}
+        >
+          {/*DropDown Goes HERE*/}
+        </NavItem>
+      )}
+    </ul>
+  );
+};
 
 export default NavLinks;
