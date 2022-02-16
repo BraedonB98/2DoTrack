@@ -16,6 +16,8 @@
   --colorOnBackground: black;
   --colorOnSurface: black;
   --colorOnError: black;
+
+  --navHeight: 4rem;
 }
 
 #content {

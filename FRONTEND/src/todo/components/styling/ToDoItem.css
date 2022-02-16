@@ -53,19 +53,19 @@
 
 /*Icon Coloring*/
 .todo-item__icon-1 {
-  color: darkslategray;
+  color: aqua;
 }
 .todo-item__icon-2 {
-  color: black;
+  color: blue;
 }
 .todo-item__icon-3 {
-  color: yellow;
+  color: Darkgreen;
 }
 .todo-item__icon-4 {
-  color: orange;
+  color: yellow;
 }
 .todo-item__icon-5 {
-  color: red;
+  color: darkred;
 }
 
 /*Map modal styling*/

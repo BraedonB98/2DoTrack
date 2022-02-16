@@ -1,0 +1,27 @@
+.drop-down-menu {
+  position: absolute;
+  top: 58px;
+  width: 300px;
+  transform: translateX(-45%);
+  background-color: var(--colorSecondaryVariant);
+  padding: 1rem;
+  overflow: hidden;
+}
+.drop-down-menu__item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  transition: background var(--speed);
+  padding: 0.2rem;
+  font-size: small;
+}
+
+.drop-down-menu__item:hover {
+  background-color: aqua;
+  cursor: pointer;
+}
+
+.drop-down-menu__icon-right {
+  margin-left: auto;
+}
