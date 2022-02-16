@@ -247,7 +247,11 @@ const ToDoItem = (props) => {
 
           {expand && (
             <div className="todo-item__expand">
-              <p className="todo-item__notes">{props.notes}</p>
+              <p className="todo-item__notes">
+                <strong>{props.address}</strong>
+                <br />
+                {props.notes}
+              </p>
               <div className="todo-item__expand-buttons">
                 {props.status === "Pending" && !props.pending && (
                   <Button
