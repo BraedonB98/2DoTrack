@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { AuthContext } from "../../context/auth-context";
 import "./styling/DropDownMenu.css";
 

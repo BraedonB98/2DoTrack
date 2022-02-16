@@ -68,17 +68,8 @@ const ToDoItemModal = (props) => {
     if (props.taskId) {
       fetchItem();
     } //if its an edited item
-    if (loadedItem.address) {
-      setAddressDependent(true);
-    } //these should run even if it is the same item
-    else {
-      setAddressDependent(false);
-    }
-    if (loadedItem.due) {
-      setTimeDependent(true);
-    } else {
-      setTimeDependent(false);
-    }
+    setAddressDependent(!!loadedItem.address);
+    setTimeDependent(!!loadedItem.due);
   }, [sendRequest, props.taskId, loadedItem, auth.token]);
 
   useEffect(() => {
@@ -99,7 +90,7 @@ const ToDoItemModal = (props) => {
           isValid: loadedItem ? true : formState.inputs.notes.valid,
         },
         address: {
-          value: loadedItem.address ? loadedItem.address : "",
+          value: loadedItem.address ? loadedItem.address : undefined,
           isValid: true,
         },
         due: {
@@ -112,7 +103,11 @@ const ToDoItemModal = (props) => {
           isValid: true,
         },
       },
-      loadedItem ? true : formState.valid
+      loadedItem
+        ? true
+        : formState.name && formState.notes.length > 4
+        ? true
+        : false
     );
   }, [addressDependent, timeDependent, loadedItem, setFormData]); //eslint-disable-line
 
