@@ -3,7 +3,7 @@ import React from "react";
 import Modal from "./Modal";
 import Button from "../FormElements/Button";
 
-import "./ErrorModal.css";
+import "./styling/ErrorModal.css";
 const ErrorModal = (props) => {
   return (
     <Modal
