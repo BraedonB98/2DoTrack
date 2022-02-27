@@ -5,11 +5,13 @@ import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 import { AiFillSetting } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
+import DashBoardItemSettingsTab from "./DashBoardItemSettingsTab";
 //---------------------CSS----------------------------------
 import "./styling/DashBoardItem.css";
 import react from "react";
 
 const DashBoardItem = (props) => {
+  const [settingDropDown, setSettingDropDown] = useState(false);
   const itemSelectHandler = (event) => {
     event.preventDefault();
     console.log(props.column);
@@ -18,6 +20,7 @@ const DashBoardItem = (props) => {
 
   const itemSettingsHandler = (event) => {
     event.preventDefault();
+    setSettingDropDown(!settingDropDown);
     console.log(props.column);
     console.log(props.row);
   };
@@ -32,6 +35,7 @@ const DashBoardItem = (props) => {
   if (props.item) {
     component = (
       <div className="dashboard-item__header">
+        {settingDropDown && <DashBoardItemSettingsTab />}
         <Button
           className="dashboard-item__settings-button"
           onClick={itemSettingsHandler}
