@@ -155,7 +155,7 @@ const createUser = async (req, res, next) => {
       { expiresIn: "2h" }
     );
   } catch (error) {
-    return next(new HttpError("Creating user failed", 500));
+    return next(new HttpError("Login Failed", 500));
   }
 
   //SMS Notification with Twilio
