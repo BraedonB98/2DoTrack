@@ -5,6 +5,19 @@ BackEnd planning
   [] array
   {} Object
 
+# known issues
+
+-Daily Reminder
+--Get mongodb users (all with (key subscription = dev || Premium) preferences.notificationTime === current hour), go through each user and create a list of things going on for them for the day(organized by time) and text it to them.  
+-Get Priority
+--For dashboard have it get the top 20 highest priority tasks for the user from any category and return them to later be displayed on the dashboard
+-Delete Category
+--When deleting a category have it remove any references to the category from the dashboard
+-Create User
+--When creating a user, Create a default account and a couple default categories, Currently both values are null, Will also need to have front end check if there are current categories and accounts on users currently in production data base and add them if they dont
+-Finance Controller
+--Still need to finish edit, delete, and get for Transactions, Categories, and Accounts
+
 -----------------------------Data Structures ----------------------------------------
 User{}
 -Name
